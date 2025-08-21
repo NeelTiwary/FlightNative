@@ -1,0 +1,1033 @@
+{
+    "flightsAvailable": [
+        {
+            "oneWay": false,
+            "seatsAvailable": 9,
+            "currencyCode": "USD",
+            "basePrice": "246.00",
+            "totalPrice": "364.77",
+            "totalTravelers": 1,
+            "trips": [
+                {
+                    "from": "DEL",
+                    "to": "JFK",
+                    "stops": 1,
+                    "totalFlightDuration": "23h 20m",
+                    "totalLayoverDuration": "5h 0m",
+                    "legs": [
+                        {
+                            "legNo": "17",
+                            "flightNumber": "382",
+                            "carrierCode": "KU",
+                            "carrierName": null,
+                            "operatingCarrierCode": "KU",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "32N",
+                            "departureAirport": "DEL",
+                            "departureTerminal": "3",
+                            "departureDateTime": "2025-11-14T02:00:00",
+                            "arrivalAirport": "KWI",
+                            "arrivalTerminal": "4",
+                            "arrivalDateTime": "2025-11-14T04:05:00",
+                            "duration": "4h 35m",
+                            "layoverAfter": "5h 0m"
+                        },
+                        {
+                            "legNo": "18",
+                            "flightNumber": "117",
+                            "carrierCode": "KU",
+                            "carrierName": null,
+                            "operatingCarrierCode": "KU",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "77W",
+                            "departureAirport": "KWI",
+                            "departureTerminal": "4",
+                            "departureDateTime": "2025-11-14T09:05:00",
+                            "arrivalAirport": "JFK",
+                            "arrivalTerminal": "7",
+                            "arrivalDateTime": "2025-11-14T15:50:00",
+                            "duration": "13h 45m",
+                            "layoverAfter": null
+                        }
+                    ]
+                }
+            ],
+            "pricingAdditionalInfo": "{\"type\":\"flight-offer\",\"id\":\"1\",\"source\":\"GDS\",\"instantTicketingRequired\":false,\"disablePricing\":false,\"nonHomogeneous\":false,\"oneWay\":false,\"paymentCardRequired\":false,\"lastTicketingDate\":\"2025-11-14\",\"numberOfBookableSeats\":9,\"itineraries\":[{\"duration\":\"PT23H20M\",\"segments\":[{\"departure\":{\"iataCode\":\"DEL\",\"terminal\":\"3\",\"at\":\"2025-11-14T02:00:00\"},\"arrival\":{\"iataCode\":\"KWI\",\"terminal\":\"4\",\"at\":\"2025-11-14T04:05:00\"},\"carrierCode\":\"KU\",\"number\":\"382\",\"aircraft\":{\"code\":\"32N\"},\"operating\":{\"carrierCode\":\"KU\"},\"duration\":\"PT4H35M\",\"id\":\"17\",\"numberOfStops\":0,\"blacklistedInEU\":false},{\"departure\":{\"iataCode\":\"KWI\",\"terminal\":\"4\",\"at\":\"2025-11-14T09:05:00\"},\"arrival\":{\"iataCode\":\"JFK\",\"terminal\":\"7\",\"at\":\"2025-11-14T15:50:00\"},\"carrierCode\":\"KU\",\"number\":\"117\",\"aircraft\":{\"code\":\"77W\"},\"operating\":{\"carrierCode\":\"KU\"},\"duration\":\"PT13H45M\",\"id\":\"18\",\"numberOfStops\":0,\"blacklistedInEU\":false}]}],\"price\":{\"currency\":\"USD\",\"total\":\"364.77\",\"base\":\"246.00\",\"fees\":[{\"amount\":\"0.00\",\"type\":\"SUPPLIER\"},{\"amount\":\"0.00\",\"type\":\"TICKETING\"}],\"grandTotal\":\"364.77\"},\"pricingOptions\":{\"includedCheckedBagsOnly\":true,\"fareType\":[\"PUBLISHED\"],\"refundableFare\":false,\"noRestrictionFare\":false,\"noPenaltyFare\":false},\"validatingAirlineCodes\":[\"KU\"],\"travelerPricings\":[{\"travelerId\":\"1\",\"fareOption\":\"STANDARD\",\"travelerType\":\"ADULT\",\"price\":{\"currency\":\"USD\",\"total\":\"364.77\",\"base\":\"246.00\"},\"fareDetailsBySegment\":[{\"segmentId\":\"17\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"VOWIN1\",\"class\":\"V\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":2,\"weight\":0}},{\"segmentId\":\"18\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"VOWIN1\",\"class\":\"V\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":2,\"weight\":0}}]}]}"
+        },
+        {
+            "oneWay": false,
+            "seatsAvailable": 9,
+            "currencyCode": "USD",
+            "basePrice": "100.00",
+            "totalPrice": "402.97",
+            "totalTravelers": 1,
+            "trips": [
+                {
+                    "from": "DEL",
+                    "to": "JFK",
+                    "stops": 1,
+                    "totalFlightDuration": "21h 5m",
+                    "totalLayoverDuration": "2h 15m",
+                    "legs": [
+                        {
+                            "legNo": "5",
+                            "flightNumber": "217",
+                            "carrierCode": "EY",
+                            "carrierName": null,
+                            "operatingCarrierCode": "EY",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "351",
+                            "departureAirport": "DEL",
+                            "departureTerminal": "3",
+                            "departureDateTime": "2025-11-14T22:05:00",
+                            "arrivalAirport": "AUH",
+                            "arrivalTerminal": "A",
+                            "arrivalDateTime": "2025-11-15T00:35:00",
+                            "duration": "4h 0m",
+                            "layoverAfter": "2h 15m"
+                        },
+                        {
+                            "legNo": "6",
+                            "flightNumber": "1",
+                            "carrierCode": "EY",
+                            "carrierName": null,
+                            "operatingCarrierCode": "EY",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "388",
+                            "departureAirport": "AUH",
+                            "departureTerminal": "A",
+                            "departureDateTime": "2025-11-15T02:50:00",
+                            "arrivalAirport": "JFK",
+                            "arrivalTerminal": "4",
+                            "arrivalDateTime": "2025-11-15T08:40:00",
+                            "duration": "14h 50m",
+                            "layoverAfter": null
+                        }
+                    ]
+                }
+            ],
+            "pricingAdditionalInfo": "{\"type\":\"flight-offer\",\"id\":\"2\",\"source\":\"GDS\",\"instantTicketingRequired\":false,\"disablePricing\":false,\"nonHomogeneous\":false,\"oneWay\":false,\"paymentCardRequired\":false,\"lastTicketingDate\":\"2025-08-31\",\"numberOfBookableSeats\":9,\"itineraries\":[{\"duration\":\"PT21H5M\",\"segments\":[{\"departure\":{\"iataCode\":\"DEL\",\"terminal\":\"3\",\"at\":\"2025-11-14T22:05:00\"},\"arrival\":{\"iataCode\":\"AUH\",\"terminal\":\"A\",\"at\":\"2025-11-15T00:35:00\"},\"carrierCode\":\"EY\",\"number\":\"217\",\"aircraft\":{\"code\":\"351\"},\"operating\":{\"carrierCode\":\"EY\"},\"duration\":\"PT4H\",\"id\":\"5\",\"numberOfStops\":0,\"blacklistedInEU\":false},{\"departure\":{\"iataCode\":\"AUH\",\"terminal\":\"A\",\"at\":\"2025-11-15T02:50:00\"},\"arrival\":{\"iataCode\":\"JFK\",\"terminal\":\"4\",\"at\":\"2025-11-15T08:40:00\"},\"carrierCode\":\"EY\",\"number\":\"1\",\"aircraft\":{\"code\":\"388\"},\"operating\":{\"carrierCode\":\"EY\"},\"duration\":\"PT14H50M\",\"id\":\"6\",\"numberOfStops\":0,\"blacklistedInEU\":false}]}],\"price\":{\"currency\":\"USD\",\"total\":\"402.97\",\"base\":\"100.00\",\"fees\":[{\"amount\":\"0.00\",\"type\":\"SUPPLIER\"},{\"amount\":\"0.00\",\"type\":\"TICKETING\"}],\"grandTotal\":\"402.97\",\"additionalServices\":[{\"amount\":\"210.00\",\"type\":\"CHECKED_BAGS\"}]},\"pricingOptions\":{\"includedCheckedBagsOnly\":false,\"fareType\":[\"PUBLISHED\"],\"refundableFare\":false,\"noRestrictionFare\":false,\"noPenaltyFare\":false},\"validatingAirlineCodes\":[\"EY\"],\"travelerPricings\":[{\"travelerId\":\"1\",\"fareOption\":\"STANDARD\",\"travelerType\":\"ADULT\",\"price\":{\"currency\":\"USD\",\"total\":\"402.97\",\"base\":\"100.00\"},\"fareDetailsBySegment\":[{\"segmentId\":\"5\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"ELN00H6R\",\"brandedFare\":\"YBASIC\",\"class\":\"E\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":0,\"weight\":0},\"amenities\":[{\"description\":\"EXCESS WEIGHT SPECIAL CHARGE\",\"isChargeable\":true,\"amenityType\":\"BAGGAGE\"},{\"description\":\"FOOD AND BEVERAGE\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"PRIORITY ACCESS\",\"isChargeable\":true,\"amenityType\":\"TRAVEL_SERVICES\"},{\"description\":\"STANDARD SEAT SELECTION\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"}]},{\"segmentId\":\"6\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"ELN00H6R\",\"brandedFare\":\"YBASIC\",\"class\":\"E\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":0,\"weight\":0},\"amenities\":[{\"description\":\"EXCESS WEIGHT SPECIAL CHARGE\",\"isChargeable\":true,\"amenityType\":\"BAGGAGE\"},{\"description\":\"FOOD AND BEVERAGE\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"PRIORITY ACCESS\",\"isChargeable\":true,\"amenityType\":\"TRAVEL_SERVICES\"},{\"description\":\"STANDARD SEAT SELECTION\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"}]}]}]}"
+        },
+        {
+            "oneWay": false,
+            "seatsAvailable": 9,
+            "currencyCode": "USD",
+            "basePrice": "174.00",
+            "totalPrice": "405.87",
+            "totalTravelers": 1,
+            "trips": [
+                {
+                    "from": "DEL",
+                    "to": "JFK",
+                    "stops": 0,
+                    "totalFlightDuration": "14h 55m",
+                    "totalLayoverDuration": "0h 0m",
+                    "legs": [
+                        {
+                            "legNo": "31",
+                            "flightNumber": "101",
+                            "carrierCode": "AI",
+                            "carrierName": null,
+                            "operatingCarrierCode": "AI",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "359",
+                            "departureAirport": "DEL",
+                            "departureTerminal": "3",
+                            "departureDateTime": "2025-11-14T02:30:00",
+                            "arrivalAirport": "JFK",
+                            "arrivalTerminal": "4",
+                            "arrivalDateTime": "2025-11-14T06:55:00",
+                            "duration": "14h 55m",
+                            "layoverAfter": null
+                        }
+                    ]
+                }
+            ],
+            "pricingAdditionalInfo": "{\"type\":\"flight-offer\",\"id\":\"3\",\"source\":\"GDS\",\"instantTicketingRequired\":false,\"disablePricing\":false,\"nonHomogeneous\":false,\"oneWay\":false,\"paymentCardRequired\":false,\"lastTicketingDate\":\"2025-11-14\",\"numberOfBookableSeats\":9,\"itineraries\":[{\"duration\":\"PT14H55M\",\"segments\":[{\"departure\":{\"iataCode\":\"DEL\",\"terminal\":\"3\",\"at\":\"2025-11-14T02:30:00\"},\"arrival\":{\"iataCode\":\"JFK\",\"terminal\":\"4\",\"at\":\"2025-11-14T06:55:00\"},\"carrierCode\":\"AI\",\"number\":\"101\",\"aircraft\":{\"code\":\"359\"},\"operating\":{\"carrierCode\":\"AI\"},\"duration\":\"PT14H55M\",\"id\":\"31\",\"numberOfStops\":0,\"blacklistedInEU\":false}]}],\"price\":{\"currency\":\"USD\",\"total\":\"405.87\",\"base\":\"174.00\",\"fees\":[{\"amount\":\"0.00\",\"type\":\"SUPPLIER\"},{\"amount\":\"0.00\",\"type\":\"TICKETING\"}],\"grandTotal\":\"405.87\",\"additionalServices\":[{\"amount\":\"98.70\",\"type\":\"CHECKED_BAGS\"}]},\"pricingOptions\":{\"includedCheckedBagsOnly\":true,\"fareType\":[\"PUBLISHED\"],\"refundableFare\":false,\"noRestrictionFare\":false,\"noPenaltyFare\":false},\"validatingAirlineCodes\":[\"AI\"],\"travelerPricings\":[{\"travelerId\":\"1\",\"fareOption\":\"STANDARD\",\"travelerType\":\"ADULT\",\"price\":{\"currency\":\"USD\",\"total\":\"405.87\",\"base\":\"174.00\"},\"fareDetailsBySegment\":[{\"segmentId\":\"31\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"SL3YXRDY\",\"brandedFare\":\"ECOVALU\",\"class\":\"S\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":1,\"weight\":0},\"amenities\":[{\"description\":\"PRE RESERVED SEAT ASSIGNMENT\",\"isChargeable\":false,\"amenityType\":\"PRE_RESERVED_SEAT\"},{\"description\":\"MEAL SERVICES\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"REFUNDABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"CHANGEABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"UPGRADE\",\"isChargeable\":true,\"amenityType\":\"UPGRADES\"},{\"description\":\"FREE CHECKED BAGGAGE ALLOWANCE\",\"isChargeable\":false,\"amenityType\":\"BRANDED_FARES\"}]}]}]}"
+        },
+        {
+            "oneWay": false,
+            "seatsAvailable": 4,
+            "currencyCode": "USD",
+            "basePrice": "174.00",
+            "totalPrice": "408.87",
+            "totalTravelers": 1,
+            "trips": [
+                {
+                    "from": "DEL",
+                    "to": "JFK",
+                    "stops": 1,
+                    "totalFlightDuration": "19h 55m",
+                    "totalLayoverDuration": "1h 50m",
+                    "legs": [
+                        {
+                            "legNo": "34",
+                            "flightNumber": "2433",
+                            "carrierCode": "AI",
+                            "carrierName": null,
+                            "operatingCarrierCode": "AI",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "32N",
+                            "departureAirport": "DEL",
+                            "departureTerminal": "3",
+                            "departureDateTime": "2025-11-14T21:30:00",
+                            "arrivalAirport": "BOM",
+                            "arrivalTerminal": "2",
+                            "arrivalDateTime": "2025-11-14T23:55:00",
+                            "duration": "2h 25m",
+                            "layoverAfter": "1h 50m"
+                        },
+                        {
+                            "legNo": "35",
+                            "flightNumber": "119",
+                            "carrierCode": "AI",
+                            "carrierName": null,
+                            "operatingCarrierCode": "AI",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "77W",
+                            "departureAirport": "BOM",
+                            "departureTerminal": "2",
+                            "departureDateTime": "2025-11-15T01:45:00",
+                            "arrivalAirport": "JFK",
+                            "arrivalTerminal": "4",
+                            "arrivalDateTime": "2025-11-15T06:55:00",
+                            "duration": "15h 40m",
+                            "layoverAfter": null
+                        }
+                    ]
+                }
+            ],
+            "pricingAdditionalInfo": "{\"type\":\"flight-offer\",\"id\":\"4\",\"source\":\"GDS\",\"instantTicketingRequired\":false,\"disablePricing\":false,\"nonHomogeneous\":false,\"oneWay\":false,\"paymentCardRequired\":false,\"lastTicketingDate\":\"2025-11-14\",\"numberOfBookableSeats\":4,\"itineraries\":[{\"duration\":\"PT19H55M\",\"segments\":[{\"departure\":{\"iataCode\":\"DEL\",\"terminal\":\"3\",\"at\":\"2025-11-14T21:30:00\"},\"arrival\":{\"iataCode\":\"BOM\",\"terminal\":\"2\",\"at\":\"2025-11-14T23:55:00\"},\"carrierCode\":\"AI\",\"number\":\"2433\",\"aircraft\":{\"code\":\"32N\"},\"operating\":{\"carrierCode\":\"AI\"},\"duration\":\"PT2H25M\",\"id\":\"34\",\"numberOfStops\":0,\"blacklistedInEU\":false},{\"departure\":{\"iataCode\":\"BOM\",\"terminal\":\"2\",\"at\":\"2025-11-15T01:45:00\"},\"arrival\":{\"iataCode\":\"JFK\",\"terminal\":\"4\",\"at\":\"2025-11-15T06:55:00\"},\"carrierCode\":\"AI\",\"number\":\"119\",\"aircraft\":{\"code\":\"77W\"},\"operating\":{\"carrierCode\":\"AI\"},\"duration\":\"PT15H40M\",\"id\":\"35\",\"numberOfStops\":0,\"blacklistedInEU\":false}]}],\"price\":{\"currency\":\"USD\",\"total\":\"408.87\",\"base\":\"174.00\",\"fees\":[{\"amount\":\"0.00\",\"type\":\"SUPPLIER\"},{\"amount\":\"0.00\",\"type\":\"TICKETING\"}],\"grandTotal\":\"408.87\",\"additionalServices\":[{\"amount\":\"98.70\",\"type\":\"CHECKED_BAGS\"}]},\"pricingOptions\":{\"includedCheckedBagsOnly\":true,\"fareType\":[\"PUBLISHED\"],\"refundableFare\":false,\"noRestrictionFare\":false,\"noPenaltyFare\":false},\"validatingAirlineCodes\":[\"AI\"],\"travelerPricings\":[{\"travelerId\":\"1\",\"fareOption\":\"STANDARD\",\"travelerType\":\"ADULT\",\"price\":{\"currency\":\"USD\",\"total\":\"408.87\",\"base\":\"174.00\"},\"fareDetailsBySegment\":[{\"segmentId\":\"34\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"SL3YXRDY\",\"brandedFare\":\"ECOVALU\",\"class\":\"S\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":1,\"weight\":0},\"amenities\":[{\"description\":\"PRE RESERVED SEAT ASSIGNMENT\",\"isChargeable\":false,\"amenityType\":\"PRE_RESERVED_SEAT\"},{\"description\":\"MEAL SERVICES\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"REFUNDABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"CHANGEABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"UPGRADE\",\"isChargeable\":true,\"amenityType\":\"UPGRADES\"},{\"description\":\"FREE CHECKED BAGGAGE ALLOWANCE\",\"isChargeable\":false,\"amenityType\":\"BRANDED_FARES\"}]},{\"segmentId\":\"35\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"SL3YXRDY\",\"brandedFare\":\"ECOVALU\",\"class\":\"S\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":1,\"weight\":0},\"amenities\":[{\"description\":\"PRE RESERVED SEAT ASSIGNMENT\",\"isChargeable\":false,\"amenityType\":\"PRE_RESERVED_SEAT\"},{\"description\":\"MEAL SERVICES\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"REFUNDABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"CHANGEABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"UPGRADE\",\"isChargeable\":true,\"amenityType\":\"UPGRADES\"},{\"description\":\"FREE CHECKED BAGGAGE ALLOWANCE\",\"isChargeable\":false,\"amenityType\":\"BRANDED_FARES\"}]}]}]}"
+        },
+        {
+            "oneWay": false,
+            "seatsAvailable": 9,
+            "currencyCode": "USD",
+            "basePrice": "174.00",
+            "totalPrice": "408.87",
+            "totalTravelers": 1,
+            "trips": [
+                {
+                    "from": "DEL",
+                    "to": "JFK",
+                    "stops": 1,
+                    "totalFlightDuration": "20h 30m",
+                    "totalLayoverDuration": "2h 25m",
+                    "legs": [
+                        {
+                            "legNo": "21",
+                            "flightNumber": "2981",
+                            "carrierCode": "AI",
+                            "carrierName": null,
+                            "operatingCarrierCode": "AI",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "321",
+                            "departureAirport": "DEL",
+                            "departureTerminal": "3",
+                            "departureDateTime": "2025-11-14T20:55:00",
+                            "arrivalAirport": "BOM",
+                            "arrivalTerminal": "2",
+                            "arrivalDateTime": "2025-11-14T23:20:00",
+                            "duration": "2h 25m",
+                            "layoverAfter": "2h 25m"
+                        },
+                        {
+                            "legNo": "22",
+                            "flightNumber": "119",
+                            "carrierCode": "AI",
+                            "carrierName": null,
+                            "operatingCarrierCode": "AI",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "77W",
+                            "departureAirport": "BOM",
+                            "departureTerminal": "2",
+                            "departureDateTime": "2025-11-15T01:45:00",
+                            "arrivalAirport": "JFK",
+                            "arrivalTerminal": "4",
+                            "arrivalDateTime": "2025-11-15T06:55:00",
+                            "duration": "15h 40m",
+                            "layoverAfter": null
+                        }
+                    ]
+                }
+            ],
+            "pricingAdditionalInfo": "{\"type\":\"flight-offer\",\"id\":\"5\",\"source\":\"GDS\",\"instantTicketingRequired\":false,\"disablePricing\":false,\"nonHomogeneous\":false,\"oneWay\":false,\"paymentCardRequired\":false,\"lastTicketingDate\":\"2025-11-14\",\"numberOfBookableSeats\":9,\"itineraries\":[{\"duration\":\"PT20H30M\",\"segments\":[{\"departure\":{\"iataCode\":\"DEL\",\"terminal\":\"3\",\"at\":\"2025-11-14T20:55:00\"},\"arrival\":{\"iataCode\":\"BOM\",\"terminal\":\"2\",\"at\":\"2025-11-14T23:20:00\"},\"carrierCode\":\"AI\",\"number\":\"2981\",\"aircraft\":{\"code\":\"321\"},\"operating\":{\"carrierCode\":\"AI\"},\"duration\":\"PT2H25M\",\"id\":\"21\",\"numberOfStops\":0,\"blacklistedInEU\":false},{\"departure\":{\"iataCode\":\"BOM\",\"terminal\":\"2\",\"at\":\"2025-11-15T01:45:00\"},\"arrival\":{\"iataCode\":\"JFK\",\"terminal\":\"4\",\"at\":\"2025-11-15T06:55:00\"},\"carrierCode\":\"AI\",\"number\":\"119\",\"aircraft\":{\"code\":\"77W\"},\"operating\":{\"carrierCode\":\"AI\"},\"duration\":\"PT15H40M\",\"id\":\"22\",\"numberOfStops\":0,\"blacklistedInEU\":false}]}],\"price\":{\"currency\":\"USD\",\"total\":\"408.87\",\"base\":\"174.00\",\"fees\":[{\"amount\":\"0.00\",\"type\":\"SUPPLIER\"},{\"amount\":\"0.00\",\"type\":\"TICKETING\"}],\"grandTotal\":\"408.87\",\"additionalServices\":[{\"amount\":\"98.70\",\"type\":\"CHECKED_BAGS\"}]},\"pricingOptions\":{\"includedCheckedBagsOnly\":true,\"fareType\":[\"PUBLISHED\"],\"refundableFare\":false,\"noRestrictionFare\":false,\"noPenaltyFare\":false},\"validatingAirlineCodes\":[\"AI\"],\"travelerPricings\":[{\"travelerId\":\"1\",\"fareOption\":\"STANDARD\",\"travelerType\":\"ADULT\",\"price\":{\"currency\":\"USD\",\"total\":\"408.87\",\"base\":\"174.00\"},\"fareDetailsBySegment\":[{\"segmentId\":\"21\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"SL3YXRDY\",\"brandedFare\":\"ECOVALU\",\"class\":\"S\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":1,\"weight\":0},\"amenities\":[{\"description\":\"PRE RESERVED SEAT ASSIGNMENT\",\"isChargeable\":false,\"amenityType\":\"PRE_RESERVED_SEAT\"},{\"description\":\"MEAL SERVICES\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"REFUNDABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"CHANGEABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"UPGRADE\",\"isChargeable\":true,\"amenityType\":\"UPGRADES\"},{\"description\":\"FREE CHECKED BAGGAGE ALLOWANCE\",\"isChargeable\":false,\"amenityType\":\"BRANDED_FARES\"}]},{\"segmentId\":\"22\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"SL3YXRDY\",\"brandedFare\":\"ECOVALU\",\"class\":\"S\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":1,\"weight\":0},\"amenities\":[{\"description\":\"PRE RESERVED SEAT ASSIGNMENT\",\"isChargeable\":false,\"amenityType\":\"PRE_RESERVED_SEAT\"},{\"description\":\"MEAL SERVICES\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"REFUNDABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"CHANGEABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"UPGRADE\",\"isChargeable\":true,\"amenityType\":\"UPGRADES\"},{\"description\":\"FREE CHECKED BAGGAGE ALLOWANCE\",\"isChargeable\":false,\"amenityType\":\"BRANDED_FARES\"}]}]}]}"
+        },
+        {
+            "oneWay": false,
+            "seatsAvailable": 7,
+            "currencyCode": "USD",
+            "basePrice": "321.00",
+            "totalPrice": "438.07",
+            "totalTravelers": 1,
+            "trips": [
+                {
+                    "from": "DEL",
+                    "to": "JFK",
+                    "stops": 1,
+                    "totalFlightDuration": "22h 5m",
+                    "totalLayoverDuration": "3h 0m",
+                    "legs": [
+                        {
+                            "legNo": "7",
+                            "flightNumber": "571",
+                            "carrierCode": "QR",
+                            "carrierName": null,
+                            "operatingCarrierCode": "QR",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "788",
+                            "departureAirport": "DEL",
+                            "departureTerminal": "3",
+                            "departureDateTime": "2025-11-14T09:55:00",
+                            "arrivalAirport": "DOH",
+                            "arrivalTerminal": null,
+                            "arrivalDateTime": "2025-11-14T11:50:00",
+                            "duration": "4h 25m",
+                            "layoverAfter": "3h 0m"
+                        },
+                        {
+                            "legNo": "8",
+                            "flightNumber": "5552",
+                            "carrierCode": "B6",
+                            "carrierName": null,
+                            "operatingCarrierCode": "QR",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "350",
+                            "departureAirport": "DOH",
+                            "departureTerminal": null,
+                            "departureDateTime": "2025-11-14T14:50:00",
+                            "arrivalAirport": "JFK",
+                            "arrivalTerminal": "8",
+                            "arrivalDateTime": "2025-11-14T21:30:00",
+                            "duration": "14h 40m",
+                            "layoverAfter": null
+                        }
+                    ]
+                }
+            ],
+            "pricingAdditionalInfo": "{\"type\":\"flight-offer\",\"id\":\"6\",\"source\":\"GDS\",\"instantTicketingRequired\":false,\"disablePricing\":false,\"nonHomogeneous\":false,\"oneWay\":false,\"paymentCardRequired\":false,\"lastTicketingDate\":\"2025-11-02\",\"numberOfBookableSeats\":7,\"itineraries\":[{\"duration\":\"PT22H5M\",\"segments\":[{\"departure\":{\"iataCode\":\"DEL\",\"terminal\":\"3\",\"at\":\"2025-11-14T09:55:00\"},\"arrival\":{\"iataCode\":\"DOH\",\"at\":\"2025-11-14T11:50:00\"},\"carrierCode\":\"QR\",\"number\":\"571\",\"aircraft\":{\"code\":\"788\"},\"operating\":{\"carrierCode\":\"QR\"},\"duration\":\"PT4H25M\",\"id\":\"7\",\"numberOfStops\":0,\"blacklistedInEU\":false},{\"departure\":{\"iataCode\":\"DOH\",\"at\":\"2025-11-14T14:50:00\"},\"arrival\":{\"iataCode\":\"JFK\",\"terminal\":\"8\",\"at\":\"2025-11-14T21:30:00\"},\"carrierCode\":\"B6\",\"number\":\"5552\",\"aircraft\":{\"code\":\"350\"},\"operating\":{\"carrierCode\":\"QR\"},\"duration\":\"PT14H40M\",\"id\":\"8\",\"numberOfStops\":0,\"blacklistedInEU\":false}]}],\"price\":{\"currency\":\"USD\",\"total\":\"438.07\",\"base\":\"321.00\",\"fees\":[{\"amount\":\"0.00\",\"type\":\"SUPPLIER\"},{\"amount\":\"0.00\",\"type\":\"TICKETING\"}],\"grandTotal\":\"438.07\"},\"pricingOptions\":{\"includedCheckedBagsOnly\":true,\"fareType\":[\"PUBLISHED\"],\"refundableFare\":false,\"noRestrictionFare\":false,\"noPenaltyFare\":false},\"validatingAirlineCodes\":[\"B6\"],\"travelerPricings\":[{\"travelerId\":\"1\",\"fareOption\":\"STANDARD\",\"travelerType\":\"ADULT\",\"price\":{\"currency\":\"USD\",\"total\":\"438.07\",\"base\":\"321.00\"},\"fareDetailsBySegment\":[{\"segmentId\":\"7\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"UJINPIRI\",\"class\":\"O\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":2,\"weight\":0}},{\"segmentId\":\"8\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"UJINPIRI\",\"class\":\"U\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":2,\"weight\":0}}]}]}"
+        },
+        {
+            "oneWay": false,
+            "seatsAvailable": 9,
+            "currencyCode": "USD",
+            "basePrice": "113.00",
+            "totalPrice": "484.27",
+            "totalTravelers": 1,
+            "trips": [
+                {
+                    "from": "DEL",
+                    "to": "JFK",
+                    "stops": 1,
+                    "totalFlightDuration": "22h 5m",
+                    "totalLayoverDuration": "3h 0m",
+                    "legs": [
+                        {
+                            "legNo": "9",
+                            "flightNumber": "571",
+                            "carrierCode": "QR",
+                            "carrierName": null,
+                            "operatingCarrierCode": "QR",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "788",
+                            "departureAirport": "DEL",
+                            "departureTerminal": "3",
+                            "departureDateTime": "2025-11-14T09:55:00",
+                            "arrivalAirport": "DOH",
+                            "arrivalTerminal": null,
+                            "arrivalDateTime": "2025-11-14T11:50:00",
+                            "duration": "4h 25m",
+                            "layoverAfter": "3h 0m"
+                        },
+                        {
+                            "legNo": "10",
+                            "flightNumber": "705",
+                            "carrierCode": "QR",
+                            "carrierName": null,
+                            "operatingCarrierCode": "QR",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "359",
+                            "departureAirport": "DOH",
+                            "departureTerminal": null,
+                            "departureDateTime": "2025-11-14T14:50:00",
+                            "arrivalAirport": "JFK",
+                            "arrivalTerminal": "8",
+                            "arrivalDateTime": "2025-11-14T21:30:00",
+                            "duration": "14h 40m",
+                            "layoverAfter": null
+                        }
+                    ]
+                }
+            ],
+            "pricingAdditionalInfo": "{\"type\":\"flight-offer\",\"id\":\"7\",\"source\":\"GDS\",\"instantTicketingRequired\":false,\"disablePricing\":false,\"nonHomogeneous\":false,\"oneWay\":false,\"paymentCardRequired\":false,\"lastTicketingDate\":\"2025-08-15\",\"numberOfBookableSeats\":9,\"itineraries\":[{\"duration\":\"PT22H5M\",\"segments\":[{\"departure\":{\"iataCode\":\"DEL\",\"terminal\":\"3\",\"at\":\"2025-11-14T09:55:00\"},\"arrival\":{\"iataCode\":\"DOH\",\"at\":\"2025-11-14T11:50:00\"},\"carrierCode\":\"QR\",\"number\":\"571\",\"aircraft\":{\"code\":\"788\"},\"operating\":{\"carrierCode\":\"QR\"},\"duration\":\"PT4H25M\",\"id\":\"9\",\"numberOfStops\":0,\"blacklistedInEU\":false},{\"departure\":{\"iataCode\":\"DOH\",\"at\":\"2025-11-14T14:50:00\"},\"arrival\":{\"iataCode\":\"JFK\",\"terminal\":\"8\",\"at\":\"2025-11-14T21:30:00\"},\"carrierCode\":\"QR\",\"number\":\"705\",\"aircraft\":{\"code\":\"359\"},\"operating\":{\"carrierCode\":\"QR\"},\"duration\":\"PT14H40M\",\"id\":\"10\",\"numberOfStops\":0,\"blacklistedInEU\":false}]}],\"price\":{\"currency\":\"USD\",\"total\":\"484.27\",\"base\":\"113.00\",\"fees\":[{\"amount\":\"0.00\",\"type\":\"SUPPLIER\"},{\"amount\":\"0.00\",\"type\":\"TICKETING\"}],\"grandTotal\":\"484.27\"},\"pricingOptions\":{\"includedCheckedBagsOnly\":true,\"fareType\":[\"PUBLISHED\"],\"refundableFare\":false,\"noRestrictionFare\":false,\"noPenaltyFare\":false},\"validatingAirlineCodes\":[\"QR\"],\"travelerPricings\":[{\"travelerId\":\"1\",\"fareOption\":\"STANDARD\",\"travelerType\":\"ADULT\",\"price\":{\"currency\":\"USD\",\"total\":\"484.27\",\"base\":\"113.00\"},\"fareDetailsBySegment\":[{\"segmentId\":\"9\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"OJINP4RI\",\"brandedFare\":\"ECLASSIC\",\"class\":\"O\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":2,\"weight\":0},\"amenities\":[{\"description\":\"CABIN BAG 1 PIECE 7 KG\",\"isChargeable\":false,\"amenityType\":\"BAGGAGE\"},{\"description\":\"PRE RESERVED SEAT ASSIGNMENT\",\"isChargeable\":true,\"amenityType\":\"PRE_RESERVED_SEAT\"},{\"description\":\"MEAL BEVERAGE\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"REFUNDABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"CHANGEABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"PREMIUM SEAT\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"50 PCT QMILES ACCUMULATION\",\"isChargeable\":false,\"amenityType\":\"BRANDED_FARES\"}]},{\"segmentId\":\"10\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"OJINP4RI\",\"brandedFare\":\"ECLASSIC\",\"class\":\"O\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":2,\"weight\":0},\"amenities\":[{\"description\":\"CABIN BAG 1 PIECE 7 KG\",\"isChargeable\":false,\"amenityType\":\"BAGGAGE\"},{\"description\":\"PRE RESERVED SEAT ASSIGNMENT\",\"isChargeable\":true,\"amenityType\":\"PRE_RESERVED_SEAT\"},{\"description\":\"MEAL BEVERAGE\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"REFUNDABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"CHANGEABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"PREMIUM SEAT\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"50 PCT QMILES ACCUMULATION\",\"isChargeable\":false,\"amenityType\":\"BRANDED_FARES\"}]}]}]}"
+        },
+        {
+            "oneWay": false,
+            "seatsAvailable": 9,
+            "currencyCode": "USD",
+            "basePrice": "113.00",
+            "totalPrice": "484.27",
+            "totalTravelers": 1,
+            "trips": [
+                {
+                    "from": "DEL",
+                    "to": "JFK",
+                    "stops": 1,
+                    "totalFlightDuration": "25h 50m",
+                    "totalLayoverDuration": "6h 30m",
+                    "legs": [
+                        {
+                            "legNo": "29",
+                            "flightNumber": "4781",
+                            "carrierCode": "QR",
+                            "carrierName": null,
+                            "operatingCarrierCode": "6E",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "320",
+                            "departureAirport": "DEL",
+                            "departureTerminal": "3",
+                            "departureDateTime": "2025-11-14T16:40:00",
+                            "arrivalAirport": "DOH",
+                            "arrivalTerminal": null,
+                            "arrivalDateTime": "2025-11-14T18:50:00",
+                            "duration": "4h 40m",
+                            "layoverAfter": "6h 30m"
+                        },
+                        {
+                            "legNo": "30",
+                            "flightNumber": "703",
+                            "carrierCode": "QR",
+                            "carrierName": null,
+                            "operatingCarrierCode": "QR",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "77W",
+                            "departureAirport": "DOH",
+                            "departureTerminal": null,
+                            "departureDateTime": "2025-11-15T01:20:00",
+                            "arrivalAirport": "JFK",
+                            "arrivalTerminal": "8",
+                            "arrivalDateTime": "2025-11-15T08:00:00",
+                            "duration": "14h 40m",
+                            "layoverAfter": null
+                        }
+                    ]
+                }
+            ],
+            "pricingAdditionalInfo": "{\"type\":\"flight-offer\",\"id\":\"8\",\"source\":\"GDS\",\"instantTicketingRequired\":false,\"disablePricing\":false,\"nonHomogeneous\":false,\"oneWay\":false,\"paymentCardRequired\":false,\"lastTicketingDate\":\"2025-08-15\",\"numberOfBookableSeats\":9,\"itineraries\":[{\"duration\":\"PT25H50M\",\"segments\":[{\"departure\":{\"iataCode\":\"DEL\",\"terminal\":\"3\",\"at\":\"2025-11-14T16:40:00\"},\"arrival\":{\"iataCode\":\"DOH\",\"at\":\"2025-11-14T18:50:00\"},\"carrierCode\":\"QR\",\"number\":\"4781\",\"aircraft\":{\"code\":\"320\"},\"operating\":{\"carrierCode\":\"6E\"},\"duration\":\"PT4H40M\",\"id\":\"29\",\"numberOfStops\":0,\"blacklistedInEU\":false},{\"departure\":{\"iataCode\":\"DOH\",\"at\":\"2025-11-15T01:20:00\"},\"arrival\":{\"iataCode\":\"JFK\",\"terminal\":\"8\",\"at\":\"2025-11-15T08:00:00\"},\"carrierCode\":\"QR\",\"number\":\"703\",\"aircraft\":{\"code\":\"77W\"},\"operating\":{\"carrierCode\":\"QR\"},\"duration\":\"PT14H40M\",\"id\":\"30\",\"numberOfStops\":0,\"blacklistedInEU\":false}]}],\"price\":{\"currency\":\"USD\",\"total\":\"484.27\",\"base\":\"113.00\",\"fees\":[{\"amount\":\"0.00\",\"type\":\"SUPPLIER\"},{\"amount\":\"0.00\",\"type\":\"TICKETING\"}],\"grandTotal\":\"484.27\"},\"pricingOptions\":{\"includedCheckedBagsOnly\":true,\"fareType\":[\"PUBLISHED\"],\"refundableFare\":false,\"noRestrictionFare\":false,\"noPenaltyFare\":false},\"validatingAirlineCodes\":[\"QR\"],\"travelerPricings\":[{\"travelerId\":\"1\",\"fareOption\":\"STANDARD\",\"travelerType\":\"ADULT\",\"price\":{\"currency\":\"USD\",\"total\":\"484.27\",\"base\":\"113.00\"},\"fareDetailsBySegment\":[{\"segmentId\":\"29\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"OJINI4RI\",\"brandedFare\":\"ECLASSIC\",\"class\":\"O\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":2,\"weight\":0},\"amenities\":[{\"description\":\"CABIN BAG 1 PIECE 7 KG\",\"isChargeable\":false,\"amenityType\":\"BAGGAGE\"},{\"description\":\"PRE RESERVED SEAT ASSIGNMENT\",\"isChargeable\":true,\"amenityType\":\"PRE_RESERVED_SEAT\"},{\"description\":\"MEAL BEVERAGE\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"REFUNDABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"CHANGEABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"PREMIUM SEAT\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"50 PCT QMILES ACCUMULATION\",\"isChargeable\":false,\"amenityType\":\"BRANDED_FARES\"}]},{\"segmentId\":\"30\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"OJINI4RI\",\"brandedFare\":\"ECLASSIC\",\"class\":\"O\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":2,\"weight\":0},\"amenities\":[{\"description\":\"CABIN BAG 1 PIECE 7 KG\",\"isChargeable\":false,\"amenityType\":\"BAGGAGE\"},{\"description\":\"PRE RESERVED SEAT ASSIGNMENT\",\"isChargeable\":true,\"amenityType\":\"PRE_RESERVED_SEAT\"},{\"description\":\"MEAL BEVERAGE\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"REFUNDABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"CHANGEABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"PREMIUM SEAT\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"50 PCT QMILES ACCUMULATION\",\"isChargeable\":false,\"amenityType\":\"BRANDED_FARES\"}]}]}]}"
+        },
+        {
+            "oneWay": false,
+            "seatsAvailable": 9,
+            "currencyCode": "USD",
+            "basePrice": "188.00",
+            "totalPrice": "495.37",
+            "totalTravelers": 1,
+            "trips": [
+                {
+                    "from": "DEL",
+                    "to": "JFK",
+                    "stops": 1,
+                    "totalFlightDuration": "21h 20m",
+                    "totalLayoverDuration": "2h 55m",
+                    "legs": [
+                        {
+                            "legNo": "15",
+                            "flightNumber": "219",
+                            "carrierCode": "EY",
+                            "carrierName": null,
+                            "operatingCarrierCode": "EY",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "781",
+                            "departureAirport": "DEL",
+                            "departureTerminal": "3",
+                            "departureDateTime": "2025-11-14T04:25:00",
+                            "arrivalAirport": "AUH",
+                            "arrivalTerminal": "A",
+                            "arrivalDateTime": "2025-11-14T06:55:00",
+                            "duration": "4h 0m",
+                            "layoverAfter": "2h 55m"
+                        },
+                        {
+                            "legNo": "16",
+                            "flightNumber": "3",
+                            "carrierCode": "EY",
+                            "carrierName": null,
+                            "operatingCarrierCode": "EY",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "789",
+                            "departureAirport": "AUH",
+                            "departureTerminal": "A",
+                            "departureDateTime": "2025-11-14T09:50:00",
+                            "arrivalAirport": "JFK",
+                            "arrivalTerminal": "4",
+                            "arrivalDateTime": "2025-11-14T15:15:00",
+                            "duration": "14h 25m",
+                            "layoverAfter": null
+                        }
+                    ]
+                }
+            ],
+            "pricingAdditionalInfo": "{\"type\":\"flight-offer\",\"id\":\"9\",\"source\":\"GDS\",\"instantTicketingRequired\":false,\"disablePricing\":false,\"nonHomogeneous\":false,\"oneWay\":false,\"paymentCardRequired\":false,\"lastTicketingDate\":\"2025-08-31\",\"numberOfBookableSeats\":9,\"itineraries\":[{\"duration\":\"PT21H20M\",\"segments\":[{\"departure\":{\"iataCode\":\"DEL\",\"terminal\":\"3\",\"at\":\"2025-11-14T04:25:00\"},\"arrival\":{\"iataCode\":\"AUH\",\"terminal\":\"A\",\"at\":\"2025-11-14T06:55:00\"},\"carrierCode\":\"EY\",\"number\":\"219\",\"aircraft\":{\"code\":\"781\"},\"operating\":{\"carrierCode\":\"EY\"},\"duration\":\"PT4H\",\"id\":\"15\",\"numberOfStops\":0,\"blacklistedInEU\":false},{\"departure\":{\"iataCode\":\"AUH\",\"terminal\":\"A\",\"at\":\"2025-11-14T09:50:00\"},\"arrival\":{\"iataCode\":\"JFK\",\"terminal\":\"4\",\"at\":\"2025-11-14T15:15:00\"},\"carrierCode\":\"EY\",\"number\":\"3\",\"aircraft\":{\"code\":\"789\"},\"operating\":{\"carrierCode\":\"EY\"},\"duration\":\"PT14H25M\",\"id\":\"16\",\"numberOfStops\":0,\"blacklistedInEU\":false}]}],\"price\":{\"currency\":\"USD\",\"total\":\"495.37\",\"base\":\"188.00\",\"fees\":[{\"amount\":\"0.00\",\"type\":\"SUPPLIER\"},{\"amount\":\"0.00\",\"type\":\"TICKETING\"}],\"grandTotal\":\"495.37\",\"additionalServices\":[{\"amount\":\"210.00\",\"type\":\"CHECKED_BAGS\"}]},\"pricingOptions\":{\"includedCheckedBagsOnly\":false,\"fareType\":[\"PUBLISHED\"],\"refundableFare\":false,\"noRestrictionFare\":false,\"noPenaltyFare\":false},\"validatingAirlineCodes\":[\"EY\"],\"travelerPricings\":[{\"travelerId\":\"1\",\"fareOption\":\"STANDARD\",\"travelerType\":\"ADULT\",\"price\":{\"currency\":\"USD\",\"total\":\"495.37\",\"base\":\"188.00\"},\"fareDetailsBySegment\":[{\"segmentId\":\"15\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"VLN00H6F\",\"brandedFare\":\"YBASIC\",\"class\":\"V\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":0,\"weight\":0},\"amenities\":[{\"description\":\"EXCESS WEIGHT SPECIAL CHARGE\",\"isChargeable\":true,\"amenityType\":\"BAGGAGE\"},{\"description\":\"FOOD AND BEVERAGE\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"PRIORITY ACCESS\",\"isChargeable\":true,\"amenityType\":\"TRAVEL_SERVICES\"},{\"description\":\"STANDARD SEAT SELECTION\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"}]},{\"segmentId\":\"16\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"VLN00H6F\",\"brandedFare\":\"YBASIC\",\"class\":\"V\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":0,\"weight\":0},\"amenities\":[{\"description\":\"EXCESS WEIGHT SPECIAL CHARGE\",\"isChargeable\":true,\"amenityType\":\"BAGGAGE\"},{\"description\":\"FOOD AND BEVERAGE\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"PRIORITY ACCESS\",\"isChargeable\":true,\"amenityType\":\"TRAVEL_SERVICES\"},{\"description\":\"STANDARD SEAT SELECTION\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"}]}]}]}"
+        },
+        {
+            "oneWay": false,
+            "seatsAvailable": 9,
+            "currencyCode": "USD",
+            "basePrice": "296.00",
+            "totalPrice": "533.97",
+            "totalTravelers": 1,
+            "trips": [
+                {
+                    "from": "DEL",
+                    "to": "EWR",
+                    "stops": 0,
+                    "totalFlightDuration": "14h 55m",
+                    "totalLayoverDuration": "0h 0m",
+                    "legs": [
+                        {
+                            "legNo": "32",
+                            "flightNumber": "105",
+                            "carrierCode": "AI",
+                            "carrierName": null,
+                            "operatingCarrierCode": "AI",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "359",
+                            "departureAirport": "DEL",
+                            "departureTerminal": "3",
+                            "departureDateTime": "2025-11-14T02:30:00",
+                            "arrivalAirport": "EWR",
+                            "arrivalTerminal": "B",
+                            "arrivalDateTime": "2025-11-14T06:55:00",
+                            "duration": "14h 55m",
+                            "layoverAfter": null
+                        }
+                    ]
+                }
+            ],
+            "pricingAdditionalInfo": "{\"type\":\"flight-offer\",\"id\":\"10\",\"source\":\"GDS\",\"instantTicketingRequired\":false,\"disablePricing\":false,\"nonHomogeneous\":false,\"oneWay\":false,\"paymentCardRequired\":false,\"lastTicketingDate\":\"2025-11-14\",\"numberOfBookableSeats\":9,\"itineraries\":[{\"duration\":\"PT14H55M\",\"segments\":[{\"departure\":{\"iataCode\":\"DEL\",\"terminal\":\"3\",\"at\":\"2025-11-14T02:30:00\"},\"arrival\":{\"iataCode\":\"EWR\",\"terminal\":\"B\",\"at\":\"2025-11-14T06:55:00\"},\"carrierCode\":\"AI\",\"number\":\"105\",\"aircraft\":{\"code\":\"359\"},\"operating\":{\"carrierCode\":\"AI\"},\"duration\":\"PT14H55M\",\"id\":\"32\",\"numberOfStops\":0,\"blacklistedInEU\":false}]}],\"price\":{\"currency\":\"USD\",\"total\":\"533.97\",\"base\":\"296.00\",\"fees\":[{\"amount\":\"0.00\",\"type\":\"SUPPLIER\"},{\"amount\":\"0.00\",\"type\":\"TICKETING\"}],\"grandTotal\":\"533.97\",\"additionalServices\":[{\"amount\":\"98.70\",\"type\":\"CHECKED_BAGS\"}]},\"pricingOptions\":{\"includedCheckedBagsOnly\":true,\"fareType\":[\"PUBLISHED\"],\"refundableFare\":false,\"noRestrictionFare\":false,\"noPenaltyFare\":false},\"validatingAirlineCodes\":[\"AI\"],\"travelerPricings\":[{\"travelerId\":\"1\",\"fareOption\":\"STANDARD\",\"travelerType\":\"ADULT\",\"price\":{\"currency\":\"USD\",\"total\":\"533.97\",\"base\":\"296.00\"},\"fareDetailsBySegment\":[{\"segmentId\":\"32\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"UL3YXSDY\",\"brandedFare\":\"ECOVALU\",\"class\":\"U\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":1,\"weight\":0},\"amenities\":[{\"description\":\"PRE RESERVED SEAT ASSIGNMENT\",\"isChargeable\":false,\"amenityType\":\"PRE_RESERVED_SEAT\"},{\"description\":\"MEAL SERVICES\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"REFUNDABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"CHANGEABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"UPGRADE\",\"isChargeable\":true,\"amenityType\":\"UPGRADES\"},{\"description\":\"FREE CHECKED BAGGAGE ALLOWANCE\",\"isChargeable\":false,\"amenityType\":\"BRANDED_FARES\"}]}]}]}"
+        },
+        {
+            "oneWay": false,
+            "seatsAvailable": 9,
+            "currencyCode": "USD",
+            "basePrice": "186.00",
+            "totalPrice": "534.47",
+            "totalTravelers": 1,
+            "trips": [
+                {
+                    "from": "DEL",
+                    "to": "EWR",
+                    "stops": 1,
+                    "totalFlightDuration": "19h 57m",
+                    "totalLayoverDuration": "1h 50m",
+                    "legs": [
+                        {
+                            "legNo": "36",
+                            "flightNumber": "51",
+                            "carrierCode": "AC",
+                            "carrierName": null,
+                            "operatingCarrierCode": "AC",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "789",
+                            "departureAirport": "DEL",
+                            "departureTerminal": "3",
+                            "departureDateTime": "2025-11-14T00:15:00",
+                            "arrivalAirport": "YUL",
+                            "arrivalTerminal": null,
+                            "arrivalDateTime": "2025-11-14T06:15:00",
+                            "duration": "16h 30m",
+                            "layoverAfter": "1h 50m"
+                        },
+                        {
+                            "legNo": "37",
+                            "flightNumber": "8938",
+                            "carrierCode": "AC",
+                            "carrierName": null,
+                            "operatingCarrierCode": null,
+                            "operatingCarrierName": null,
+                            "aircraftCode": "CR9",
+                            "departureAirport": "YUL",
+                            "departureTerminal": null,
+                            "departureDateTime": "2025-11-14T08:05:00",
+                            "arrivalAirport": "EWR",
+                            "arrivalTerminal": "A",
+                            "arrivalDateTime": "2025-11-14T09:42:00",
+                            "duration": "1h 37m",
+                            "layoverAfter": null
+                        }
+                    ]
+                }
+            ],
+            "pricingAdditionalInfo": "{\"type\":\"flight-offer\",\"id\":\"11\",\"source\":\"GDS\",\"instantTicketingRequired\":false,\"disablePricing\":false,\"nonHomogeneous\":false,\"oneWay\":false,\"paymentCardRequired\":false,\"lastTicketingDate\":\"2025-08-16\",\"numberOfBookableSeats\":9,\"itineraries\":[{\"duration\":\"PT19H57M\",\"segments\":[{\"departure\":{\"iataCode\":\"DEL\",\"terminal\":\"3\",\"at\":\"2025-11-14T00:15:00\"},\"arrival\":{\"iataCode\":\"YUL\",\"at\":\"2025-11-14T06:15:00\"},\"carrierCode\":\"AC\",\"number\":\"51\",\"aircraft\":{\"code\":\"789\"},\"operating\":{\"carrierCode\":\"AC\"},\"duration\":\"PT16H30M\",\"id\":\"36\",\"numberOfStops\":0,\"blacklistedInEU\":false},{\"departure\":{\"iataCode\":\"YUL\",\"at\":\"2025-11-14T08:05:00\"},\"arrival\":{\"iataCode\":\"EWR\",\"terminal\":\"A\",\"at\":\"2025-11-14T09:42:00\"},\"carrierCode\":\"AC\",\"number\":\"8938\",\"aircraft\":{\"code\":\"CR9\"},\"operating\":{},\"duration\":\"PT1H37M\",\"id\":\"37\",\"numberOfStops\":0,\"blacklistedInEU\":false}]}],\"price\":{\"currency\":\"USD\",\"total\":\"534.47\",\"base\":\"186.00\",\"fees\":[{\"amount\":\"0.00\",\"type\":\"SUPPLIER\"},{\"amount\":\"0.00\",\"type\":\"TICKETING\"}],\"grandTotal\":\"534.47\"},\"pricingOptions\":{\"includedCheckedBagsOnly\":true,\"fareType\":[\"PUBLISHED\"],\"refundableFare\":false,\"noRestrictionFare\":false,\"noPenaltyFare\":false},\"validatingAirlineCodes\":[\"AC\"],\"travelerPricings\":[{\"travelerId\":\"1\",\"fareOption\":\"STANDARD\",\"travelerType\":\"ADULT\",\"price\":{\"currency\":\"USD\",\"total\":\"534.47\",\"base\":\"186.00\"},\"fareDetailsBySegment\":[{\"segmentId\":\"36\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"KNCO4\",\"brandedFare\":\"STANDARD\",\"class\":\"K\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":1,\"weight\":0},\"amenities\":[{\"description\":\"CHECKED BAG SECOND\",\"isChargeable\":true,\"amenityType\":\"BAGGAGE\"},{\"description\":\"COMPLIMENTARY MEAL\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"BASIC SEAT\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"CHANGEABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"}]},{\"segmentId\":\"37\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"KNCO4\",\"brandedFare\":\"STANDARD\",\"class\":\"K\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":1,\"weight\":0},\"amenities\":[{\"description\":\"CHECKED BAG SECOND\",\"isChargeable\":true,\"amenityType\":\"BAGGAGE\"},{\"description\":\"COMPLIMENTARY MEAL\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"BASIC SEAT\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"CHANGEABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"}]}]}]}"
+        },
+        {
+            "oneWay": false,
+            "seatsAvailable": 9,
+            "currencyCode": "USD",
+            "basePrice": "186.00",
+            "totalPrice": "534.47",
+            "totalTravelers": 1,
+            "trips": [
+                {
+                    "from": "DEL",
+                    "to": "LGA",
+                    "stops": 1,
+                    "totalFlightDuration": "20h 7m",
+                    "totalLayoverDuration": "2h 5m",
+                    "legs": [
+                        {
+                            "legNo": "11",
+                            "flightNumber": "51",
+                            "carrierCode": "AC",
+                            "carrierName": null,
+                            "operatingCarrierCode": "AC",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "789",
+                            "departureAirport": "DEL",
+                            "departureTerminal": "3",
+                            "departureDateTime": "2025-11-14T00:15:00",
+                            "arrivalAirport": "YUL",
+                            "arrivalTerminal": null,
+                            "arrivalDateTime": "2025-11-14T06:15:00",
+                            "duration": "16h 30m",
+                            "layoverAfter": "2h 5m"
+                        },
+                        {
+                            "legNo": "12",
+                            "flightNumber": "8634",
+                            "carrierCode": "AC",
+                            "carrierName": null,
+                            "operatingCarrierCode": null,
+                            "operatingCarrierName": null,
+                            "aircraftCode": "E75",
+                            "departureAirport": "YUL",
+                            "departureTerminal": null,
+                            "departureDateTime": "2025-11-14T08:20:00",
+                            "arrivalAirport": "LGA",
+                            "arrivalTerminal": "B",
+                            "arrivalDateTime": "2025-11-14T09:52:00",
+                            "duration": "1h 32m",
+                            "layoverAfter": null
+                        }
+                    ]
+                }
+            ],
+            "pricingAdditionalInfo": "{\"type\":\"flight-offer\",\"id\":\"12\",\"source\":\"GDS\",\"instantTicketingRequired\":false,\"disablePricing\":false,\"nonHomogeneous\":false,\"oneWay\":false,\"paymentCardRequired\":false,\"lastTicketingDate\":\"2025-08-16\",\"numberOfBookableSeats\":9,\"itineraries\":[{\"duration\":\"PT20H7M\",\"segments\":[{\"departure\":{\"iataCode\":\"DEL\",\"terminal\":\"3\",\"at\":\"2025-11-14T00:15:00\"},\"arrival\":{\"iataCode\":\"YUL\",\"at\":\"2025-11-14T06:15:00\"},\"carrierCode\":\"AC\",\"number\":\"51\",\"aircraft\":{\"code\":\"789\"},\"operating\":{\"carrierCode\":\"AC\"},\"duration\":\"PT16H30M\",\"id\":\"11\",\"numberOfStops\":0,\"blacklistedInEU\":false},{\"departure\":{\"iataCode\":\"YUL\",\"at\":\"2025-11-14T08:20:00\"},\"arrival\":{\"iataCode\":\"LGA\",\"terminal\":\"B\",\"at\":\"2025-11-14T09:52:00\"},\"carrierCode\":\"AC\",\"number\":\"8634\",\"aircraft\":{\"code\":\"E75\"},\"operating\":{},\"duration\":\"PT1H32M\",\"id\":\"12\",\"numberOfStops\":0,\"blacklistedInEU\":false}]}],\"price\":{\"currency\":\"USD\",\"total\":\"534.47\",\"base\":\"186.00\",\"fees\":[{\"amount\":\"0.00\",\"type\":\"SUPPLIER\"},{\"amount\":\"0.00\",\"type\":\"TICKETING\"}],\"grandTotal\":\"534.47\"},\"pricingOptions\":{\"includedCheckedBagsOnly\":true,\"fareType\":[\"PUBLISHED\"],\"refundableFare\":false,\"noRestrictionFare\":false,\"noPenaltyFare\":false},\"validatingAirlineCodes\":[\"AC\"],\"travelerPricings\":[{\"travelerId\":\"1\",\"fareOption\":\"STANDARD\",\"travelerType\":\"ADULT\",\"price\":{\"currency\":\"USD\",\"total\":\"534.47\",\"base\":\"186.00\"},\"fareDetailsBySegment\":[{\"segmentId\":\"11\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"KNCO4\",\"brandedFare\":\"STANDARD\",\"class\":\"K\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":1,\"weight\":0},\"amenities\":[{\"description\":\"CHECKED BAG SECOND\",\"isChargeable\":true,\"amenityType\":\"BAGGAGE\"},{\"description\":\"COMPLIMENTARY MEAL\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"BASIC SEAT\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"CHANGEABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"}]},{\"segmentId\":\"12\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"KNCO4\",\"brandedFare\":\"STANDARD\",\"class\":\"K\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":1,\"weight\":0},\"amenities\":[{\"description\":\"CHECKED BAG SECOND\",\"isChargeable\":true,\"amenityType\":\"BAGGAGE\"},{\"description\":\"COMPLIMENTARY MEAL\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"BASIC SEAT\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"CHANGEABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"}]}]}]}"
+        },
+        {
+            "oneWay": false,
+            "seatsAvailable": 9,
+            "currencyCode": "USD",
+            "basePrice": "186.00",
+            "totalPrice": "534.47",
+            "totalTravelers": 1,
+            "trips": [
+                {
+                    "from": "DEL",
+                    "to": "LGA",
+                    "stops": 1,
+                    "totalFlightDuration": "22h 37m",
+                    "totalLayoverDuration": "4h 35m",
+                    "legs": [
+                        {
+                            "legNo": "23",
+                            "flightNumber": "51",
+                            "carrierCode": "AC",
+                            "carrierName": null,
+                            "operatingCarrierCode": "AC",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "789",
+                            "departureAirport": "DEL",
+                            "departureTerminal": "3",
+                            "departureDateTime": "2025-11-14T00:15:00",
+                            "arrivalAirport": "YUL",
+                            "arrivalTerminal": null,
+                            "arrivalDateTime": "2025-11-14T06:15:00",
+                            "duration": "16h 30m",
+                            "layoverAfter": "4h 35m"
+                        },
+                        {
+                            "legNo": "24",
+                            "flightNumber": "8636",
+                            "carrierCode": "AC",
+                            "carrierName": null,
+                            "operatingCarrierCode": null,
+                            "operatingCarrierName": null,
+                            "aircraftCode": "E75",
+                            "departureAirport": "YUL",
+                            "departureTerminal": null,
+                            "departureDateTime": "2025-11-14T10:50:00",
+                            "arrivalAirport": "LGA",
+                            "arrivalTerminal": "B",
+                            "arrivalDateTime": "2025-11-14T12:22:00",
+                            "duration": "1h 32m",
+                            "layoverAfter": null
+                        }
+                    ]
+                }
+            ],
+            "pricingAdditionalInfo": "{\"type\":\"flight-offer\",\"id\":\"13\",\"source\":\"GDS\",\"instantTicketingRequired\":false,\"disablePricing\":false,\"nonHomogeneous\":false,\"oneWay\":false,\"paymentCardRequired\":false,\"lastTicketingDate\":\"2025-08-16\",\"numberOfBookableSeats\":9,\"itineraries\":[{\"duration\":\"PT22H37M\",\"segments\":[{\"departure\":{\"iataCode\":\"DEL\",\"terminal\":\"3\",\"at\":\"2025-11-14T00:15:00\"},\"arrival\":{\"iataCode\":\"YUL\",\"at\":\"2025-11-14T06:15:00\"},\"carrierCode\":\"AC\",\"number\":\"51\",\"aircraft\":{\"code\":\"789\"},\"operating\":{\"carrierCode\":\"AC\"},\"duration\":\"PT16H30M\",\"id\":\"23\",\"numberOfStops\":0,\"blacklistedInEU\":false},{\"departure\":{\"iataCode\":\"YUL\",\"at\":\"2025-11-14T10:50:00\"},\"arrival\":{\"iataCode\":\"LGA\",\"terminal\":\"B\",\"at\":\"2025-11-14T12:22:00\"},\"carrierCode\":\"AC\",\"number\":\"8636\",\"aircraft\":{\"code\":\"E75\"},\"operating\":{},\"duration\":\"PT1H32M\",\"id\":\"24\",\"numberOfStops\":0,\"blacklistedInEU\":false}]}],\"price\":{\"currency\":\"USD\",\"total\":\"534.47\",\"base\":\"186.00\",\"fees\":[{\"amount\":\"0.00\",\"type\":\"SUPPLIER\"},{\"amount\":\"0.00\",\"type\":\"TICKETING\"}],\"grandTotal\":\"534.47\"},\"pricingOptions\":{\"includedCheckedBagsOnly\":true,\"fareType\":[\"PUBLISHED\"],\"refundableFare\":false,\"noRestrictionFare\":false,\"noPenaltyFare\":false},\"validatingAirlineCodes\":[\"AC\"],\"travelerPricings\":[{\"travelerId\":\"1\",\"fareOption\":\"STANDARD\",\"travelerType\":\"ADULT\",\"price\":{\"currency\":\"USD\",\"total\":\"534.47\",\"base\":\"186.00\"},\"fareDetailsBySegment\":[{\"segmentId\":\"23\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"KNCO4\",\"brandedFare\":\"STANDARD\",\"class\":\"K\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":1,\"weight\":0},\"amenities\":[{\"description\":\"CHECKED BAG SECOND\",\"isChargeable\":true,\"amenityType\":\"BAGGAGE\"},{\"description\":\"COMPLIMENTARY MEAL\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"BASIC SEAT\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"CHANGEABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"}]},{\"segmentId\":\"24\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"KNCO4\",\"brandedFare\":\"STANDARD\",\"class\":\"K\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":1,\"weight\":0},\"amenities\":[{\"description\":\"CHECKED BAG SECOND\",\"isChargeable\":true,\"amenityType\":\"BAGGAGE\"},{\"description\":\"COMPLIMENTARY MEAL\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"BASIC SEAT\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"CHANGEABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"}]}]}]}"
+        },
+        {
+            "oneWay": false,
+            "seatsAvailable": 9,
+            "currencyCode": "USD",
+            "basePrice": "186.00",
+            "totalPrice": "534.47",
+            "totalTravelers": 1,
+            "trips": [
+                {
+                    "from": "DEL",
+                    "to": "JFK",
+                    "stops": 1,
+                    "totalFlightDuration": "30h 13m",
+                    "totalLayoverDuration": "11h 55m",
+                    "legs": [
+                        {
+                            "legNo": "13",
+                            "flightNumber": "51",
+                            "carrierCode": "AC",
+                            "carrierName": null,
+                            "operatingCarrierCode": "AC",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "789",
+                            "departureAirport": "DEL",
+                            "departureTerminal": "3",
+                            "departureDateTime": "2025-11-14T00:15:00",
+                            "arrivalAirport": "YUL",
+                            "arrivalTerminal": null,
+                            "arrivalDateTime": "2025-11-14T06:15:00",
+                            "duration": "16h 30m",
+                            "layoverAfter": "11h 55m"
+                        },
+                        {
+                            "legNo": "14",
+                            "flightNumber": "8898",
+                            "carrierCode": "AC",
+                            "carrierName": null,
+                            "operatingCarrierCode": null,
+                            "operatingCarrierName": null,
+                            "aircraftCode": "E75",
+                            "departureAirport": "YUL",
+                            "departureTerminal": null,
+                            "departureDateTime": "2025-11-14T18:10:00",
+                            "arrivalAirport": "JFK",
+                            "arrivalTerminal": "7",
+                            "arrivalDateTime": "2025-11-14T19:58:00",
+                            "duration": "1h 48m",
+                            "layoverAfter": null
+                        }
+                    ]
+                }
+            ],
+            "pricingAdditionalInfo": "{\"type\":\"flight-offer\",\"id\":\"14\",\"source\":\"GDS\",\"instantTicketingRequired\":false,\"disablePricing\":false,\"nonHomogeneous\":false,\"oneWay\":false,\"paymentCardRequired\":false,\"lastTicketingDate\":\"2025-08-16\",\"numberOfBookableSeats\":9,\"itineraries\":[{\"duration\":\"PT30H13M\",\"segments\":[{\"departure\":{\"iataCode\":\"DEL\",\"terminal\":\"3\",\"at\":\"2025-11-14T00:15:00\"},\"arrival\":{\"iataCode\":\"YUL\",\"at\":\"2025-11-14T06:15:00\"},\"carrierCode\":\"AC\",\"number\":\"51\",\"aircraft\":{\"code\":\"789\"},\"operating\":{\"carrierCode\":\"AC\"},\"duration\":\"PT16H30M\",\"id\":\"13\",\"numberOfStops\":0,\"blacklistedInEU\":false},{\"departure\":{\"iataCode\":\"YUL\",\"at\":\"2025-11-14T18:10:00\"},\"arrival\":{\"iataCode\":\"JFK\",\"terminal\":\"7\",\"at\":\"2025-11-14T19:58:00\"},\"carrierCode\":\"AC\",\"number\":\"8898\",\"aircraft\":{\"code\":\"E75\"},\"operating\":{},\"duration\":\"PT1H48M\",\"id\":\"14\",\"numberOfStops\":0,\"blacklistedInEU\":false}]}],\"price\":{\"currency\":\"USD\",\"total\":\"534.47\",\"base\":\"186.00\",\"fees\":[{\"amount\":\"0.00\",\"type\":\"SUPPLIER\"},{\"amount\":\"0.00\",\"type\":\"TICKETING\"}],\"grandTotal\":\"534.47\"},\"pricingOptions\":{\"includedCheckedBagsOnly\":true,\"fareType\":[\"PUBLISHED\"],\"refundableFare\":false,\"noRestrictionFare\":false,\"noPenaltyFare\":false},\"validatingAirlineCodes\":[\"AC\"],\"travelerPricings\":[{\"travelerId\":\"1\",\"fareOption\":\"STANDARD\",\"travelerType\":\"ADULT\",\"price\":{\"currency\":\"USD\",\"total\":\"534.47\",\"base\":\"186.00\"},\"fareDetailsBySegment\":[{\"segmentId\":\"13\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"KNCO4\",\"brandedFare\":\"STANDARD\",\"class\":\"K\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":1,\"weight\":0},\"amenities\":[{\"description\":\"CHECKED BAG SECOND\",\"isChargeable\":true,\"amenityType\":\"BAGGAGE\"},{\"description\":\"COMPLIMENTARY MEAL\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"BASIC SEAT\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"CHANGEABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"}]},{\"segmentId\":\"14\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"KNCO4\",\"brandedFare\":\"STANDARD\",\"class\":\"K\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":1,\"weight\":0},\"amenities\":[{\"description\":\"CHECKED BAG SECOND\",\"isChargeable\":true,\"amenityType\":\"BAGGAGE\"},{\"description\":\"COMPLIMENTARY MEAL\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"BASIC SEAT\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"CHANGEABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"}]}]}]}"
+        },
+        {
+            "oneWay": false,
+            "seatsAvailable": 9,
+            "currencyCode": "USD",
+            "basePrice": "157.00",
+            "totalPrice": "538.97",
+            "totalTravelers": 1,
+            "trips": [
+                {
+                    "from": "DEL",
+                    "to": "JFK",
+                    "stops": 1,
+                    "totalFlightDuration": "23h 0m",
+                    "totalLayoverDuration": "5h 5m",
+                    "legs": [
+                        {
+                            "legNo": "1",
+                            "flightNumber": "872",
+                            "carrierCode": "KL",
+                            "carrierName": null,
+                            "operatingCarrierCode": "KL",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "77W",
+                            "departureAirport": "DEL",
+                            "departureTerminal": "3",
+                            "departureDateTime": "2025-11-14T03:20:00",
+                            "arrivalAirport": "AMS",
+                            "arrivalTerminal": null,
+                            "arrivalDateTime": "2025-11-14T08:25:00",
+                            "duration": "9h 35m",
+                            "layoverAfter": "5h 5m"
+                        },
+                        {
+                            "legNo": "2",
+                            "flightNumber": "641",
+                            "carrierCode": "KL",
+                            "carrierName": null,
+                            "operatingCarrierCode": "KL",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "781",
+                            "departureAirport": "AMS",
+                            "departureTerminal": null,
+                            "departureDateTime": "2025-11-14T13:30:00",
+                            "arrivalAirport": "JFK",
+                            "arrivalTerminal": "4",
+                            "arrivalDateTime": "2025-11-14T15:50:00",
+                            "duration": "8h 20m",
+                            "layoverAfter": null
+                        }
+                    ]
+                }
+            ],
+            "pricingAdditionalInfo": "{\"type\":\"flight-offer\",\"id\":\"15\",\"source\":\"GDS\",\"instantTicketingRequired\":false,\"disablePricing\":false,\"nonHomogeneous\":false,\"oneWay\":false,\"paymentCardRequired\":false,\"lastTicketingDate\":\"2025-11-11\",\"numberOfBookableSeats\":9,\"itineraries\":[{\"duration\":\"PT23H\",\"segments\":[{\"departure\":{\"iataCode\":\"DEL\",\"terminal\":\"3\",\"at\":\"2025-11-14T03:20:00\"},\"arrival\":{\"iataCode\":\"AMS\",\"at\":\"2025-11-14T08:25:00\"},\"carrierCode\":\"KL\",\"number\":\"872\",\"aircraft\":{\"code\":\"77W\"},\"operating\":{\"carrierCode\":\"KL\"},\"duration\":\"PT9H35M\",\"id\":\"1\",\"numberOfStops\":0,\"blacklistedInEU\":false},{\"departure\":{\"iataCode\":\"AMS\",\"at\":\"2025-11-14T13:30:00\"},\"arrival\":{\"iataCode\":\"JFK\",\"terminal\":\"4\",\"at\":\"2025-11-14T15:50:00\"},\"carrierCode\":\"KL\",\"number\":\"641\",\"aircraft\":{\"code\":\"781\"},\"operating\":{\"carrierCode\":\"KL\"},\"duration\":\"PT8H20M\",\"id\":\"2\",\"numberOfStops\":0,\"blacklistedInEU\":false}]}],\"price\":{\"currency\":\"USD\",\"total\":\"538.97\",\"base\":\"157.00\",\"fees\":[{\"amount\":\"0.00\",\"type\":\"SUPPLIER\"},{\"amount\":\"0.00\",\"type\":\"TICKETING\"}],\"grandTotal\":\"538.97\",\"additionalServices\":[{\"amount\":\"104.90\",\"type\":\"CHECKED_BAGS\"}]},\"pricingOptions\":{\"includedCheckedBagsOnly\":true,\"fareType\":[\"PUBLISHED\"],\"refundableFare\":false,\"noRestrictionFare\":false,\"noPenaltyFare\":false},\"validatingAirlineCodes\":[\"AF\"],\"travelerPricings\":[{\"travelerId\":\"1\",\"fareOption\":\"STANDARD\",\"travelerType\":\"ADULT\",\"price\":{\"currency\":\"USD\",\"total\":\"538.97\",\"base\":\"157.00\"},\"fareDetailsBySegment\":[{\"segmentId\":\"1\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"RGL3BBRA\",\"brandedFare\":\"LIGHTBAG\",\"class\":\"R\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":1,\"weight\":0},\"amenities\":[{\"description\":\"SNACK\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"BEVERAGE\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"MEAL\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"SEAT SELECTION\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"MILEAGE ACCRUAL\",\"isChargeable\":false,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"UPGRADE ELIGIBILITY\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"}]},{\"segmentId\":\"2\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"RGL3BBRA\",\"brandedFare\":\"LIGHTBAG\",\"class\":\"R\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":1,\"weight\":0},\"amenities\":[{\"description\":\"SNACK\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"BEVERAGE\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"MEAL\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"SEAT SELECTION\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"MILEAGE ACCRUAL\",\"isChargeable\":false,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"UPGRADE ELIGIBILITY\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"}]}]}]}"
+        },
+        {
+            "oneWay": false,
+            "seatsAvailable": 9,
+            "currencyCode": "USD",
+            "basePrice": "217.00",
+            "totalPrice": "564.97",
+            "totalTravelers": 1,
+            "trips": [
+                {
+                    "from": "DEL",
+                    "to": "JFK",
+                    "stops": 1,
+                    "totalFlightDuration": "21h 5m",
+                    "totalLayoverDuration": "2h 0m",
+                    "legs": [
+                        {
+                            "legNo": "3",
+                            "flightNumber": "769",
+                            "carrierCode": "AZ",
+                            "carrierName": null,
+                            "operatingCarrierCode": "AZ",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "339",
+                            "departureAirport": "DEL",
+                            "departureTerminal": "3",
+                            "departureDateTime": "2025-11-14T03:40:00",
+                            "arrivalAirport": "FCO",
+                            "arrivalTerminal": "3",
+                            "arrivalDateTime": "2025-11-14T08:15:00",
+                            "duration": "9h 5m",
+                            "layoverAfter": "2h 0m"
+                        },
+                        {
+                            "legNo": "4",
+                            "flightNumber": "608",
+                            "carrierCode": "AZ",
+                            "carrierName": null,
+                            "operatingCarrierCode": "AZ",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "339",
+                            "departureAirport": "FCO",
+                            "departureTerminal": "1",
+                            "departureDateTime": "2025-11-14T10:15:00",
+                            "arrivalAirport": "JFK",
+                            "arrivalTerminal": "1",
+                            "arrivalDateTime": "2025-11-14T14:15:00",
+                            "duration": "10h 0m",
+                            "layoverAfter": null
+                        }
+                    ]
+                }
+            ],
+            "pricingAdditionalInfo": "{\"type\":\"flight-offer\",\"id\":\"16\",\"source\":\"GDS\",\"instantTicketingRequired\":false,\"disablePricing\":false,\"nonHomogeneous\":false,\"oneWay\":false,\"paymentCardRequired\":false,\"lastTicketingDate\":\"2025-11-14\",\"numberOfBookableSeats\":9,\"itineraries\":[{\"duration\":\"PT21H5M\",\"segments\":[{\"departure\":{\"iataCode\":\"DEL\",\"terminal\":\"3\",\"at\":\"2025-11-14T03:40:00\"},\"arrival\":{\"iataCode\":\"FCO\",\"terminal\":\"3\",\"at\":\"2025-11-14T08:15:00\"},\"carrierCode\":\"AZ\",\"number\":\"769\",\"aircraft\":{\"code\":\"339\"},\"operating\":{\"carrierCode\":\"AZ\"},\"duration\":\"PT9H5M\",\"id\":\"3\",\"numberOfStops\":0,\"blacklistedInEU\":false},{\"departure\":{\"iataCode\":\"FCO\",\"terminal\":\"1\",\"at\":\"2025-11-14T10:15:00\"},\"arrival\":{\"iataCode\":\"JFK\",\"terminal\":\"1\",\"at\":\"2025-11-14T14:15:00\"},\"carrierCode\":\"AZ\",\"number\":\"608\",\"aircraft\":{\"code\":\"339\"},\"operating\":{\"carrierCode\":\"AZ\"},\"duration\":\"PT10H\",\"id\":\"4\",\"numberOfStops\":0,\"blacklistedInEU\":false}]}],\"price\":{\"currency\":\"USD\",\"total\":\"564.97\",\"base\":\"217.00\",\"fees\":[{\"amount\":\"0.00\",\"type\":\"SUPPLIER\"},{\"amount\":\"0.00\",\"type\":\"TICKETING\"}],\"grandTotal\":\"564.97\",\"additionalServices\":[{\"amount\":\"180.00\",\"type\":\"CHECKED_BAGS\"}]},\"pricingOptions\":{\"includedCheckedBagsOnly\":true,\"fareType\":[\"PUBLISHED\"],\"refundableFare\":false,\"noRestrictionFare\":false,\"noPenaltyFare\":false},\"validatingAirlineCodes\":[\"AZ\"],\"travelerPricings\":[{\"travelerId\":\"1\",\"fareOption\":\"STANDARD\",\"travelerType\":\"ADULT\",\"price\":{\"currency\":\"USD\",\"total\":\"564.97\",\"base\":\"217.00\"},\"fareDetailsBySegment\":[{\"segmentId\":\"3\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"LCLOWIA\",\"brandedFare\":\"ECOCLASSIC\",\"class\":\"L\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":1,\"weight\":0},\"amenities\":[{\"description\":\"ADVANCE SEAT RESERVATION\",\"isChargeable\":true,\"amenityType\":\"PRE_RESERVED_SEAT\"},{\"description\":\"MEAL AND WINE\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"REFUNDABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"MILEAGE ACCRUAL\",\"isChargeable\":false,\"amenityType\":\"BRANDED_FARES\"}]},{\"segmentId\":\"4\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"LCLOWIA\",\"brandedFare\":\"ECOCLASSIC\",\"class\":\"L\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":1,\"weight\":0},\"amenities\":[{\"description\":\"ADVANCE SEAT RESERVATION\",\"isChargeable\":true,\"amenityType\":\"PRE_RESERVED_SEAT\"},{\"description\":\"MEAL AND WINE\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"REFUNDABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"MILEAGE ACCRUAL\",\"isChargeable\":false,\"amenityType\":\"BRANDED_FARES\"}]}]}]}"
+        },
+        {
+            "oneWay": false,
+            "seatsAvailable": 9,
+            "currencyCode": "USD",
+            "basePrice": "217.00",
+            "totalPrice": "564.97",
+            "totalTravelers": 1,
+            "trips": [
+                {
+                    "from": "DEL",
+                    "to": "JFK",
+                    "stops": 1,
+                    "totalFlightDuration": "25h 45m",
+                    "totalLayoverDuration": "6h 40m",
+                    "legs": [
+                        {
+                            "legNo": "27",
+                            "flightNumber": "769",
+                            "carrierCode": "AZ",
+                            "carrierName": null,
+                            "operatingCarrierCode": "AZ",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "339",
+                            "departureAirport": "DEL",
+                            "departureTerminal": "3",
+                            "departureDateTime": "2025-11-14T03:40:00",
+                            "arrivalAirport": "FCO",
+                            "arrivalTerminal": "3",
+                            "arrivalDateTime": "2025-11-14T08:15:00",
+                            "duration": "9h 5m",
+                            "layoverAfter": "6h 40m"
+                        },
+                        {
+                            "legNo": "28",
+                            "flightNumber": "610",
+                            "carrierCode": "AZ",
+                            "carrierName": null,
+                            "operatingCarrierCode": "AZ",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "339",
+                            "departureAirport": "FCO",
+                            "departureTerminal": "1",
+                            "departureDateTime": "2025-11-14T14:55:00",
+                            "arrivalAirport": "JFK",
+                            "arrivalTerminal": "1",
+                            "arrivalDateTime": "2025-11-14T18:55:00",
+                            "duration": "10h 0m",
+                            "layoverAfter": null
+                        }
+                    ]
+                }
+            ],
+            "pricingAdditionalInfo": "{\"type\":\"flight-offer\",\"id\":\"17\",\"source\":\"GDS\",\"instantTicketingRequired\":false,\"disablePricing\":false,\"nonHomogeneous\":false,\"oneWay\":false,\"paymentCardRequired\":false,\"lastTicketingDate\":\"2025-11-14\",\"numberOfBookableSeats\":9,\"itineraries\":[{\"duration\":\"PT25H45M\",\"segments\":[{\"departure\":{\"iataCode\":\"DEL\",\"terminal\":\"3\",\"at\":\"2025-11-14T03:40:00\"},\"arrival\":{\"iataCode\":\"FCO\",\"terminal\":\"3\",\"at\":\"2025-11-14T08:15:00\"},\"carrierCode\":\"AZ\",\"number\":\"769\",\"aircraft\":{\"code\":\"339\"},\"operating\":{\"carrierCode\":\"AZ\"},\"duration\":\"PT9H5M\",\"id\":\"27\",\"numberOfStops\":0,\"blacklistedInEU\":false},{\"departure\":{\"iataCode\":\"FCO\",\"terminal\":\"1\",\"at\":\"2025-11-14T14:55:00\"},\"arrival\":{\"iataCode\":\"JFK\",\"terminal\":\"1\",\"at\":\"2025-11-14T18:55:00\"},\"carrierCode\":\"AZ\",\"number\":\"610\",\"aircraft\":{\"code\":\"339\"},\"operating\":{\"carrierCode\":\"AZ\"},\"duration\":\"PT10H\",\"id\":\"28\",\"numberOfStops\":0,\"blacklistedInEU\":false}]}],\"price\":{\"currency\":\"USD\",\"total\":\"564.97\",\"base\":\"217.00\",\"fees\":[{\"amount\":\"0.00\",\"type\":\"SUPPLIER\"},{\"amount\":\"0.00\",\"type\":\"TICKETING\"}],\"grandTotal\":\"564.97\",\"additionalServices\":[{\"amount\":\"180.00\",\"type\":\"CHECKED_BAGS\"}]},\"pricingOptions\":{\"includedCheckedBagsOnly\":true,\"fareType\":[\"PUBLISHED\"],\"refundableFare\":false,\"noRestrictionFare\":false,\"noPenaltyFare\":false},\"validatingAirlineCodes\":[\"AZ\"],\"travelerPricings\":[{\"travelerId\":\"1\",\"fareOption\":\"STANDARD\",\"travelerType\":\"ADULT\",\"price\":{\"currency\":\"USD\",\"total\":\"564.97\",\"base\":\"217.00\"},\"fareDetailsBySegment\":[{\"segmentId\":\"27\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"LCLOWIA\",\"brandedFare\":\"ECOCLASSIC\",\"class\":\"L\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":1,\"weight\":0},\"amenities\":[{\"description\":\"ADVANCE SEAT RESERVATION\",\"isChargeable\":true,\"amenityType\":\"PRE_RESERVED_SEAT\"},{\"description\":\"MEAL AND WINE\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"REFUNDABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"MILEAGE ACCRUAL\",\"isChargeable\":false,\"amenityType\":\"BRANDED_FARES\"}]},{\"segmentId\":\"28\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"LCLOWIA\",\"brandedFare\":\"ECOCLASSIC\",\"class\":\"L\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":1,\"weight\":0},\"amenities\":[{\"description\":\"ADVANCE SEAT RESERVATION\",\"isChargeable\":true,\"amenityType\":\"PRE_RESERVED_SEAT\"},{\"description\":\"MEAL AND WINE\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"REFUNDABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"MILEAGE ACCRUAL\",\"isChargeable\":false,\"amenityType\":\"BRANDED_FARES\"}]}]}]}"
+        },
+        {
+            "oneWay": false,
+            "seatsAvailable": 9,
+            "currencyCode": "USD",
+            "basePrice": "449.00",
+            "totalPrice": "568.37",
+            "totalTravelers": 1,
+            "trips": [
+                {
+                    "from": "DEL",
+                    "to": "JFK",
+                    "stops": 1,
+                    "totalFlightDuration": "21h 45m",
+                    "totalLayoverDuration": "2h 45m",
+                    "legs": [
+                        {
+                            "legNo": "25",
+                            "flightNumber": "122",
+                            "carrierCode": "AY",
+                            "carrierName": null,
+                            "operatingCarrierCode": "AY",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "359",
+                            "departureAirport": "DEL",
+                            "departureTerminal": "3",
+                            "departureDateTime": "2025-11-14T07:50:00",
+                            "arrivalAirport": "HEL",
+                            "arrivalTerminal": null,
+                            "arrivalDateTime": "2025-11-14T14:10:00",
+                            "duration": "9h 50m",
+                            "layoverAfter": "2h 45m"
+                        },
+                        {
+                            "legNo": "26",
+                            "flightNumber": "15",
+                            "carrierCode": "AY",
+                            "carrierName": null,
+                            "operatingCarrierCode": "AY",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "333",
+                            "departureAirport": "HEL",
+                            "departureTerminal": null,
+                            "departureDateTime": "2025-11-14T16:55:00",
+                            "arrivalAirport": "JFK",
+                            "arrivalTerminal": "8",
+                            "arrivalDateTime": "2025-11-14T19:05:00",
+                            "duration": "9h 10m",
+                            "layoverAfter": null
+                        }
+                    ]
+                }
+            ],
+            "pricingAdditionalInfo": "{\"type\":\"flight-offer\",\"id\":\"18\",\"source\":\"GDS\",\"instantTicketingRequired\":false,\"disablePricing\":false,\"nonHomogeneous\":false,\"oneWay\":false,\"paymentCardRequired\":false,\"lastTicketingDate\":\"2025-08-16\",\"numberOfBookableSeats\":9,\"itineraries\":[{\"duration\":\"PT21H45M\",\"segments\":[{\"departure\":{\"iataCode\":\"DEL\",\"terminal\":\"3\",\"at\":\"2025-11-14T07:50:00\"},\"arrival\":{\"iataCode\":\"HEL\",\"at\":\"2025-11-14T14:10:00\"},\"carrierCode\":\"AY\",\"number\":\"122\",\"aircraft\":{\"code\":\"359\"},\"operating\":{\"carrierCode\":\"AY\"},\"duration\":\"PT9H50M\",\"id\":\"25\",\"numberOfStops\":0,\"blacklistedInEU\":false},{\"departure\":{\"iataCode\":\"HEL\",\"at\":\"2025-11-14T16:55:00\"},\"arrival\":{\"iataCode\":\"JFK\",\"terminal\":\"8\",\"at\":\"2025-11-14T19:05:00\"},\"carrierCode\":\"AY\",\"number\":\"15\",\"aircraft\":{\"code\":\"333\"},\"operating\":{\"carrierCode\":\"AY\"},\"duration\":\"PT9H10M\",\"id\":\"26\",\"numberOfStops\":0,\"blacklistedInEU\":false}]}],\"price\":{\"currency\":\"USD\",\"total\":\"568.37\",\"base\":\"449.00\",\"fees\":[{\"amount\":\"0.00\",\"type\":\"SUPPLIER\"},{\"amount\":\"0.00\",\"type\":\"TICKETING\"}],\"grandTotal\":\"568.37\",\"additionalServices\":[{\"amount\":\"87.40\",\"type\":\"CHECKED_BAGS\"}]},\"pricingOptions\":{\"includedCheckedBagsOnly\":true,\"fareType\":[\"PUBLISHED\"],\"refundableFare\":false,\"noRestrictionFare\":false,\"noPenaltyFare\":false},\"validatingAirlineCodes\":[\"AY\"],\"travelerPricings\":[{\"travelerId\":\"1\",\"fareOption\":\"STANDARD\",\"travelerType\":\"ADULT\",\"price\":{\"currency\":\"USD\",\"total\":\"568.37\",\"base\":\"449.00\"},\"fareDetailsBySegment\":[{\"segmentId\":\"25\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"ONN0S9CM\",\"brandedFare\":\"ECLASSIC\",\"class\":\"O\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":1,\"weight\":0},\"amenities\":[{\"description\":\"MEAL AND BEVERAGE\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"CARRY ON BAGGAGE\",\"isChargeable\":false,\"amenityType\":\"TRAVEL_SERVICES\"}]},{\"segmentId\":\"26\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"ONN0S9CM\",\"brandedFare\":\"ECLASSIC\",\"class\":\"O\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":1,\"weight\":0},\"amenities\":[{\"description\":\"MEAL AND BEVERAGE\",\"isChargeable\":false,\"amenityType\":\"MEAL\"},{\"description\":\"CARRY ON BAGGAGE\",\"isChargeable\":false,\"amenityType\":\"TRAVEL_SERVICES\"}]}]}]}"
+        },
+        {
+            "oneWay": false,
+            "seatsAvailable": 9,
+            "currencyCode": "USD",
+            "basePrice": "75.00",
+            "totalPrice": "580.90",
+            "totalTravelers": 1,
+            "trips": [
+                {
+                    "from": "DEL",
+                    "to": "JFK",
+                    "stops": 1,
+                    "totalFlightDuration": "33h 25m",
+                    "totalLayoverDuration": "14h 0m",
+                    "legs": [
+                        {
+                            "legNo": "19",
+                            "flightNumber": "974",
+                            "carrierCode": "MS",
+                            "carrierName": null,
+                            "operatingCarrierCode": "MS",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "330",
+                            "departureAirport": "DEL",
+                            "departureTerminal": "3",
+                            "departureDateTime": "2025-11-14T11:20:00",
+                            "arrivalAirport": "CAI",
+                            "arrivalTerminal": "3",
+                            "arrivalDateTime": "2025-11-14T15:15:00",
+                            "duration": "7h 25m",
+                            "layoverAfter": "14h 0m"
+                        },
+                        {
+                            "legNo": "20",
+                            "flightNumber": "985",
+                            "carrierCode": "MS",
+                            "carrierName": null,
+                            "operatingCarrierCode": "MS",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "773",
+                            "departureAirport": "CAI",
+                            "departureTerminal": "3",
+                            "departureDateTime": "2025-11-15T05:15:00",
+                            "arrivalAirport": "JFK",
+                            "arrivalTerminal": "1",
+                            "arrivalDateTime": "2025-11-15T10:15:00",
+                            "duration": "12h 0m",
+                            "layoverAfter": null
+                        }
+                    ]
+                }
+            ],
+            "pricingAdditionalInfo": "{\"type\":\"flight-offer\",\"id\":\"19\",\"source\":\"GDS\",\"instantTicketingRequired\":false,\"disablePricing\":false,\"nonHomogeneous\":false,\"oneWay\":false,\"paymentCardRequired\":false,\"lastTicketingDate\":\"2025-11-14\",\"numberOfBookableSeats\":9,\"itineraries\":[{\"duration\":\"PT33H25M\",\"segments\":[{\"departure\":{\"iataCode\":\"DEL\",\"terminal\":\"3\",\"at\":\"2025-11-14T11:20:00\"},\"arrival\":{\"iataCode\":\"CAI\",\"terminal\":\"3\",\"at\":\"2025-11-14T15:15:00\"},\"carrierCode\":\"MS\",\"number\":\"974\",\"aircraft\":{\"code\":\"330\"},\"operating\":{\"carrierCode\":\"MS\"},\"duration\":\"PT7H25M\",\"id\":\"19\",\"numberOfStops\":0,\"blacklistedInEU\":false},{\"departure\":{\"iataCode\":\"CAI\",\"terminal\":\"3\",\"at\":\"2025-11-15T05:15:00\"},\"arrival\":{\"iataCode\":\"JFK\",\"terminal\":\"1\",\"at\":\"2025-11-15T10:15:00\"},\"carrierCode\":\"MS\",\"number\":\"985\",\"aircraft\":{\"code\":\"773\"},\"operating\":{\"carrierCode\":\"MS\"},\"duration\":\"PT12H\",\"id\":\"20\",\"numberOfStops\":0,\"blacklistedInEU\":false}]}],\"price\":{\"currency\":\"USD\",\"total\":\"580.90\",\"base\":\"75.00\",\"fees\":[{\"amount\":\"0.00\",\"type\":\"SUPPLIER\"},{\"amount\":\"0.00\",\"type\":\"TICKETING\"}],\"grandTotal\":\"580.90\"},\"pricingOptions\":{\"includedCheckedBagsOnly\":true,\"fareType\":[\"PUBLISHED\"],\"refundableFare\":false,\"noRestrictionFare\":false,\"noPenaltyFare\":false},\"validatingAirlineCodes\":[\"MS\"],\"travelerPricings\":[{\"travelerId\":\"1\",\"fareOption\":\"STANDARD\",\"travelerType\":\"ADULT\",\"price\":{\"currency\":\"USD\",\"total\":\"580.90\",\"base\":\"75.00\"},\"fareDetailsBySegment\":[{\"segmentId\":\"19\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"WRIINO\",\"class\":\"W\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":2,\"weight\":0}},{\"segmentId\":\"20\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"WRIINO\",\"class\":\"W\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":2,\"weight\":0}}]}]}"
+        },
+        {
+            "oneWay": false,
+            "seatsAvailable": 3,
+            "currencyCode": "USD",
+            "basePrice": "249.00",
+            "totalPrice": "600.67",
+            "totalTravelers": 1,
+            "trips": [
+                {
+                    "from": "DEL",
+                    "to": "EWR",
+                    "stops": 0,
+                    "totalFlightDuration": "16h 55m",
+                    "totalLayoverDuration": "0h 0m",
+                    "legs": [
+                        {
+                            "legNo": "33",
+                            "flightNumber": "83",
+                            "carrierCode": "UA",
+                            "carrierName": null,
+                            "operatingCarrierCode": "UA",
+                            "operatingCarrierName": null,
+                            "aircraftCode": "789",
+                            "departureAirport": "DEL",
+                            "departureTerminal": "3",
+                            "departureDateTime": "2025-11-14T23:55:00",
+                            "arrivalAirport": "EWR",
+                            "arrivalTerminal": "B",
+                            "arrivalDateTime": "2025-11-15T06:20:00",
+                            "duration": "16h 55m",
+                            "layoverAfter": null
+                        }
+                    ]
+                }
+            ],
+            "pricingAdditionalInfo": "{\"type\":\"flight-offer\",\"id\":\"20\",\"source\":\"GDS\",\"instantTicketingRequired\":false,\"disablePricing\":false,\"nonHomogeneous\":false,\"oneWay\":false,\"paymentCardRequired\":false,\"lastTicketingDate\":\"2025-08-14\",\"numberOfBookableSeats\":3,\"itineraries\":[{\"duration\":\"PT16H55M\",\"segments\":[{\"departure\":{\"iataCode\":\"DEL\",\"terminal\":\"3\",\"at\":\"2025-11-14T23:55:00\"},\"arrival\":{\"iataCode\":\"EWR\",\"terminal\":\"B\",\"at\":\"2025-11-15T06:20:00\"},\"carrierCode\":\"UA\",\"number\":\"83\",\"aircraft\":{\"code\":\"789\"},\"operating\":{\"carrierCode\":\"UA\"},\"duration\":\"PT16H55M\",\"id\":\"33\",\"numberOfStops\":0,\"blacklistedInEU\":false}]}],\"price\":{\"currency\":\"USD\",\"total\":\"600.67\",\"base\":\"249.00\",\"fees\":[{\"amount\":\"0.00\",\"type\":\"SUPPLIER\"},{\"amount\":\"0.00\",\"type\":\"TICKETING\"}],\"grandTotal\":\"600.67\"},\"pricingOptions\":{\"includedCheckedBagsOnly\":true,\"fareType\":[\"PUBLISHED\"],\"refundableFare\":false,\"noRestrictionFare\":false,\"noPenaltyFare\":false},\"validatingAirlineCodes\":[\"UA\"],\"travelerPricings\":[{\"travelerId\":\"1\",\"fareOption\":\"STANDARD\",\"travelerType\":\"ADULT\",\"price\":{\"currency\":\"USD\",\"total\":\"600.67\",\"base\":\"249.00\"},\"fareDetailsBySegment\":[{\"segmentId\":\"33\",\"cabin\":\"ECONOMY\",\"fareBasis\":\"LNCO7\",\"brandedFare\":\"ECONOMY\",\"class\":\"L\",\"isAllotment\":false,\"includedCheckedBags\":{\"quantity\":1,\"weight\":0},\"amenities\":[{\"description\":\"SECOND BAG\",\"isChargeable\":true,\"amenityType\":\"BAGGAGE\"},{\"description\":\"PRE RESERVED SEAT ASSIGNMENT\",\"isChargeable\":false,\"amenityType\":\"PRE_RESERVED_SEAT\"},{\"description\":\"PRIORITY BOARDING\",\"isChargeable\":true,\"amenityType\":\"TRAVEL_SERVICES\"},{\"description\":\"MILEAGE ACCRUAL\",\"isChargeable\":false,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"UPGRADE ELIGIBILITY\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"},{\"description\":\"CHANGEABLE TICKET\",\"isChargeable\":true,\"amenityType\":\"BRANDED_FARES\"}]}]}]}"
+        }
+    ]
+}
