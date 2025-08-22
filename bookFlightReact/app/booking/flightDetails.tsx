@@ -1,6 +1,7 @@
 import FlightOfferDetails from "@/components/FlightOfferDetailsNew";
 import { useAppContext } from "@/context/AppContextProvider";
 import { router } from "expo-router";
+import React from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { Button } from "react-native-paper";
 
