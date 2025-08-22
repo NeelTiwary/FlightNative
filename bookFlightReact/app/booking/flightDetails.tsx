@@ -5,7 +5,11 @@ import { ScrollView } from "react-native-gesture-handler";
 import { Button } from "react-native-paper";
 
 export default function FlightDetails() {
-    const {selectedFlightOffer} = useAppContext();
+    const { selectedFlightOffer } = useAppContext();
+    
+    // Debug log to see what data we're getting
+    console.log("FlightDetails - selectedFlightOffer:", selectedFlightOffer);
+    
     return (
         <ScrollView style={{ padding: 10 }}>
             <FlightOfferDetails
@@ -14,6 +18,7 @@ export default function FlightDetails() {
             <Button
                 mode="contained"
                 onPress={() => router.push("/booking")}
+                style={{ marginTop: 20 }}
             >
                 Continue
             </Button>

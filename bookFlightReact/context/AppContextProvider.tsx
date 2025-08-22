@@ -66,7 +66,7 @@ export const AppContextProvider = ({ children }: { children: React.ReactNode }) 
   const [toSuggestions, setToSuggestions] = useState([]);
   const [flightOffers, setFlightOffers] = useState([]);
   const [selectedFlightOffer, setSelectedFlightOffer] = useState<any>(null);
-  const [apiUrl, setApiUrl] = useState("http://54.205.253.121:8080");
+  const [apiUrl, setApiUrl] = useState("http://13.217.101.178:8080");
   const [countriesData, setCountriesData] = useState([]);
   const [flightBooking, setFlightBooking] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -83,90 +83,115 @@ export const AppContextProvider = ({ children }: { children: React.ReactNode }) 
     }
   };
 
-  const fetchFlightOffers = async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const { originLocationCode, destinationLocationCode, departureDate, returnDate, adults, children, infants, currencyCode } = searchParams;
+ // Update the fetchFlightOffers function in your AppContextProvider
+const fetchFlightOffers = async () => {
+  setIsLoading(true);
+  setError(null);
+  try {
+    const { originLocationCode, destinationLocationCode, departureDate, returnDate, adults, children, infants, currencyCode } = searchParams;
 
-      if (!originLocationCode || !destinationLocationCode || !departureDate) {
-        throw new Error("Missing required search parameters");
+    if (!originLocationCode || !destinationLocationCode || !departureDate) {
+      throw new Error("Missing required search parameters");
+    }
+
+    let url = `${apiUrl}/flights/search?originLocationCode=${originLocationCode}&destinationLocationCode=${destinationLocationCode}&departureDate=${departureDate}&currencyCode=${currencyCode || "INR"}`;
+    if (adults) url += `&adults=${adults}`;
+    if (children) url += `&children=${children}`;
+    if (infants) url += `&infants=${infants}`;
+    if (returnDate) url += `&returnDate=${returnDate}`;
+
+    console.log("Fetching URL:", url);
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        response.status === 400
+          ? "Invalid search parameters."
+          : response.status === 500
+          ? "Server error. Please try again later."
+          : `HTTP error ${response.status}`
+      );
+    }
+
+    const data = await response.json();
+    console.log("Flight Offers Response:", data);
+
+    const flightsArr: FlightOffer[] = Array.isArray(data.flightsAvailable) ? data.flightsAvailable : [];
+    
+    const transformedOffers: FlightOffer[] = flightsArr.map((offer: any) => {
+      // Parse the raw offer data
+      let parsedOffer;
+      try {
+        parsedOffer = typeof offer.pricingAdditionalInfo === 'string' 
+          ? JSON.parse(offer.pricingAdditionalInfo) 
+          : offer.pricingAdditionalInfo || offer;
+      } catch (e) {
+        console.warn("Failed to parse pricingAdditionalInfo", e);
+        parsedOffer = offer;
       }
 
-      let url = `${apiUrl}/flights/search?originLocationCode=${originLocationCode}&destinationLocationCode=${destinationLocationCode}&departureDate=${departureDate}&currencyCode=${currencyCode || "INR"}`;
-      if (adults) url += `&adults=${adults}`;
-      if (children) url += `&children=${children}`;
-      if (infants) url += `&infants=${infants}`;
-      if (returnDate) url += `&returnDate=${returnDate}`;
-
-      console.log("Fetching URL:", url);
-
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(
-          response.status === 400
-            ? "Invalid search parameters."
-            : response.status === 500
-            ? "Server error. Please try again later."
-            : `HTTP error ${response.status}`
-        );
-      }
-
-      const data = await response.json();
-      console.log("Flight Offers Response:", data);
-
-      const flightsArr: FlightOffer[] = Array.isArray(data.flightsAvailable) ? data.flightsAvailable : [];
-      const transformedOffers: FlightOffer[] = flightsArr.map((offer: any) => ({
-        oneWay: offer.oneWay,
-        seatsAvailable: offer.numberOfBookableSeats,
-        currencyCode: offer.price.currency,
-        basePrice: offer.price.base,
-        totalPrice: offer.price.total,
-        totalTravelers: offer.travelerPricings.length,
-        pricingAdditionalInfo: JSON.stringify(offer), // Store raw offer data
-        trips: offer.itineraries.map((itinerary: any) => ({
-          tripType: offer.oneWay ? "ONE_WAY" : "RETURN",
-          tripNo: itinerary.id || 1,
-          stops: itinerary.segments ? itinerary.segments.length - 1 : 0,
-          from: iataToCity[offer.itineraries[0].segments[0].departure.iataCode] || offer.itineraries[0].segments[0].departure.iataCode || "Unknown",
-          to: iataToCity[offer.itineraries[0].segments[offer.itineraries[0].segments.length - 1].arrival.iataCode] ||
-              offer.itineraries[0].segments[offer.itineraries[0].segments.length - 1].arrival.iataCode || "Unknown",
-          totalFlightDuration: itinerary.duration || "N/A",
-          totalLayoverDuration: itinerary.segments.some((s: any) => s.numberOfStops > 0) ? "Unknown" : "0h 0m",
-          legs: itinerary.segments.map((segment: any) => ({
-            carrierName: carrierCodeToName[segment.carrierCode] || segment.carrierCode || "Unknown",
-            operatingCarrierCode: segment.operating?.carrierCode || segment.carrierCode || "",
-            departureCity: iataToCity[segment.departure.iataCode] || segment.departure.iataCode || "Unknown",
-            arrivalCity: iataToCity[segment.arrival.iataCode] || segment.arrival.iataCode || "Unknown",
-            departureDateTime: segment.departure.at || "",
-            arrivalDateTime: segment.arrival.at || "",
-            duration: segment.duration || "N/A",
-            aircraft: aircraftCodeToName[segment.aircraft.code] || segment.aircraft.code || "Unknown",
-            cabinClass:
-              offer.travelerPricings?.[0]?.fareDetailsBySegment?.find(
+      const itineraries = parsedOffer.itineraries || [];
+      
+      return {
+        oneWay: parsedOffer.oneWay || false,
+        seatsAvailable: parsedOffer.numberOfBookableSeats || 0,
+        currencyCode: parsedOffer.price?.currency || "USD",
+        basePrice: parsedOffer.price?.base || "0",
+        totalPrice: parsedOffer.price?.total || "0",
+        totalTravelers: parsedOffer.travelerPricings?.length || 1,
+        pricingAdditionalInfo: JSON.stringify(parsedOffer),
+        trips: itineraries.map((itinerary: any, index: number) => {
+          const segments = itinerary.segments || [];
+          const firstSegment = segments[0];
+          const lastSegment = segments[segments.length - 1];
+          
+          return {
+            tripType: parsedOffer.oneWay ? "ONE_WAY" : index === 0 ? "OUTBOUND" : "RETURN",
+            tripNo: index + 1,
+            stops: Math.max(0, segments.length - 1),
+            from: firstSegment?.departure?.iataCode || "Unknown",
+            to: lastSegment?.arrival?.iataCode || "Unknown",
+            totalFlightDuration: itinerary.duration || "N/A",
+            totalLayoverDuration: "0h 0m", // You might need to calculate this
+            legs: segments.map((segment: any) => ({
+              carrierCode: segment.carrierCode || "",
+              carrierName: carrierCodeToName[segment.carrierCode] || segment.carrierCode || "Unknown",
+              operatingCarrierCode: segment.operating?.carrierCode || segment.carrierCode || "",
+              departureIataCode: segment.departure?.iataCode || "",
+              departureCity: iataToCity[segment.departure?.iataCode] || segment.departure?.iataCode || "Unknown",
+              arrivalIataCode: segment.arrival?.iataCode || "",
+              arrivalCity: iataToCity[segment.arrival?.iataCode] || segment.arrival?.iataCode || "Unknown",
+              departureDateTime: segment.departure?.at || "",
+              arrivalDateTime: segment.arrival?.at || "",
+              duration: segment.duration || "N/A",
+              aircraftCode: segment.aircraft?.code || "",
+              aircraft: aircraftCodeToName[segment.aircraft?.code] || segment.aircraft?.code || "Unknown",
+              cabinClass: parsedOffer.travelerPricings?.[0]?.fareDetailsBySegment?.find(
                 (fare: any) => fare.segmentId === segment.id
               )?.cabin || "Economy",
-            layoverAfter: segment.numberOfStops > 0 ? "Unknown" : null,
-          })),
-        })),
-      }));
+              layoverAfter: segment.numberOfStops > 0 ? "Unknown" : null,
+            }))
+          };
+        })
+      };
+    });
 
-      setFlightOffers(transformedOffers);
-      setError(null);
-    } catch (error: any) {
-      console.error("Flight search error:", error);
-      setError(error.message || "Failed to fetch flights. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    setFlightOffers(transformedOffers);
+    setError(null);
+  } catch (error: any) {
+    console.error("Flight search error:", error);
+    setError(error.message || "Failed to fetch flights. Please try again.");
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   useEffect(() => {
     fetchCountriesData();

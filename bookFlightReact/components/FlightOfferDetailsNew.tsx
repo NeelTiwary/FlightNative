@@ -1,188 +1,192 @@
 import { useAppContext } from "@/context/AppContextProvider";
-import { FlightOffer } from "@/types";
 import { formatDate, formatTime } from "@/utils/helper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import React from "react";
 import { StyleSheet, View, Image } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Card, Chip, Divider, Text } from "react-native-paper";
 
+// Enhanced mappings
 const carrierCodeToName: { [key: string]: string } = {
+  AS: "Alaska Airlines",
+  UA: "United Airlines",
   DL: "Delta Air Lines",
   AA: "American Airlines",
-  UA: "United Airlines",
   WN: "Southwest Airlines",
   B6: "JetBlue Airways",
   NK: "Spirit Airlines",
   F9: "Frontier Airlines",
-  AI: "Air India",
-  "6E": "IndiGo",
-  SG: "SpiceJet",
-  UK: "Vistara",
-  TK: "Turkish Airlines",
-  AS: "Alaska Airlines", // For the logged flight
+  // Add more as needed
 };
 
 const iataToCity: { [key: string]: string } = {
-  EWR: "Newark",
-  DEL: "Delhi",
-  LAX: "Los Angeles", // Added for the logged flight
+  EWR: "Newark Liberty International Airport",
+  LAX: "Los Angeles International Airport",
+  JFK: "John F. Kennedy International Airport",
+  LGA: "LaGuardia Airport",
+  ORD: "Chicago O'Hare International Airport",
+  DFW: "Dallas/Fort Worth International Airport",
+  DEN: "Denver International Airport",
+  SFO: "San Francisco International Airport",
+  LAS: "McCarran International Airport",
+  MCO: "Orlando International Airport",
+  MIA: "Miami International Airport",
+  BOS: "Logan International Airport",
+  ATL: "Hartsfield-Jackson Atlanta International Airport",
+  SEA: "Seattle-Tacoma International Airport",  
   // Add more as needed
 };
 
 const aircraftCodeToName: { [key: string]: string } = {
-  "789": "Boeing 787-9",
-  "73J": "Boeing 737-900", // Added for the logged flight
+  "73J": "Boeing 737-900",
+  "738": "Boeing 737-800",
+  "739": "Boeing 737-900ER",
+  "320": "Airbus A320",
+  "321": "Airbus A321",
+  "789": "Boeing 787-9 Dreamliner",
+  "77W": "Boeing 777-300ER",
   // Add more as needed
 };
 
 const getAirlineIconURL = (code: string) =>
-  carrierCodeToName[code]
-    ? `https://content.airhex.com/content/logos/airlines_${code.toUpperCase()}_100_100_s.png`
-    : "https://content.airhex.com/content/logos/default.png";
+  `https://content.airhex.com/content/logos/airlines_${code.toUpperCase()}_100_100_s.png`;
 
 export default function FlightOfferDetailsNew() {
   const { selectedFlightOffer: flightData } = useAppContext();
-  console.log("Flight Data in FlightOfferDetailsNew:", {
-    flightData,
-    hasTrips: !!flightData?.trips,
-    isTripsArray: Array.isArray(flightData?.trips),
-    tripsLength: flightData?.trips?.length,
-  });
+  
+  // Parse the flight data
+  const parsedFlightData = React.useMemo(() => {
+    if (!flightData) return null;
+    
+    try {
+      if (flightData.pricingAdditionalInfo) {
+        return typeof flightData.pricingAdditionalInfo === 'string'
+          ? JSON.parse(flightData.pricingAdditionalInfo)
+          : flightData.pricingAdditionalInfo;
+      }
+      return flightData;
+    } catch (error) {
+      console.warn("Failed to parse flight data:", error);
+      return flightData;
+    }
+  }, [flightData]);
 
-  // Enhanced defensive check
-  if (!flightData || !flightData.trips || !Array.isArray(flightData.trips) || flightData.trips.length === 0) {
-    console.warn("FlightOfferDetailsNew: Invalid flight data", {
-      flightData,
-      trips: flightData?.trips,
-    });
+  if (!parsedFlightData) {
     return (
       <View style={styles.container}>
         <Text style={styles.errorText}>No flight details available</Text>
-        {flightData && (
-          <View style={styles.fallbackInfo}>
-            <Text style={styles.infoLabel}>
-              Price: {flightData.currencyCode || "N/A"} {flightData.totalPrice || "N/A"}
-            </Text>
-            <Text style={styles.infoLabel}>
-              Base Price: {flightData.currencyCode || "N/A"} {flightData.basePrice || "N/A"}
-            </Text>
-          </View>
-        )}
       </View>
     );
   }
 
+  const itineraries = parsedFlightData.itineraries || [];
+  const priceInfo = parsedFlightData.price || {};
+
   return (
     <ScrollView style={styles.container}>
-      {flightData.trips.map((trip: any, index: number) => (
+      {itineraries.map((itinerary: any, index: number) => (
         <View key={index}>
-          <Chip
-            icon={"airplane-takeoff"}
-            style={styles.tripChip}
-            textStyle={{ fontWeight: "600" }}
-          >
-            {trip.tripType === "ONE_WAY" ||
-            (trip.tripType === "RETURN" && index === 0)
-              ? "Outbound Trip"
-              : trip.tripType === "RETURN" && index === 1
-              ? "Return Trip"
-              : `Trip ${trip.tripNo || index + 1}`}
+          <Chip icon={"airplane-takeoff"} style={styles.tripChip}>
+            {index === 0 ? "Outbound Flight" : "Return Flight"}
           </Chip>
 
-          {trip.legs && Array.isArray(trip.legs) && trip.legs.length > 0 ? (
-            trip.legs.map((leg: any, legIdx: number) => (
-              <View key={legIdx} style={{ marginBottom: 24 }}>
+          {itinerary.segments && itinerary.segments.map((segment: any, segIdx: number) => {
+            const carrierCode = segment.carrierCode || "";
+            const airlineName = carrierCodeToName[carrierCode] || carrierCode;
+            const aircraft = aircraftCodeToName[segment.aircraft?.code] || segment.aircraft?.code;
+            
+            return (
+              <View key={segIdx} style={{ marginBottom: 24 }}>
                 <Card style={styles.card}>
                   <Card.Title
-                    title={leg.carrierName || carrierCodeToName[leg.carrierCode] || leg.carrierCode || "Unknown Airline"}
+                    title={airlineName}
                     titleStyle={styles.airlineName}
                     left={() => (
                       <Image
-                        source={{
-                          uri: getAirlineIconURL(leg.operatingCarrierCode || leg.carrierCode || ""),
-                        }}
+                        source={{ uri: getAirlineIconURL(carrierCode) }}
                         style={styles.airlineLogo}
-                        onError={() => console.log("Failed to load airline logo")}
+                        onError={() => console.log("Failed to load airline logo for:", carrierCode)}
                       />
                     )}
                   />
                   <Card.Content>
                     <View style={styles.timelineRow}>
                       <View style={styles.cityBlock}>
-                        <Text style={styles.city}>{leg.departureCity || iataToCity[leg.departure?.iataCode] || "Unknown Departure City"}</Text>
-                        <Text style={styles.time}>{formatTime(leg.departureDateTime) || "N/A"}</Text>
-                        <Text style={styles.date}>{formatDate(leg.departureDateTime) || "N/A"}</Text>
+                        <Text style={styles.city}>
+                          {iataToCity[segment.departure?.iataCode] || segment.departure?.iataCode}
+                        </Text>
+                        <Text style={styles.time}>
+                          {formatTime(segment.departure?.at)}
+                        </Text>
+                        <Text style={styles.date}>
+                          {formatDate(segment.departure?.at)}
+                        </Text>
                       </View>
+                      
                       <View style={styles.timelineLineHorizontal}>
                         <View style={styles.timelineDot} />
                         <View style={styles.timelineLineMid} />
                         <View style={styles.timelineDot} />
                       </View>
+                      
                       <View style={styles.cityBlock}>
-                        <Text style={styles.city}>{leg.arrivalCity || iataToCity[leg.arrival?.iataCode] || "Unknown Arrival City"}</Text>
-                        <Text style={styles.time}>{formatTime(leg.arrivalDateTime) || "N/A"}</Text>
-                        <Text style={styles.date}>{formatDate(leg.arrivalDateTime) || "N/A"}</Text>
+                        <Text style={styles.city}>
+                          {iataToCity[segment.arrival?.iataCode] || segment.arrival?.iataCode}
+                        </Text>
+                        <Text style={styles.time}>
+                          {formatTime(segment.arrival?.at)}
+                        </Text>
+                        <Text style={styles.date}>
+                          {formatDate(segment.arrival?.at)}
+                        </Text>
                       </View>
                     </View>
-                    <Text style={styles.flightInfo}>Travel Time: {leg.duration || "N/A"}</Text>
+                    
+                    <Text style={styles.flightInfo}>
+                      Duration: {segment.duration || "N/A"}
+                    </Text>
+                    
                     <Divider style={styles.divider} />
+                    
+                    <View style={styles.row}>
+                      <Text style={styles.infoLabel}>Flight Number</Text>
+                      <Text style={styles.infoValue}>
+                        {carrierCode} {segment.number}
+                      </Text>
+                    </View>
+                    
                     <View style={styles.row}>
                       <Text style={styles.infoLabel}>Aircraft</Text>
-                      <Text style={styles.infoValue}>{leg.aircraft || aircraftCodeToName[leg.aircraft?.code] || "Unknown"}</Text>
+                      <Text style={styles.infoValue}>{aircraft}</Text>
                     </View>
+                    
                     <View style={styles.row}>
                       <Text style={styles.infoLabel}>Cabin</Text>
-                      <Text style={styles.infoValue}>{leg.cabinClass || "Unknown"}</Text>
-                    </View>
-                    <Text style={styles.amenitiesTitle}>Amenities</Text>
-                    <View style={styles.amenities}>
-                      <Chip icon="wifi" style={styles.amenityChip} textStyle={styles.amenityText}>
-                        Wi-Fi
-                      </Chip>
-                      <Chip
-                        icon="power-plug-outline"
-                        style={styles.amenityChip}
-                        textStyle={styles.amenityText}
-                      >
-                        Power Outlet
-                      </Chip>
-                      <Chip
-                        icon="television-classic"
-                        style={styles.amenityChip}
-                        textStyle={styles.amenityText}
-                      >
-                        Entertainment
-                      </Chip>
+                      <Text style={styles.infoValue}>
+                        {parsedFlightData.travelerPricings?.[0]?.fareDetailsBySegment?.[0]?.cabin || "Economy"}
+                      </Text>
                     </View>
                   </Card.Content>
                 </Card>
-                {leg.layoverAfter && (
-                  <View style={styles.stopoverContainer}>
-                    <MaterialCommunityIcons name="clock-outline" size={18} />
-                    <Text style={styles.stopoverText}>
-                      {leg.layoverAfter} layover in {leg.arrivalCity || "Unknown"}
-                    </Text>
-                  </View>
-                )}
               </View>
-            ))
-          ) : (
-            <Text style={styles.errorText}>No flight legs available</Text>
-          )}
-          <Divider style={[styles.divider, { height: 3 }]} />
+            );
+          })}
         </View>
       ))}
+      
       <View style={styles.priceInfo}>
-        <Text style={styles.infoLabel}>
-          Total Price: {flightData.currencyCode || "N/A"} {flightData.totalPrice || "N/A"}
+        <Text style={styles.totalPrice}>
+          Total: {priceInfo.currency} {priceInfo.total}
         </Text>
-        <Text style={styles.infoLabel}>
-          Base Price: {flightData.currencyCode || "N/A"} {flightData.basePrice || "N/A"}
+        <Text style={styles.basePrice}>
+          Base Fare: {priceInfo.currency} {priceInfo.base}
         </Text>
       </View>
     </ScrollView>
   );
 }
+
+// Keep the same styles as before
 
 const styles = StyleSheet.create({
   container: {
