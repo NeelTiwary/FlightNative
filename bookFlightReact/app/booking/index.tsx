@@ -1,11 +1,11 @@
+import TravelerForm from "@/components/TravelerForm";
 import { useAppContext } from "@/context/AppContextProvider";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, View, TouchableOpacity, Platform } from "react-native";
-import { Button, List, Text, Card, Snackbar, Portal, Modal } from "react-native-paper";
+import { Platform, ScrollView, StyleSheet, View } from "react-native";
+import { Button, List, Text, Snackbar } from "react-native-paper";
 import axiosInstance from "../../config/axiosConfig";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import TravelerForm from "@/components/TravelerForm";
 
 export default function Booking() {
   const { travelers, setTravelers, selectedFlightOffer, setSelectedFlightOffer, apiUrl, setFlightBooking } = useAppContext();
@@ -13,7 +13,6 @@ export default function Booking() {
   const [loading, setLoading] = useState(false);
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const router = useRouter();
 
   const genderOptions = ["MALE", "FEMALE", "OTHER"];
@@ -21,7 +20,7 @@ export default function Booking() {
   const countryCallingCodes = ["+1", "+44", "+91", "+61", "+81"];
 
   useEffect(() => {
-    console.log("selectedFlightOffer:", selectedFlightOffer);
+    console.log("selectedFlightOffer:", JSON.stringify(selectedFlightOffer, null, 2));
     console.log("travelers:", travelers);
     if (!travelers.length && selectedFlightOffer?.totalTravelers) {
       handleAddTraveler();
@@ -160,6 +159,7 @@ export default function Booking() {
 
     if (!isValid) {
       setSnackbarMessage(errors.join("; "));
+      setSnackbarVisible(true);
       console.log("Validation failed:", errors);
     } else {
       console.log("Validation passed");
@@ -168,117 +168,112 @@ export default function Booking() {
   };
 
   const handleBooking = async () => {
-    console.log("handleBooking triggered");
+  try {
+    setLoading(true);
     if (!validateTravelers()) {
-      setSnackbarVisible(true);
       return;
     }
-    setShowConfirmModal(true);
-  };
 
-  const confirmBooking = async () => {
+    // Ensure we have parsed offer object
+    let flightOffer;
     try {
-      setLoading(true);
-      setShowConfirmModal(false);
+      console.log("Selected flight offer pricing info:", selectedFlightOffer);
+      flightOffer = selectedFlightOffer.pricingAdditionalInfo
+    } catch (error) {
+      throw new Error("Invalid flight offer format");
+    }
 
-      const flightOfferStr =
-        typeof selectedFlightOffer?.pricingAdditionalInfo === "string"
-          ? selectedFlightOffer.pricingAdditionalInfo
-          : JSON.stringify(selectedFlightOffer?.pricingAdditionalInfo);
-
-      const travelersMapped = travelers.map((t, idx) => ({
-        id: (idx + 1).toString(),
-        firstName: t.firstName,
-        lastName: t.lastName,
-        dateOfBirth: t.dob,
-        gender: t.gender.toUpperCase(),
-        email: idx === 0 ? t.email : undefined,
-        phones: [
-          {
-            deviceType: "MOBILE",
-            countryCallingCode: t.phoneNumber.countryCallingCode.replace("+", ""),
-            number: t.phoneNumber.number,
+    const bookingData = {
+        flightOffer: flightOffer,
+        travelers: travelers.map((traveler: any, index: number) => ({
+          id: (index + 1).toString(),
+          dateOfBirth: traveler.dateOfBirth || traveler.dob, // support both keys
+          name: {
+            firstName: traveler.firstName,
+            lastName: traveler.lastName,
           },
-        ],
-        documents: [
-          {
-            documentType: t.document.documentType,
-            number: t.document.number,
-            issuanceDate: t.document.issuanceDate,
-            expiryDate: t.document.expiryDate,
-            issuanceCountry: t.document.issuanceCountry,
-            validityCountry: t.document.validityCountry,
-            nationality: t.document.nationality,
-            birthPlace: t.document.birthPlace,
-            issuanceLocation: t.document.issuanceLocation,
-            holder: t.document.holder,
+          gender: traveler.gender,
+          contact: {
+            emailAddress: traveler.email,
+            phones: [
+              {
+                deviceType: "MOBILE",
+                countryCallingCode: traveler.phoneNumber.countryCallingCode.replace("+", ""),
+                number: traveler.phoneNumber.number,
+              },
+            ],
           },
-        ],
-      }));
-
-      const bookingData = {
-        flightOffer: flightOfferStr,
-        travelers: travelersMapped,
+          documents: [
+            {
+              documentType: traveler.document.documentType,
+              number: traveler.document.number,
+              issuanceDate: traveler.document.issuanceDate,
+              expiryDate: traveler.document.expiryDate,
+              issuanceCountry: traveler.document.issuanceCountry,
+              issuanceLocation: traveler.document.issuanceLocation,
+              nationality: traveler.document.nationality,
+              birthPlace: traveler.document.birthPlace,
+              validityCountry: traveler.document.validityCountry,
+              holder: true,
+            },
+          ],
+        })),
       };
 
-      console.log("Sending bookingData:", bookingData);
+    console.log("Booking data:", JSON.stringify(bookingData, null, 2));
 
-      const response = await axiosInstance.post(`${apiUrl}/booking/flight-order`, bookingData);
-      const bookingResponse = response.data;
+    const endpoint = apiUrl
+      ? `${apiUrl}/booking/flight-order`
+      : "/v1/booking/flight-orders";
 
-      if (!bookingResponse.orderId) {
-        throw new Error("Incomplete booking data received.");
-      }
+    const response = await axiosInstance.post(endpoint, bookingData, {
+      headers: { "Content-Type": "application/json" },
+    });
 
-      setFlightBooking(bookingResponse);
-      setTravelers([]);
-      setSnackbarMessage(`Booking successful! Order ID: ${bookingResponse.orderId}`);
-      setSnackbarVisible(true);
-      if (Platform.OS === "web") {
-        localStorage.setItem("flightBooking", JSON.stringify(bookingResponse));
-      }
-      router.push("/booking/confirmation");
-    } catch (error: any) {
-      console.error("Booking error:", error.response?.data || error.message);
-      setSnackbarMessage(error.message || "Failed to book flight. Please try again.");
-      setSnackbarVisible(true);
-    } finally {
-      setLoading(false);
+    const bookingResponse = response.data;
+
+    if (!bookingResponse.data?.id) {
+      throw new Error("Incomplete booking data received.");
     }
-  };
+
+    setFlightBooking(bookingResponse.data);
+    setTravelers([]);
+    setSnackbarMessage(`Booking successful! Order ID: ${bookingResponse.data.id}`);
+    setSnackbarVisible(true);
+
+    if (Platform.OS === "web") {
+      localStorage.setItem("flightBooking", JSON.stringify(bookingResponse.data));
+    }
+
+    router.push("/booking/confirmation");
+  } catch (error: any) {
+    console.error("Booking error:", error.response?.data || error.message);
+    setSnackbarMessage(
+      error.response?.data?.errors?.[0]?.detail ||
+        "Failed to book flight. Please try again."
+    );
+    setSnackbarVisible(true);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const confirmFlightOfferPricing = async () => {
-    try {
-      if (!selectedFlightOffer?.pricingAdditionalInfo) {
-        throw new Error("No pricingAdditionalInfo available");
-      }
+        try {
+            const body = {
+                flightOffer: selectedFlightOffer.pricingAdditionalInfo,
+            }
+             const response = await axiosInstance.post(`/pricing/flights/confirm`, body);
+          //  const response = await axios.post(`${apiUrl}/pricing/flights/confirm`, body);
+            console.log("Flight offer pricing:", response.data);
+            //setSelectedFlightOffer(response.data);
+        } catch (error) {
+            console.error("Error fetching flight offer pricing:", error);
+        }
 
-      const body = {
-        flightOffer: typeof selectedFlightOffer.pricingAdditionalInfo === "string"
-          ? selectedFlightOffer.pricingAdditionalInfo
-          : JSON.stringify(selectedFlightOffer.pricingAdditionalInfo),
-      };
-
-      console.log("Confirming flight offer pricing with body:", body);
-
-      const response = await axiosInstance.post(`${apiUrl}/pricing/flights/confirm`, body);
-      console.log("Flight offer pricing response:", response.data);
-
-      const parsedOffer =
-        typeof response.data.pricingAdditionalInfo === "string"
-          ? JSON.parse(response.data.pricingAdditionalInfo)
-          : response.data.pricingAdditionalInfo || response.data;
-
-      setSelectedFlightOffer({
-        ...response.data,
-        pricingAdditionalInfo: JSON.stringify(parsedOffer),
-      });
-    } catch (error: any) {
-      console.error("Error fetching flight offer pricing:", error.response?.data || error.message);
-      setSnackbarMessage(error.message || "Failed to confirm flight pricing.");
-      setSnackbarVisible(true);
     }
-  };
+
 
   useEffect(() => {
     if (selectedFlightOffer && selectedFlightOffer.pricingAdditionalInfo) {
@@ -287,33 +282,44 @@ export default function Booking() {
   }, [selectedFlightOffer]);
 
   const renderFlightSummary = () => {
-    if (!selectedFlightOffer || !selectedFlightOffer.trips || !Array.isArray(selectedFlightOffer.trips)) {
+    if (!selectedFlightOffer || !selectedFlightOffer.pricingAdditionalInfo) {
       return null;
     }
 
-    const trip = selectedFlightOffer.trips[0];
-    const firstLeg = trip.legs && trip.legs[0];
+    let flightOffer;
+    try {
+      flightOffer =
+        typeof selectedFlightOffer.pricingAdditionalInfo === "string"
+          ? JSON.parse(selectedFlightOffer.pricingAdditionalInfo)
+          : selectedFlightOffer.pricingAdditionalInfo;
+    } catch (error) {
+      console.error("Error parsing flightOffer:", error);
+      return null;
+    }
+
+    const itinerary = flightOffer.itineraries?.[0];
+    const firstSegment = itinerary?.segments?.[0];
+
     return (
-      <Card style={styles.summaryCard}>
-        <Card.Title
-          title="Flight Summary"
-          titleStyle={styles.summaryTitle}
-          left={(props) => <MaterialCommunityIcons name="airplane" size={24} color="#007AFF" />}
-        />
-        <Card.Content>
+      <View style={styles.summaryCard}>
+        <View style={styles.summaryHeader}>
+          <MaterialCommunityIcons name="airplane" size={24} color="#007AFF" />
+          <Text style={styles.summaryTitle}>Flight Summary</Text>
+        </View>
+        <View style={styles.summaryContent}>
           <View style={styles.summaryRow}>
             <MaterialCommunityIcons name="route" size={16} color="#666" />
             <Text style={styles.summaryLabel}>Route:</Text>
             <Text style={styles.summaryValue}>
-              {trip.from || "Unknown"} → {trip.to || "Unknown"}
+              {firstSegment?.departure?.iataCode || "Unknown"} → {firstSegment?.arrival?.iataCode || "Unknown"}
             </Text>
           </View>
           <View style={styles.summaryRow}>
             <MaterialCommunityIcons name="calendar" size={16} color="#666" />
             <Text style={styles.summaryLabel}>Date:</Text>
             <Text style={styles.summaryValue}>
-              {firstLeg?.departureDateTime
-                ? new Date(firstLeg.departureDateTime).toLocaleDateString()
+              {firstSegment?.departure?.at
+                ? new Date(firstSegment.departure.at).toLocaleDateString()
                 : "N/A"}
             </Text>
           </View>
@@ -324,8 +330,8 @@ export default function Booking() {
               {selectedFlightOffer.currencyCode} {selectedFlightOffer.totalPrice}
             </Text>
           </View>
-        </Card.Content>
-      </Card>
+        </View>
+      </View>
     );
   };
 
@@ -349,7 +355,7 @@ export default function Booking() {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {travelers.length > 0 ? (
           travelers.map((traveler: any, index: number) => (
-            <Card key={`traveler-${traveler.id}`} style={styles.travelerCard}>
+            <View key={`traveler-${traveler.id}`} style={styles.travelerCard}>
               <List.Accordion
                 title={
                   traveler.firstName && traveler.lastName
@@ -361,8 +367,6 @@ export default function Booking() {
                 onPress={() => handleAccordionPress(index)}
                 style={styles.accordion}
                 titleStyle={styles.accordionTitle}
-                accessibilityLabel={`Traveler ${index + 1} details`}
-                accessibilityRole="button"
               >
                 <TravelerForm
                   traveler={traveler}
@@ -373,7 +377,7 @@ export default function Booking() {
                   countryCallingCodes={countryCallingCodes}
                 />
               </List.Accordion>
-            </Card>
+            </View>
           ))
         ) : (
           <View style={styles.noTravelersContainer}>
@@ -391,86 +395,32 @@ export default function Booking() {
         )}
 
         {travelers.length > 0 && (
-          <TouchableOpacity
-            style={styles.addButton}
-            onPress={handleAddTraveler}
-            activeOpacity={0.8}
+          <Button
+            mode="contained"
+            onPress={handleBooking}
+            loading={loading}
+            disabled={loading || travelers.length === 0}
+            style={styles.bookButton}
+            labelStyle={styles.bookButtonLabel}
+            icon="airplane-takeoff"
           >
-            <MaterialCommunityIcons name="plus" size={24} color="#FFFFFF" />
-            <Text style={styles.addButtonText}>Add Traveler</Text>
-          </TouchableOpacity>
+            {loading ? "Booking..." : `Book Flight (${travelers.length})`}
+          </Button>
         )}
       </ScrollView>
 
-      <View style={styles.footer}>
-        <Button
-          mode="contained"
-          onPress={handleBooking}
-          loading={loading}
-          disabled={loading || travelers.length === 0}
-          style={styles.bookButton}
-          labelStyle={styles.bookButtonLabel}
-          accessibilityLabel="Book flight"
-          icon="airplane-takeoff"
-        >
-          {loading ? "Processing..." : `Book Flight (${travelers.length})`}
-        </Button>
-      </View>
-
-      <Portal>
-        <Snackbar
-          visible={snackbarVisible}
-          onDismiss={() => setSnackbarVisible(false)}
-          duration={5000}
-          style={styles.snackbar}
-          action={{
-            label: "Dismiss",
-            onPress: () => setSnackbarVisible(false),
-          }}
-        >
-          {snackbarMessage}
-        </Snackbar>
-
-        <Modal
-          visible={showConfirmModal}
-          onDismiss={() => setShowConfirmModal(false)}
-          contentContainerStyle={styles.modalContainer}
-        >
-          <Card style={styles.modalCard}>
-            <Card.Title
-              title="Confirm Booking"
-              titleStyle={styles.modalTitle}
-              left={(props) => <MaterialCommunityIcons name="shield-check" size={24} color="#007AFF" />}
-            />
-            <Card.Content>
-              <Text style={styles.modalText}>
-                Are you sure you want to book this flight for {travelers.length}{" "}
-                traveler{travelers.length > 1 ? "s" : ""}?
-              </Text>
-              <Text style={styles.modalSubtext}>
-                Total: {selectedFlightOffer?.currencyCode} {selectedFlightOffer?.totalPrice}
-              </Text>
-            </Card.Content>
-            <Card.Actions style={styles.modalActions}>
-              <Button
-                onPress={() => setShowConfirmModal(false)}
-                mode="outlined"
-                style={styles.cancelButton}
-              >
-                Cancel
-              </Button>
-              <Button
-                mode="contained"
-                onPress={confirmBooking}
-                style={styles.confirmButton}
-                icon="check"
-              >
-                Confirm Booking
-              </Button>
-            </Card.Actions>
-          </Card>
-        </Modal>
-      </Portal>
+      <Snackbar
+        visible={snackbarVisible}
+        onDismiss={() => setSnackbarVisible(false)}
+        duration={5000}
+        style={styles.snackbar}
+        action={{
+          label: "Dismiss",
+          onPress: () => setSnackbarVisible(false),
+        }}
+      >
+        {snackbarMessage}
+      </Snackbar>
     </View>
   );
 }
@@ -511,16 +461,26 @@ const styles = StyleSheet.create({
     margin: 16,
     backgroundColor: "#FFFFFF",
     borderRadius: 12,
+    padding: 16,
     elevation: 2,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
+  summaryHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 8,
+  },
   summaryTitle: {
     fontSize: 18,
     fontWeight: "600",
     color: "#1A1A1A",
+    marginLeft: 8,
+  },
+  summaryContent: {
+    paddingHorizontal: 8,
   },
   summaryRow: {
     flexDirection: "row",
@@ -546,7 +506,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 16,
-    paddingBottom: 120,
+    paddingBottom: 80,
   },
   travelerCard: {
     marginBottom: 16,
@@ -557,7 +517,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
     shadowRadius: 2,
-    overflow: "hidden",
   },
   accordion: {
     backgroundColor: "#FFFFFF",
@@ -590,45 +549,11 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontWeight: "600",
   },
-  addButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#007AFF",
-    padding: 16,
-    borderRadius: 12,
-    elevation: 2,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  addButtonText: {
-    color: "#FFFFFF",
-    fontWeight: "600",
-    fontSize: 16,
-    marginLeft: 8,
-  },
-  footer: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    padding: 16,
-    backgroundColor: "#FFFFFF",
-    borderTopWidth: 1,
-    borderTopColor: "#E0E0E0",
-    elevation: 4,
-    zIndex: 1000,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
   bookButton: {
     borderRadius: 12,
     backgroundColor: "#007AFF",
     paddingVertical: 6,
+    marginHorizontal: 16,
   },
   bookButtonLabel: {
     fontSize: 16,
@@ -639,45 +564,5 @@ const styles = StyleSheet.create({
     backgroundColor: "#323232",
     margin: 16,
     borderRadius: 8,
-  },
-  modalContainer: {
-    margin: 24,
-  },
-  modalCard: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 16,
-    overflow: "hidden",
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: "600",
-    color: "#1A1A1A",
-  },
-  modalText: {
-    fontSize: 16,
-    color: "#1A1A1A",
-    marginBottom: 8,
-    lineHeight: 24,
-  },
-  modalSubtext: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#007AFF",
-    marginBottom: 4,
-  },
-  modalActions: {
-    justifyContent: "flex-end",
-    paddingHorizontal: 16,
-    paddingBottom: 16,
-  },
-  cancelButton: {
-    borderColor: "#E0E0E0",
-    borderWidth: 1,
-    borderRadius: 8,
-    marginRight: 8,
-  },
-  confirmButton: {
-    borderRadius: 8,
-    backgroundColor: "#007AFF",
   },
 });
