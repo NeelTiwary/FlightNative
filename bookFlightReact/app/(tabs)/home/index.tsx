@@ -150,8 +150,6 @@ export default function Home() {
 
        const queryparams = convertToQueryParams(params);
         const response = await axiosInstance.get(`/flights/search?${queryparams}`);
-      // const response = await axios.get(`${apiUrl}/flights/search?${queryparams}`);
-       // console.log("Flight offers response: ", response);
        setFlightOffers(response.data.flightsAvailable);
        setTimeout(() => {
          router.push("/offers");
@@ -324,71 +322,71 @@ export default function Home() {
                     tripType === type && styles.tripTypeTextActive
                     ]}
                   >
-                    {type === "roundTrip" ? "Round Trip" : 
+                    {type === "roundTrip" ? "Round" : 
                     type === "oneWay" ? "One Way" : "Multi City"}
                   </Text>
                 </Pressable>
               ))}
             </View>
 
-            <Divider style={styles.divider} />
-
             {/* Location Inputs */}
             <View style={styles.locationContainer}>
               <View style={styles.inputContainer}>
-                <Text style={styles.inputLabel}>From</Text>
-                <View style={styles.textInputContainer}>
-                  <IconButton icon="airplane-takeoff" size={20} style={styles.inputIcon} />
-                  <TextInput
-                    value={fromInput}
-                    onChangeText={handleFromInputChange}
-                    placeholder="Departure"
-                    style={styles.textInput}
-                    mode="flat"
-                    underlineColor="transparent"
-                  />
-                  {fromLoading && <IconButton icon="loading" size={20} />}
-                </View>
-                {fromSuggestions.length > 0 && (
-                  <View style={styles.suggestionsContainer}>
-                    <ScrollView style={styles.suggestionsScroll}>
-                      {fromSuggestions.map(item => renderSuggestionItem(item, 'from'))}
-                    </ScrollView>
+                <View style={styles.textInputWrapper}>
+                  <Text style={styles.inputLabel}>From</Text>
+                  <View style={styles.textInputContainer}>
+                    <IconButton icon="airplane-takeoff" size={18} style={styles.inputIcon} />
+                    <TextInput
+                      value={fromInput}
+                      onChangeText={handleFromInputChange}
+                      placeholder="Departure"
+                      style={styles.textInput}
+                      mode="flat"
+                      underlineColor="transparent"
+                    />
+                    {fromLoading && <IconButton icon="loading" size={18} />}
                   </View>
-                )}
+                  {fromSuggestions.length > 0 && (
+                    <View style={styles.suggestionsContainer}>
+                      <ScrollView style={styles.suggestionsScroll}>
+                        {fromSuggestions.map(item => renderSuggestionItem(item, 'from'))}
+                      </ScrollView>
+                    </View>
+                  )}
+                </View>
 
-                <Text style={styles.inputLabel}>To</Text>
-                <View style={styles.textInputContainer}>
-                  <IconButton icon="airplane-landing" size={20} style={styles.inputIcon} />
-                  <TextInput
-                    value={toInput}
-                    onChangeText={handleToInputChange}
-                    placeholder="Destination"
-                    style={styles.textInput}
-                    mode="flat"
-                    underlineColor="transparent"
-                  />
-                  {toLoading && <IconButton icon="loading" size={20} />}
-                </View>
-                {toSuggestions.length > 0 && (
-                  <View style={styles.suggestionsContainer}>
-                    <ScrollView style={styles.suggestionsScroll}>
-                      {toSuggestions.map(item => renderSuggestionItem(item, 'to'))}
-                    </ScrollView>
+                <View style={styles.textInputWrapper}>
+                  <Text style={styles.inputLabel}>To</Text>
+                  <View style={styles.textInputContainer}>
+                    <IconButton icon="airplane-landing" size={18} style={styles.inputIcon} />
+                    <TextInput
+                      value={toInput}
+                      onChangeText={handleToInputChange}
+                      placeholder="Destination"
+                      style={styles.textInput}
+                      mode="flat"
+                      underlineColor="transparent"
+                    />
+                    {toLoading && <IconButton icon="loading" size={18} />}
                   </View>
-                )}
+                  {toSuggestions.length > 0 && (
+                    <View style={styles.suggestionsContainer}>
+                      <ScrollView style={styles.suggestionsScroll}>
+                        {toSuggestions.map(item => renderSuggestionItem(item, 'to'))}
+                      </ScrollView>
+                    </View>
+                  )}
+                </View>
               </View>
 
               <IconButton
                 icon="swap-vertical"
-                size={24}
+                size={20}
                 onPress={swapLocations}
                 style={styles.swapButton}
                 iconColor="#fff"
               />
             </View>
-
-            <Divider style={styles.divider} />
 
             {/* Date Selection */}
             <View style={styles.dateContainer}>
@@ -398,7 +396,7 @@ export default function Home() {
                   style={styles.dateButton}
                   onPress={() => showDatePicker('departureDate')}
                 >
-                  <IconButton icon="calendar" size={20} style={styles.inputIcon} />
+                  <IconButton icon="calendar" size={18} style={styles.inputIcon} />
                   <Text style={styles.dateText}>
                     {formatDate(searchParams.departureDate) || "Select date"}
                   </Text>
@@ -412,7 +410,7 @@ export default function Home() {
                     style={styles.dateButton}
                     onPress={() => showDatePicker('returnDate')}
                   >
-                    <IconButton icon="calendar" size={20} style={styles.inputIcon} />
+                    <IconButton icon="calendar" size={18} style={styles.inputIcon} />
                     <Text style={styles.dateText}>
                       {formatDate(searchParams.returnDate) || "Select date"}
                     </Text>
@@ -436,9 +434,6 @@ export default function Home() {
                 minimumDate={new Date()}
               />
             )}
-
-            <Divider style={styles.divider} />
-
             {/* Passengers and Class */}
             <View style={styles.passengerContainer}>
               <View style={styles.passengerInput}>
@@ -446,14 +441,14 @@ export default function Home() {
                 <View style={styles.counterContainer}>
                   <IconButton 
                     icon="minus" 
-                    size={20} 
+                    size={18} 
                     onPress={() => handleChange('adults', Math.max(1, searchParams.adults - 1))}
                     style={styles.counterButton}
                   />
                   <Text style={styles.counterText}>{searchParams.adults} Adult</Text>
                   <IconButton 
                     icon="plus" 
-                    size={20} 
+                    size={18} 
                     onPress={() => handleChange('adults', searchParams.adults + 1)}
                     style={styles.counterButton}
                   />
@@ -464,7 +459,7 @@ export default function Home() {
                 <Text style={styles.inputLabel}>Class</Text>
                 <Pressable style={styles.classSelector} onPress={toggleClassDropdown}>
                   <Text style={styles.classText}>{searchParams.flightClass}</Text>
-                  <IconButton icon="chevron-down" size={20} style={styles.classDropdownIcon} />
+                  <IconButton icon="chevron-down" size={18} style={styles.classDropdownIcon} />
                 </Pressable>
                 
                 <Modal
@@ -513,6 +508,7 @@ export default function Home() {
               disabled={offersLoading}
               style={styles.searchButton}
               labelStyle={styles.searchButtonText}
+              icon="magnify"
             >
               {offersLoading ? "Searching..." : "Search Flights"}
             </Button>
@@ -527,17 +523,17 @@ export default function Home() {
             { id: 2, title: "Business Class", discount: "25% OFF", code: "BUSINESS25", color: "#4ECDC4" },
             { id: 3, title: "Early Bird", discount: "20% OFF", code: "EARLY20", color: "#45B7D1" },
           ].map(offer => (
-            <LinearGradient
-              key={offer.id}
-              colors={[offer.color, `${offer.color}DD`]}
-              style={styles.promotionCard}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-            >
-              <Text style={styles.promotionTitle}>{offer.title}</Text>
-              <Text style={styles.promotionDiscount}>{offer.discount}</Text>
-              <Text style={styles.promotionCode}>Use code: {offer.code}</Text>
-            </LinearGradient>
+            <Card key={offer.id} style={[styles.promotionCard, { borderLeftColor: offer.color, borderLeftWidth: 4 }]}>
+              <Card.Content style={styles.promotionContent}>
+                <View style={styles.promotionHeader}>
+                  <Text style={styles.promotionTitle}>{offer.title}</Text>
+                  <View style={[styles.promotionBadge, { backgroundColor: offer.color }]}>
+                    <Text style={styles.promotionDiscount}>{offer.discount}</Text>
+                  </View>
+                </View>
+                <Text style={styles.promotionCode}>Use code: {offer.code}</Text>
+              </Card.Content>
+            </Card>
           ))}
         </ScrollView>
 
@@ -545,14 +541,14 @@ export default function Home() {
         <Text style={styles.sectionTitle}>Popular Destinations</Text>
         <View style={styles.destinationsContainer}>
           {[
-            { id: 1, name: "Paris", price: "$420" },
-            { id: 2, name: "Tokyo", price: "$650" },
-            { id: 3, name: "New York", price: "$380" },
-            { id: 4, name: "Bali", price: "$520" },
+            { id: 1, name: "Paris", price: "$420", icon: "city" },
+            { id: 2, name: "Tokyo", price: "$650", icon: "temple-buddhist" },
+            { id: 3, name: "New York", price: "$380", icon: "city-variant" },
+            { id: 4, name: "Bali", price: "$520", icon: "island" },
           ].map(destination => (
             <Card key={destination.id} style={styles.destinationCard}>
               <Card.Content style={styles.destinationContent}>
-                <IconButton icon="airplane" size={24} color="#1a73e8" />
+                <IconButton icon={destination.icon} size={24} color="#1a73e8" style={styles.destinationIcon} />
                 <Text style={styles.destinationName}>{destination.name}</Text>
                 <Text style={styles.destinationPrice}>From {destination.price}</Text>
               </Card.Content>
@@ -574,6 +570,7 @@ const headerStyles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#1a73e8',
+    letterSpacing: 0.5,
   },
   headerRight: {
     flexDirection: 'row',
@@ -588,7 +585,7 @@ const headerStyles = StyleSheet.create({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f8f9fa',
   },
   scrollView: {
     flex: 1,
@@ -598,8 +595,10 @@ const styles = StyleSheet.create({
   },
   hero: {
     padding: 24,
-    paddingTop: 50,
+    paddingTop: 20,
     paddingBottom: 40,
+    borderBottomLeftRadius: 48,
+    borderBottomRightRadius: 48,
   },
   heroTitle: {
     fontSize: 22,
@@ -615,24 +614,24 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   formCard: {
-    marginHorizontal: 16,
-    marginTop: -25,
-    borderRadius: 16,
+    marginHorizontal: 10,
+    marginTop: -30,
+    borderRadius: 30,
     marginBottom: 24,
     backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
+    shadowColor: '#065dcfff',
+    shadowOffset: { width: 4, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
-    elevation: 5,
+    elevation: 10,
   },
   tripTypeContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginBottom: 16,
-    backgroundColor: '#f8f9fa',
+    marginBottom: 8,
+    backgroundColor: '#cae3fcff',
     borderRadius: 12,
-    padding: 4,
+    padding: 12,
   },
   tripTypeButton: {
     paddingVertical: 8,
@@ -642,9 +641,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   tripTypeButtonActive: {
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    backgroundColor: '#ffffffff',
+    shadowColor: '#020c81ff',
+    shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
     elevation: 2,
@@ -658,35 +657,34 @@ const styles = StyleSheet.create({
     color: '#1a73e8',
     fontWeight: 'bold',
   },
-  divider: {
-    marginVertical: 8,
-    backgroundColor: '#e9ecef',
-    height: 1,
-  },
   locationContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 0,
     zIndex: 10,
   },
   inputContainer: {
     flex: 1,
-    position: 'relative',
+  },
+  textInputWrapper: {
+    marginBottom: 6,
   },
   inputLabel: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '600',
     color: '#495057',
-    marginBottom: 6,
+    marginBottom: 2,
+    marginLeft: 4,
   },
   textInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#ced4da',
-    borderRadius: 8,
+    borderColor: '#e9ecef',
+    borderRadius: 25,
     backgroundColor: '#fff',
-    height: 50,
+    height: 37,
+    overflow: 'hidden',
   },
   inputIcon: {
     margin: 0,
@@ -695,8 +693,8 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 1,
     backgroundColor: 'transparent',
-    fontSize: 16,
-    height: 48,
+    fontSize: 13,
+    height: 40,
     includeFontPadding: false,
   },
   suggestionsContainer: {
@@ -707,7 +705,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#dee2e6',
+    borderColor: '#c3c6c9ff',
     zIndex: 100,
     marginTop: 4,
     elevation: 5,
@@ -723,14 +721,14 @@ const styles = StyleSheet.create({
   suggestionItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 12,
+    padding: 4,
     borderBottomWidth: 1,
     borderBottomColor: '#f1f3f4',
   },
   suggestionIconContainer: {
     width: 32,
     height: 32,
-    borderRadius: 16,
+    borderRadius: 6,
     backgroundColor: '#e3f2fd',
     justifyContent: 'center',
     alignItems: 'center',
@@ -743,33 +741,33 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   suggestionName: {
-    fontSize: 16,
+    fontSize: 11,
     color: '#212529',
     fontWeight: '500',
   },
   suggestionIata: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#6c757d',
     marginTop: 2,
   },
   swapButton: {
     backgroundColor: '#1a73e8',
-    marginHorizontal: 8,
-    borderRadius: 20,
-    width: 40,
-    height: 40,
+    marginHorizontal: 0,
+    borderRadius: 12,
+    width: 36,
+    height: 36,
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 2,
     shadowColor: '#1a73e8',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 1, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 2,
   },
   dateContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 8,
+    marginBottom: 6,
   },
   dateInput: {
     flex: 0.48,
@@ -778,22 +776,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#ced4da',
-    borderRadius: 8,
+    borderColor: '#e9ecef',
+    borderRadius: 26,
     backgroundColor: '#fff',
-    height: 50,
-    paddingHorizontal: 8,
+    height: 37,
+    paddingHorizontal: 0,
   },
   dateText: {
-    fontSize: 16,
-    color: '#212529',
-    marginLeft: 8,
+    fontSize: 15,
+    color: '#4c4b4bff',
+    marginLeft: 0,
     flex: 1,
   },
   passengerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 16,
+    marginBottom: 1,
     position: 'relative',
     zIndex: 1,
   },
@@ -805,19 +803,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     borderWidth: 1,
-    borderColor: '#ced4da',
-    borderRadius: 8,
+    borderColor: '#e9ecef',
+    borderRadius: 25,
     backgroundColor: '#fff',
     paddingHorizontal: 4,
-    height: 50,
+    height: 42,
   },
   counterButton: {
     margin: 0,
     backgroundColor: '#f8f9fa',
-    borderRadius: 20,
+    borderRadius: 50,
   },
   counterText: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#212529',
     fontWeight: '500',
   },
@@ -830,14 +828,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     borderWidth: 1,
-    borderColor: '#ced4da',
-    borderRadius: 8,
+    borderColor: '#e9ecef',
+    borderRadius: 25,
     backgroundColor: '#fff',
     paddingHorizontal: 12,
-    height: 50,
+    height: 42,
   },
   classText: {
-    fontSize: 16,
+    fontSize: 15,
     color: '#212529',
     fontWeight: '500',
   },
@@ -851,8 +849,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   dropdownContainer: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
+    backgroundColor: '#ffffffff',
+    borderRadius: 12,
     padding: 8,
     width: width * 0.7,
     shadowColor: '#000',
@@ -864,14 +862,14 @@ const styles = StyleSheet.create({
   dropdownItem: {
     paddingVertical: 12,
     paddingHorizontal: 16,
-    borderRadius: 6,
+    borderRadius: 8,
     marginBottom: 4,
   },
   dropdownItemSelected: {
-    backgroundColor: '#e3f2fd',
+    backgroundColor: '#383b3dff',
   },
   dropdownItemText: {
-    fontSize: 16,
+    fontSize: 15,
     color: '#212529',
   },
   dropdownItemTextSelected: {
@@ -880,7 +878,7 @@ const styles = StyleSheet.create({
   },
   searchButton: {
     backgroundColor: '#1a73e8',
-    borderRadius: 8,
+    borderRadius: 30,
     paddingVertical: 8,
     marginTop: 8,
     height: 50,
@@ -894,8 +892,9 @@ const styles = StyleSheet.create({
   searchButtonText: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 17,
     letterSpacing: 0.5,
+    zIndex: 200,
   },
   sectionTitle: {
     fontSize: 20,
@@ -903,6 +902,7 @@ const styles = StyleSheet.create({
     color: '#212529',
     marginHorizontal: 16,
     marginBottom: 16,
+    marginTop: 8,
   },
   promotionsContainer: {
     paddingHorizontal: 16,
@@ -911,30 +911,41 @@ const styles = StyleSheet.create({
   promotionCard: {
     width: width * 0.7,
     borderRadius: 12,
-    padding: 16,
     marginRight: 16,
+    backgroundColor: '#fff',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
   },
+  promotionContent: {
+    padding: 16,
+  },
+  promotionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
   promotionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 4,
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#212529',
+  },
+  promotionBadge: {
+    borderRadius: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
   },
   promotionDiscount: {
-    fontSize: 24,
+    fontSize: 12,
     fontWeight: 'bold',
     color: '#fff',
-    marginBottom: 8,
   },
   promotionCode: {
     fontSize: 14,
-    color: '#fff',
-    opacity: 0.9,
+    color: '#6c757d',
   },
   destinationsContainer: {
     flexDirection: 'row',
@@ -958,12 +969,15 @@ const styles = StyleSheet.create({
     padding: 16,
     alignItems: 'center',
   },
+  destinationIcon: {
+    margin: 0,
+    marginBottom: 8,
+  },
   destinationName: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#212529',
     marginBottom: 4,
-    marginTop: 8,
     textAlign: 'center',
   },
   destinationPrice: {

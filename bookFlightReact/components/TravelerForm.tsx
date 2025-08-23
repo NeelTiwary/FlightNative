@@ -1,178 +1,306 @@
-import { useAppContext } from "@/context/AppContextProvider";
-import { theme } from "@/themes/theme";
-import { StyleSheet, View } from "react-native";
-import { Button, RadioButton, TextInput } from "react-native-paper";
+import React from "react";
+import { StyleSheet, View, ScrollView, TouchableOpacity } from "react-native";
+import { RadioButton, Text, TextInput, IconButton } from "react-native-paper";
 import DatePickerInput from "./DatePickerInput";
-import MenuDropdown from "./MenuDropdown";
+import { theme } from "@/themes/theme";
 
-type TravelerFormType = {
-    traveler: any,
-    handleChange: (field: string, index: number) => (value: string) => void,
-    index: number,
-    genderOptions: string[],
-    documentTypeOptions: string[],
-    countryCallingCodes: string[]
+export interface Traveler {
+  firstName: string;
+  lastName: string;
+  dob: string;
+  gender: string;
+  passport: string;
+  email: string;
+  phoneNumber: { countryCallingCode: string; number: string };
 }
+
+type Props = {
+  traveler: Traveler;
+  index: number;
+  handleChange: (fieldPath: string, index: number) => (value: string) => void;
+  handleAddTraveler: () => void;
+  genderOptions: string[];
+  countryCallingCodes: string[];
+  isLastTraveler: boolean;
+};
+
 export default function TravelerForm({
-    traveler, 
-    handleChange, 
-    index, 
-    genderOptions, 
-    documentTypeOptions, 
-    countryCallingCodes
-}: TravelerFormType) {
-    const { countriesData } = useAppContext();
-    return (
-        <View>
-            <TextInput
-                label="First Name"
-                mode="flat"
-                value={traveler.firstName}
-                onChangeText={(text) => handleChange('firstName', index)(text)}
-                style={styles.input}
-            />
-            <TextInput
-                label="Last Name"
-                mode="flat"
-                value={traveler.lastName}
-                onChangeText={(text) => handleChange('lastName', index)(text)}
-                style={styles.input}
-            />
-
-                <RadioButton.Group
-                onValueChange={(value) => handleChange('gender', index)(value)}
-                value={traveler.gender}
-            >
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
-                    {
-                        genderOptions.map((option: string, index: number) => (
-                            <View key={index} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                <RadioButton value={option} />
-                                <Button style={{ marginStart: -15 }}>{option}</Button>
-                            </View>
-                        ))
-                    }
-                </View>
-            </RadioButton.Group>
-            <TextInput
-                label="Email"
-                mode="flat"
-                value={traveler.email}
-                onChangeText={(text) => handleChange('email', index)(text)}
-                style={styles.input}
-            />
-            <DatePickerInput
-                // showDatePicker={showDatePicker}
-                // setShowDatePicker={setShowDatePicker}
-                handleChange={(type: string) => (value: string) => handleChange(type, index)(value)}
-                placeholderText="Date of Birth"
-                dateValue={traveler.dateOfBirth ? new Date(traveler.dateOfBirth).toDateString() : ""}
-                dateType='dateOfBirth'                     
-            />
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10, gap: 10, alignItems: 'center' }}>
-                <View style={{ flex: 2 }}>
-                    <MenuDropdown
-                        items={countriesData.map((c: any) => `${c.idd.root}${c.idd.suffixes.map((s: string) => s).join('')}`)}
-                        selectedItem={traveler.phoneNumber.countryCallingCode}
-                        label="Code"
-                        type="phoneNumber.countryCallingCode"
-                        handleChange={(type) => (val) => handleChange(type, index)(val)}
-                        styles={{
-                            marginTop: 45
-                        }}
-                    />
-                </View>
-                <View style={{ flex: 7 }}>
-                    <TextInput
-                        label="Phone Number"
-                        mode="flat"
-                        value={traveler.phoneNumber.number}
-                        onChangeText={(text) => handleChange('phoneNumber.number', index)(text)}
-                        style={{ backgroundColor: theme.colors.transparent}}
-                    />
-                </View>
-            </View>
-            <MenuDropdown 
-                items={documentTypeOptions}
-                selectedItem={traveler.document.documentType}
-                label="Type of Document"
-                type="document.documentType"
-                handleChange={(type) => (val) => handleChange(type, index)(val)}
-                styles={{
-                    marginTop: 45
-                }}
-            />
-
-            <TextInput
-                label="Birth Place"
-                mode="flat"
-                value={traveler.document.birthPlace}
-                onChangeText={(text) => handleChange('document.birthPlace', index)(text)}
-                style={[styles.input, { marginTop: 10 }]}
-                placeholder="Ex - Delhi"
-            />
-            <TextInput
-                label="Issuance Location"
-                mode="flat"
-                value={traveler.document.issuanceLocation}
-                onChangeText={(text) => handleChange('document.issuanceLocation', index)(text)}
-                style={styles.input}
-                placeholder="Ex - Delhi"
-            />
-            <TextInput
-                label="ID Number"
-                mode="flat"
-                value={traveler.document.number}
-                onChangeText={(text) => handleChange('document.number', index)(text)}
-                style={styles.input}
-            />
-            <DatePickerInput
-                handleChange={(type: string) => (value: string) => handleChange(type, index)(value)}
-                placeholderText="Issuance Date"
-                dateValue={traveler.document.issuanceDate ? new Date(traveler.document.issuanceDate).toDateString() : ""}
-                dateType='document.issuanceDate'                     
-            />
-            <DatePickerInput
-                handleChange={(type: string) => (value: string) => handleChange(type, index)(value)}
-                placeholderText="Expiry Date"
-                dateValue={traveler.document.expiryDate ? new Date(traveler.document.expiryDate).toDateString() : ""}
-                dateType='document.expiryDate'                     
-            />
-            <TextInput
-                label="Issuance Country"
-                mode="flat"
-                value={traveler.document.issuanceCountry}
-                onChangeText={(text) => handleChange('document.issuanceCountry', index)(text)}
-                style={styles.input}
-                placeholder="ISO Code - IN, US"
-            />
-            <TextInput
-                label="Validity Country"
-                mode="flat"
-                value={traveler.document.validityCountry}
-                onChangeText={(text) => handleChange('document.validityCountry', index)(text)}
-                style={styles.input}
-                placeholder="ISO Code - IN, US"
-            />
-            <TextInput
-                label="Nationality"
-                mode="flat"
-                value={traveler.document.nationality}
-                onChangeText={(text) => handleChange('document.nationality', index)(text)}
-                style={styles.input}
-                placeholder="ISO Code - IN, US"
-            />
+  traveler,
+  index,
+  handleChange,
+  handleAddTraveler,
+  genderOptions,
+  countryCallingCodes,
+  isLastTraveler,
+}: Props) {
+  return (
+    <View style={styles.container}>
+      <ScrollView 
+        style={styles.scrollContainer}
+        contentContainerStyle={styles.contentContainer}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Header */}
+        <View style={styles.header}>
+          <Text variant="headlineSmall" style={styles.headerText}>
+            Traveler {index + 1} Details
+          </Text>
+          <View style={styles.headerDivider} />
         </View>
-    )
+
+        {/* Name Section */}
+        <View style={styles.section}>
+          <Text variant="titleSmall" style={styles.sectionTitle}>
+            PERSONAL INFORMATION
+          </Text>
+          <View style={styles.row}>
+            <View style={[styles.column, { flex: 1, marginRight: 8 }]}>
+              <TextInput
+                label="First Name *"
+                value={traveler.firstName}
+                onChangeText={(t) => handleChange("firstName", index)(t)}
+                style={styles.input}
+                mode="outlined"
+                outlineColor="#E0E0E0"
+                activeOutlineColor={theme.colors.primary}
+              />
+            </View>
+            <View style={[styles.column, { flex: 1 }]}>
+              <TextInput
+                label="Last Name *"
+                value={traveler.lastName}
+                onChangeText={(t) => handleChange("lastName", index)(t)}
+                style={styles.input}
+                mode="outlined"
+                outlineColor="#E0E0E0"
+                activeOutlineColor={theme.colors.primary}
+              />
+            </View>
+          </View>
+
+          {/* Date of Birth */}
+          <DatePickerInput
+            placeholderText="Date of Birth *"
+            dateValue={traveler.dob ? new Date(traveler.dob).toDateString() : ""}
+            dateType="dob"
+            handleChange={(t) => (v) => handleChange(t, index)(v)}
+          />
+        </View>
+
+        {/* Gender Section */}
+        <View style={styles.section}>
+          <Text variant="titleSmall" style={styles.sectionTitle}>
+            GENDER
+          </Text>
+          <RadioButton.Group
+            onValueChange={(v) => handleChange("gender", index)(v)}
+            value={traveler.gender}
+          >
+            <View style={styles.radioGroup}>
+              {genderOptions.map((g) => (
+                <View key={g} style={styles.radioItem}>
+                  <RadioButton 
+                    value={g} 
+                    color={theme.colors.primary}
+                    uncheckedColor="#9E9E9E"
+                  />
+                  <Text variant="bodyMedium" style={styles.radioLabel}>{g}</Text>
+                </View>
+              ))}
+            </View>
+          </RadioButton.Group>
+        </View>
+
+        {/* Passport Number */}
+        <View style={styles.section}>
+          <TextInput
+            label="Passport Number (Optional)"
+            value={traveler.passport}
+            onChangeText={(t) => handleChange("passport", index)(t)}
+            style={styles.input}
+            mode="outlined"
+            outlineColor="#E0E0E0"
+            activeOutlineColor={theme.colors.primary}
+          />
+        </View>
+
+        {/* Contact Information Section */}
+        <View style={styles.section}>
+          <Text variant="titleSmall" style={styles.sectionTitle}>
+            CONTACT INFORMATION
+          </Text>
+          
+          <TextInput
+            label="Email Address *"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            value={traveler.email}
+            onChangeText={(t) => handleChange("email", index)(t)}
+            style={styles.input}
+            mode="outlined"
+            outlineColor="#E0E0E0"
+            activeOutlineColor={theme.colors.primary}
+          />
+
+          {/* Phone number */}
+          <View style={styles.phoneSection}>
+            <Text variant="bodyMedium" style={styles.phoneLabel}>
+              Phone Number *
+            </Text>
+            <View style={styles.phoneRow}>
+              <View style={styles.countryCodeContainer}>
+                <TextInput
+                  label="Code"
+                  value={traveler.phoneNumber.countryCallingCode}
+                  onChangeText={(t) => handleChange("phoneNumber.countryCallingCode", index)(t)}
+                  style={styles.countryCodeInput}
+                  mode="outlined"
+                  outlineColor="#E0E0E0"
+                  activeOutlineColor={theme.colors.primary}
+                  keyboardType="phone-pad"
+                />
+              </View>
+              <View style={styles.phoneInputContainer}>
+                <TextInput
+                  label="Phone Number"
+                  keyboardType="phone-pad"
+                  value={traveler.phoneNumber.number}
+                  onChangeText={(t) => handleChange("phoneNumber.number", index)(t)}
+                  style={styles.input}
+                  mode="outlined"
+                  outlineColor="#E0E0E0"
+                  activeOutlineColor={theme.colors.primary}
+                />
+              </View>
+            </View>
+          </View>
+        </View>
+      </ScrollView>
+
+      {/* Add Traveler Button - Only show for the last traveler */}
+      {isLastTraveler && (
+        <TouchableOpacity 
+          style={styles.addButton}
+          onPress={handleAddTraveler}
+          activeOpacity={0.8}
+        >
+          <IconButton
+            icon="plus"
+            size={24}
+            iconColor="#FFFFFF"
+          />
+          <Text style={styles.addButtonText}>Add Traveler</Text>
+        </TouchableOpacity>
+      )}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-    input: {
-        marginBottom: 10,
-        borderTopWidth: 0,
-        borderLeftWidth: 0,
-        borderRightWidth: 0,
-        borderRadius: 1,
-        backgroundColor: theme.colors.transparent
-    }
-})
+  container: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+  },
+  scrollContainer: {
+    flex: 1,
+  },
+  contentContainer: {
+    padding: 16,
+    paddingBottom: 80,
+  },
+  header: {
+    marginBottom: 16,
+  },
+  headerText: {
+    color: '#212121',
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  headerDivider: {
+    height: 2,
+    backgroundColor: theme.colors.primary,
+    width: 40,
+  },
+  section: {
+    marginBottom: 16,
+  },
+  sectionTitle: {
+    color: '#616161',
+    marginBottom: 12,
+    fontWeight: '600',
+    letterSpacing: 0.5,
+  },
+  row: {
+    flexDirection: "row",
+    marginBottom: 12,
+  },
+  column: {
+    flexDirection: "column",
+  },
+  input: {
+    backgroundColor: '#FFFFFF',
+    fontSize: 16,
+  },
+  radioGroup: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+  },
+  radioItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginRight: 16,
+  },
+  radioLabel: {
+    color: '#424242',
+    marginLeft: 4,
+  },
+  phoneSection: {
+    marginTop: 4,
+  },
+  phoneLabel: {
+    color: '#616161',
+    marginBottom: 6,
+  },
+  phoneRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  countryCodeContainer: {
+    flex: 3,
+    marginRight: 8,
+  },
+  countryCodeInput: {
+    backgroundColor: '#FFFFFF',
+  },
+  phoneInputContainer: {
+    flex: 7,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: '#EEEEEE',
+    marginVertical: 16,
+  },
+  addButton: {
+    position: 'absolute',
+    bottom: 16,
+    left: 16,
+    right: 16,
+    backgroundColor: theme.colors.primary,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10,
+    borderRadius: 8,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+  },
+  addButtonText: {
+    color: '#FFFFFF',
+    fontWeight: '600',
+    fontSize: 16,
+    marginLeft: 4,
+  },
+});

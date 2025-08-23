@@ -2,7 +2,7 @@ import TravelerForm from "@/components/TravelerForm";
 import { useAppContext } from "@/context/AppContextProvider";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { Platform, ScrollView, StyleSheet, View } from "react-native";
+import { Platform, ScrollView, StyleSheet, View, TouchableOpacity } from "react-native";
 import { Button, List, Text, Card, Snackbar, Portal, Modal } from "react-native-paper";
 import axiosInstance from "../../config/axiosConfig";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -16,12 +16,37 @@ export default function Booking() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const router = useRouter();
 
-  const genderOptions = ["MALE", "FEMALE", "OTHER"];
+  const genderOptions = ["MALE", "FEMALE"];
   const documentTypeOptions = ["PASSPORT", "VISA", "GREEN_CARD"];
   const countryCallingCodes = ["+1", "+44", "+91", "+61", "+81"];
 
   const handleAccordionPress = (index: number) => {
     setExpandedIndex(index === expandedIndex ? null : index);
+  };
+
+  const handleAddTraveler = () => {
+    const newTraveler = {
+      firstName: "",
+      lastName: "",
+      dateOfBirth: "",
+      gender: "",
+      email: "",
+      phoneNumber: {
+        countryCallingCode: "",
+        number: ""
+      },
+      document: {
+        documentType: "",
+        number: "",
+        expiryDate: "",
+        issuanceCountry: "",
+        birthPlace: "",
+        issuanceLocation: "",
+        validityCountry: "",
+        nationality: ""
+      }
+    };
+    setTravelers([...travelers, newTraveler]);
   };
 
   const handleChange = (field: string, index: number) => (value: string) => {
@@ -172,15 +197,21 @@ export default function Booking() {
     const firstLeg = trip.legs && trip.legs[0];
     return (
       <Card style={styles.summaryCard}>
-        <Card.Title title="Flight Summary" titleStyle={styles.summaryTitle} />
+        <Card.Title 
+          title="Flight Summary" 
+          titleStyle={styles.summaryTitle}
+          left={(props) => <MaterialCommunityIcons name="airplane" size={24} color="#007AFF" />}
+        />
         <Card.Content>
           <View style={styles.summaryRow}>
+            <MaterialCommunityIcons name="route" size={16} color="#666" />
             <Text style={styles.summaryLabel}>Route:</Text>
             <Text style={styles.summaryValue}>
               {trip.from || "Unknown"} → {trip.to || "Unknown"}
             </Text>
           </View>
           <View style={styles.summaryRow}>
+            <MaterialCommunityIcons name="calendar" size={16} color="#666" />
             <Text style={styles.summaryLabel}>Date:</Text>
             <Text style={styles.summaryValue}>
               {firstLeg?.departureDateTime
@@ -189,8 +220,9 @@ export default function Booking() {
             </Text>
           </View>
           <View style={styles.summaryRow}>
+            <MaterialCommunityIcons name="cash" size={16} color="#666" />
             <Text style={styles.summaryLabel}>Total Price:</Text>
-            <Text style={styles.summaryValue}>
+            <Text style={[styles.summaryValue, styles.priceText]}>
               {selectedFlightOffer.currencyCode} {selectedFlightOffer.totalPrice}
             </Text>
           </View>
@@ -226,7 +258,7 @@ export default function Booking() {
                     ? `${traveler.firstName} ${traveler.lastName}`
                     : `Traveler ${index + 1}`
                 }
-                left={(props) => <List.Icon {...props} icon="account" />}
+                left={(props) => <List.Icon {...props} icon="account" color="#007AFF" />}
                 expanded={expandedIndex === index}
                 onPress={() => handleAccordionPress(index)}
                 style={styles.accordion}
@@ -246,8 +278,21 @@ export default function Booking() {
             </Card>
           ))
         ) : (
-          <Text style={styles.noTravelersText}>No travelers added.</Text>
+          <View style={styles.noTravelersContainer}>
+            <MaterialCommunityIcons name="account-multiple" size={48} color="#E0E0E0" />
+            <Text style={styles.noTravelersText}>No travelers added yet</Text>
+          </View>
         )}
+
+        {/* Add Traveler Button */}
+        <TouchableOpacity 
+          style={styles.addButton}
+          onPress={handleAddTraveler}
+          activeOpacity={0.8}
+        >
+          <MaterialCommunityIcons name="plus" size={24} color="#FFFFFF" />
+          <Text style={styles.addButtonText}>Add Traveler</Text>
+        </TouchableOpacity>
       </ScrollView>
 
       <View style={styles.footer}>
@@ -259,8 +304,9 @@ export default function Booking() {
           style={styles.bookButton}
           labelStyle={styles.bookButtonLabel}
           accessibilityLabel="Book flight"
+          icon="airplane-takeoff"
         >
-          {loading ? "Booking..." : "Book Flight"}
+          {loading ? "Processing..." : `Book Flight (${travelers.length})`}
         </Button>
       </View>
 
@@ -270,6 +316,10 @@ export default function Booking() {
           onDismiss={() => setSnackbarVisible(false)}
           duration={3000}
           style={styles.snackbar}
+          action={{
+            label: 'Dismiss',
+            onPress: () => setSnackbarVisible(false),
+          }}
         >
           {snackbarMessage}
         </Snackbar>
@@ -280,19 +330,35 @@ export default function Booking() {
           contentContainerStyle={styles.modalContainer}
         >
           <Card style={styles.modalCard}>
-            <Card.Title title="Confirm Booking" titleStyle={styles.modalTitle} />
+            <Card.Title 
+              title="Confirm Booking" 
+              titleStyle={styles.modalTitle}
+              left={(props) => <MaterialCommunityIcons name="shield-check" size={24} color="#007AFF" />}
+            />
             <Card.Content>
               <Text style={styles.modalText}>
                 Are you sure you want to book this flight for {travelers.length}{" "}
                 traveler{travelers.length > 1 ? "s" : ""}?
               </Text>
+              <Text style={styles.modalSubtext}>
+                Total: {selectedFlightOffer?.currencyCode} {selectedFlightOffer?.totalPrice}
+              </Text>
             </Card.Content>
-            <Card.Actions>
-              <Button onPress={() => setShowConfirmModal(false)} textColor="#666666">
+            <Card.Actions style={styles.modalActions}>
+              <Button 
+                onPress={() => setShowConfirmModal(false)} 
+                mode="outlined"
+                style={styles.cancelButton}
+              >
                 Cancel
               </Button>
-              <Button mode="contained" onPress={confirmBooking} style={styles.confirmButton}>
-                Confirm
+              <Button 
+                mode="contained" 
+                onPress={confirmBooking} 
+                style={styles.confirmButton}
+                icon="check"
+              >
+                Confirm Booking
               </Button>
             </Card.Actions>
           </Card>
@@ -305,81 +371,127 @@ export default function Booking() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF", // White background
+    backgroundColor: "#F8F9FA",
   },
   header: {
     padding: 16,
-    paddingTop: Platform.OS === "ios" ? 40 : 16,
+    paddingTop: Platform.OS === "ios" ? 48 : 16,
     flexDirection: "row",
     alignItems: "center",
-    borderBottomWidth: 1,
-    borderBottomColor: "#E0E0E0", // Light gray border
+    backgroundColor: "#FFFFFF",
+    elevation: 1,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
   },
   headerTitle: {
     fontSize: 18,
-    fontWeight: "500",
-    color: "#000000", // Black text
+    fontWeight: "600",
+    color: "#1A1A1A",
     flex: 1,
     textAlign: "center",
+    marginRight: 40,
   },
   backButton: {
     marginRight: 8,
   },
   backButtonLabel: {
     fontSize: 16,
-    color: "#007AFF", // Classic blue for buttons
+    color: "#007AFF",
   },
   summaryCard: {
     margin: 16,
-    borderWidth: 1,
-    borderColor: "#E0E0E0", // Light gray border
-    backgroundColor: "#FFFFFF", // White background
-    borderRadius: 4, // Minimal rounding
+    backgroundColor: "#FFFFFF",
+    borderRadius: 12,
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
   summaryTitle: {
-    fontSize: 16,
-    fontWeight: "500",
-    color: "#000000",
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#1A1A1A",
   },
   summaryRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    marginVertical: 4,
+    alignItems: "center",
+    marginVertical: 6,
   },
   summaryLabel: {
     fontSize: 14,
-    color: "#666666", // Gray for labels
+    color: "#666666",
+    marginLeft: 8,
+    marginRight: 12,
+    width: 80,
   },
   summaryValue: {
     fontSize: 14,
     fontWeight: "500",
-    color: "#000000",
+    color: "#1A1A1A",
+    flex: 1,
+  },
+  priceText: {
+    color: "#007AFF",
+    fontWeight: "600",
   },
   scrollContent: {
     padding: 16,
-    paddingBottom: 80, // Space for footer button
+    paddingBottom: 100,
   },
   travelerCard: {
     marginBottom: 16,
-    borderWidth: 1,
-    borderColor: "#E0E0E0",
     backgroundColor: "#FFFFFF",
-    borderRadius: 4,
+    borderRadius: 12,
+    elevation: 1,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    overflow: "hidden",
   },
   accordion: {
     backgroundColor: "#FFFFFF",
-    padding: 8,
   },
   accordionTitle: {
     fontSize: 16,
     fontWeight: "500",
-    color: "#000000",
+    color: "#1A1A1A",
+  },
+  noTravelersContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 40,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 12,
+    marginBottom: 16,
   },
   noTravelersText: {
     fontSize: 16,
-    color: "#666666",
+    color: "#999999",
+    marginTop: 12,
     textAlign: "center",
-    marginTop: 20,
+  },
+  addButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#007AFF",
+    padding: 16,
+    borderRadius: 12,
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  addButtonText: {
+    color: "#FFFFFF",
+    fontWeight: "600",
+    fontSize: 16,
+    marginLeft: 8,
   },
   footer: {
     position: "absolute",
@@ -390,43 +502,65 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderTopWidth: 1,
     borderTopColor: "#E0E0E0",
+    elevation: 4,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
   bookButton: {
-    borderRadius: 4,
-    backgroundColor: "#007AFF", // Classic blue
+    borderRadius: 12,
+    backgroundColor: "#007AFF",
+    paddingVertical: 6,
   },
   bookButtonLabel: {
     fontSize: 16,
-    fontWeight: "500",
+    fontWeight: "600",
     color: "#FFFFFF",
   },
   snackbar: {
-    backgroundColor: "#F5F5F5", // Light gray
+    backgroundColor: "#323232",
     margin: 16,
-    borderRadius: 4,
+    borderRadius: 8,
   },
   modalContainer: {
-    margin: 16,
+    margin: 24,
   },
   modalCard: {
-    padding: 16,
     backgroundColor: "#FFFFFF",
-    borderRadius: 4,
-    borderWidth: 1,
-    borderColor: "#E0E0E0",
+    borderRadius: 16,
+    overflow: "hidden",
   },
   modalTitle: {
-    fontSize: 16,
-    fontWeight: "500",
-    color: "#000000",
+    fontSize: 20,
+    fontWeight: "600",
+    color: "#1A1A1A",
   },
   modalText: {
-    fontSize: 14,
-    color: "#000000",
-    marginBottom: 16,
+    fontSize: 16,
+    color: "#1A1A1A",
+    marginBottom: 8,
+    lineHeight: 24,
+  },
+  modalSubtext: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#007AFF",
+    marginBottom: 4,
+  },
+  modalActions: {
+    justifyContent: "flex-end",
+    paddingHorizontal: 16,
+    paddingBottom: 16,
+  },
+  cancelButton: {
+    borderColor: "#E0E0E0",
+    borderWidth: 1,
+    borderRadius: 8,
+    marginRight: 8,
   },
   confirmButton: {
-    borderRadius: 4,
+    borderRadius: 8,
     backgroundColor: "#007AFF",
   },
 });
