@@ -1,11 +1,11 @@
-import TravelerForm from "@/components/TravelerForm";
 import { useAppContext } from "@/context/AppContextProvider";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { Platform, ScrollView, StyleSheet, View, TouchableOpacity } from "react-native";
+import { ScrollView, StyleSheet, View, TouchableOpacity, Platform } from "react-native";
 import { Button, List, Text, Card, Snackbar, Portal, Modal } from "react-native-paper";
 import axiosInstance from "../../config/axiosConfig";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import TravelerForm from "@/components/TravelerForm";
 
 export default function Booking() {
   const { travelers, setTravelers, selectedFlightOffer, setSelectedFlightOffer, apiUrl, setFlightBooking } = useAppContext();
@@ -16,9 +16,17 @@ export default function Booking() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const router = useRouter();
 
-  const genderOptions = ["MALE", "FEMALE"];
+  const genderOptions = ["MALE", "FEMALE", "OTHER"];
   const documentTypeOptions = ["PASSPORT", "VISA", "GREEN_CARD"];
   const countryCallingCodes = ["+1", "+44", "+91", "+61", "+81"];
+
+  useEffect(() => {
+    console.log("selectedFlightOffer:", selectedFlightOffer);
+    console.log("travelers:", travelers);
+    if (!travelers.length && selectedFlightOffer?.totalTravelers) {
+      handleAddTraveler();
+    }
+  }, [selectedFlightOffer, travelers]);
 
   const handleAccordionPress = (index: number) => {
     setExpandedIndex(index === expandedIndex ? null : index);
@@ -26,43 +34,48 @@ export default function Booking() {
 
   const handleAddTraveler = () => {
     const newTraveler = {
+      id: `${Date.now()}-${travelers.length + 1}`,
       firstName: "",
       lastName: "",
-      dateOfBirth: "",
+      dob: "",
       gender: "",
       email: "",
       phoneNumber: {
         countryCallingCode: "",
-        number: ""
+        number: "",
       },
       document: {
         documentType: "",
         number: "",
         expiryDate: "",
+        issuanceDate: "",
         issuanceCountry: "",
+        validityCountry: "",
+        nationality: "",
         birthPlace: "",
         issuanceLocation: "",
-        validityCountry: "",
-        nationality: ""
-      }
+        holder: true,
+      },
     };
     setTravelers([...travelers, newTraveler]);
+    console.log("Added traveler:", newTraveler);
+    setExpandedIndex(travelers.length);
   };
 
   const handleChange = (field: string, index: number) => (value: string) => {
     const newTravelers = [...travelers];
-    if (field.includes("document.")) {
+    if (field.includes("phoneNumber.")) {
+      const phoneField = field.split(".")[1];
+      newTravelers[index] = {
+        ...newTravelers[index],
+        phoneNumber: {
+          ...newTravelers[index].phoneNumber,
+          [phoneField]: value,
+        },
+      };
+    } else if (field.includes("document.")) {
       const docField = field.split(".")[1];
-      if (docField === "birthPlace") {
-        newTravelers[index] = {
-          ...newTravelers[index],
-          document: {
-            ...newTravelers[index].document,
-            [docField]: value,
-            issuanceLocation: value,
-          },
-        };
-      } else if (docField === "issuanceCountry") {
+      if (docField === "issuanceCountry") {
         newTravelers[index] = {
           ...newTravelers[index],
           document: {
@@ -70,6 +83,15 @@ export default function Booking() {
             [docField]: value,
             validityCountry: value,
             nationality: value,
+          },
+        };
+      } else if (docField === "birthPlace") {
+        newTravelers[index] = {
+          ...newTravelers[index],
+          document: {
+            ...newTravelers[index].document,
+            [docField]: value,
+            issuanceLocation: value,
           },
         };
       } else {
@@ -81,15 +103,6 @@ export default function Booking() {
           },
         };
       }
-    } else if (field.includes("phoneNumber.")) {
-      const phoneField = field.split(".")[1];
-      newTravelers[index] = {
-        ...newTravelers[index],
-        phoneNumber: {
-          ...newTravelers[index].phoneNumber,
-          [phoneField]: value,
-        },
-      };
     } else {
       newTravelers[index] = {
         ...newTravelers[index],
@@ -97,31 +110,69 @@ export default function Booking() {
       };
     }
     setTravelers(newTravelers);
+    console.log("Updated traveler:", newTravelers[index]);
   };
 
   const validateTravelers = () => {
-    return travelers.every((traveler) =>
-      traveler.firstName &&
-      traveler.lastName &&
-      traveler.gender &&
-      traveler.email &&
-      traveler.dateOfBirth &&
-      traveler.phoneNumber.countryCallingCode &&
-      traveler.phoneNumber.number &&
-      traveler.document.documentType &&
-      traveler.document.number &&
-      traveler.document.expiryDate &&
-      traveler.document.issuanceCountry
-    );
+    const errors: string[] = [];
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isValid = travelers.every((traveler, index) => {
+      const requiredFields = [
+        { field: "firstName", label: `Traveler ${index + 1} First Name` },
+        { field: "lastName", label: `Traveler ${index + 1} Last Name` },
+        { field: "gender", label: `Traveler ${index + 1} Gender` },
+        { field: "email", label: `Traveler ${index + 1} Email` },
+        { field: "dob", label: `Traveler ${index + 1} Date of Birth` },
+        { field: "phoneNumber.countryCallingCode", label: `Traveler ${index + 1} Phone Country Code` },
+        { field: "phoneNumber.number", label: `Traveler ${index + 1} Phone Number` },
+        { field: "document.documentType", label: `Traveler ${index + 1} Document Type` },
+        { field: "document.number", label: `Traveler ${index + 1} Document Number` },
+        { field: "document.expiryDate", label: `Traveler ${index + 1} Document Expiry Date` },
+        { field: "document.issuanceDate", label: `Traveler ${index + 1} Issuance Date` },
+        { field: "document.issuanceCountry", label: `Traveler ${index + 1} Issuance Country` },
+        { field: "document.validityCountry", label: `Traveler ${index + 1} Validity Country` },
+        { field: "document.nationality", label: `Traveler ${index + 1} Nationality` },
+        { field: "document.birthPlace", label: `Traveler ${index + 1} Birth Place` },
+        { field: "document.issuanceLocation", label: `Traveler ${index + 1} Issuance Location` },
+      ];
+
+      const missingFields = requiredFields.filter(({ field }) => {
+        if (field.includes(".")) {
+          const [parent, child] = field.split(".");
+          return !traveler[parent]?.[child];
+        }
+        if (field === "email" && traveler[field] && !emailRegex.test(traveler[field])) {
+          return true;
+        }
+        return !traveler[field];
+      });
+
+      if (missingFields.length > 0) {
+        const errorMessage = `Missing or invalid fields for Traveler ${index + 1}: ${missingFields
+          .map((f) => f.label)
+          .join(", ")}`;
+        errors.push(errorMessage);
+        console.log(errorMessage);
+        return false;
+      }
+      return true;
+    });
+
+    if (!isValid) {
+      setSnackbarMessage(errors.join("; "));
+      console.log("Validation failed:", errors);
+    } else {
+      console.log("Validation passed");
+    }
+    return isValid;
   };
 
   const handleBooking = async () => {
+    console.log("handleBooking triggered");
     if (!validateTravelers()) {
-      setSnackbarMessage("Please fill all required traveler details.");
       setSnackbarVisible(true);
       return;
     }
-
     setShowConfirmModal(true);
   };
 
@@ -129,38 +180,67 @@ export default function Booking() {
     try {
       setLoading(true);
       setShowConfirmModal(false);
+
+      const flightOfferStr =
+        typeof selectedFlightOffer?.pricingAdditionalInfo === "string"
+          ? selectedFlightOffer.pricingAdditionalInfo
+          : JSON.stringify(selectedFlightOffer?.pricingAdditionalInfo);
+
+      const travelersMapped = travelers.map((t, idx) => ({
+        id: (idx + 1).toString(),
+        firstName: t.firstName,
+        lastName: t.lastName,
+        dateOfBirth: t.dob,
+        gender: t.gender.toUpperCase(),
+        email: idx === 0 ? t.email : undefined,
+        phones: [
+          {
+            deviceType: "MOBILE",
+            countryCallingCode: t.phoneNumber.countryCallingCode.replace("+", ""),
+            number: t.phoneNumber.number,
+          },
+        ],
+        documents: [
+          {
+            documentType: t.document.documentType,
+            number: t.document.number,
+            issuanceDate: t.document.issuanceDate,
+            expiryDate: t.document.expiryDate,
+            issuanceCountry: t.document.issuanceCountry,
+            validityCountry: t.document.validityCountry,
+            nationality: t.document.nationality,
+            birthPlace: t.document.birthPlace,
+            issuanceLocation: t.document.issuanceLocation,
+            holder: t.document.holder,
+          },
+        ],
+      }));
+
       const bookingData = {
-        flightOffer: selectedFlightOffer.pricingAdditionalInfo,
-        travelers: travelers.map((traveler: any, index: number) => ({
-          id: index + 1,
-          firstName: traveler.firstName,
-          lastName: traveler.lastName,
-          dateOfBirth: traveler.dateOfBirth,
-          gender: traveler.gender,
-          email: traveler.email,
-          phones: [
-            {
-              deviceType: "MOBILE",
-              countryCallingCode: traveler.phoneNumber.countryCallingCode,
-              number: traveler.phoneNumber.number,
-            },
-          ],
-          documents: [{ ...traveler.document, holder: true }],
-        })),
+        flightOffer: flightOfferStr,
+        travelers: travelersMapped,
       };
 
+      console.log("Sending bookingData:", bookingData);
+
       const response = await axiosInstance.post(`${apiUrl}/booking/flight-order`, bookingData);
-      setFlightBooking(response.data);
-      if (Platform.OS === "web") {
-        localStorage.setItem("flightBooking", JSON.stringify(response.data));
+      const bookingResponse = response.data;
+
+      if (!bookingResponse.orderId) {
+        throw new Error("Incomplete booking data received.");
       }
+
+      setFlightBooking(bookingResponse);
       setTravelers([]);
-      setSnackbarMessage(`Booking successful! Order ID: ${response.data.orderId}`);
+      setSnackbarMessage(`Booking successful! Order ID: ${bookingResponse.orderId}`);
       setSnackbarVisible(true);
+      if (Platform.OS === "web") {
+        localStorage.setItem("flightBooking", JSON.stringify(bookingResponse));
+      }
       router.push("/booking/confirmation");
-    } catch (error) {
-      console.error("Booking error:", error);
-      setSnackbarMessage("Failed to book flight. Please try again.");
+    } catch (error: any) {
+      console.error("Booking error:", error.response?.data || error.message);
+      setSnackbarMessage(error.message || "Failed to book flight. Please try again.");
       setSnackbarVisible(true);
     } finally {
       setLoading(false);
@@ -169,15 +249,33 @@ export default function Booking() {
 
   const confirmFlightOfferPricing = async () => {
     try {
+      if (!selectedFlightOffer?.pricingAdditionalInfo) {
+        throw new Error("No pricingAdditionalInfo available");
+      }
+
       const body = {
-        flightOffer: selectedFlightOffer.pricingAdditionalInfo,
+        flightOffer: typeof selectedFlightOffer.pricingAdditionalInfo === "string"
+          ? selectedFlightOffer.pricingAdditionalInfo
+          : JSON.stringify(selectedFlightOffer.pricingAdditionalInfo),
       };
+
+      console.log("Confirming flight offer pricing with body:", body);
+
       const response = await axiosInstance.post(`${apiUrl}/pricing/flights/confirm`, body);
-      console.log("Flight offer pricing:", response.data);
-      setSelectedFlightOffer(response.data);
-    } catch (error) {
-      console.error("Error fetching flight offer pricing:", error);
-      setSnackbarMessage("Failed to confirm flight pricing.");
+      console.log("Flight offer pricing response:", response.data);
+
+      const parsedOffer =
+        typeof response.data.pricingAdditionalInfo === "string"
+          ? JSON.parse(response.data.pricingAdditionalInfo)
+          : response.data.pricingAdditionalInfo || response.data;
+
+      setSelectedFlightOffer({
+        ...response.data,
+        pricingAdditionalInfo: JSON.stringify(parsedOffer),
+      });
+    } catch (error: any) {
+      console.error("Error fetching flight offer pricing:", error.response?.data || error.message);
+      setSnackbarMessage(error.message || "Failed to confirm flight pricing.");
       setSnackbarVisible(true);
     }
   };
@@ -186,7 +284,7 @@ export default function Booking() {
     if (selectedFlightOffer && selectedFlightOffer.pricingAdditionalInfo) {
       confirmFlightOfferPricing();
     }
-  }, []);
+  }, [selectedFlightOffer]);
 
   const renderFlightSummary = () => {
     if (!selectedFlightOffer || !selectedFlightOffer.trips || !Array.isArray(selectedFlightOffer.trips)) {
@@ -197,8 +295,8 @@ export default function Booking() {
     const firstLeg = trip.legs && trip.legs[0];
     return (
       <Card style={styles.summaryCard}>
-        <Card.Title 
-          title="Flight Summary" 
+        <Card.Title
+          title="Flight Summary"
           titleStyle={styles.summaryTitle}
           left={(props) => <MaterialCommunityIcons name="airplane" size={24} color="#007AFF" />}
         />
@@ -251,7 +349,7 @@ export default function Booking() {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {travelers.length > 0 ? (
           travelers.map((traveler: any, index: number) => (
-            <Card key={`traveler-${index}`} style={styles.travelerCard}>
+            <Card key={`traveler-${traveler.id}`} style={styles.travelerCard}>
               <List.Accordion
                 title={
                   traveler.firstName && traveler.lastName
@@ -281,18 +379,27 @@ export default function Booking() {
           <View style={styles.noTravelersContainer}>
             <MaterialCommunityIcons name="account-multiple" size={48} color="#E0E0E0" />
             <Text style={styles.noTravelersText}>No travelers added yet</Text>
+            <Button
+              mode="contained"
+              onPress={handleAddTraveler}
+              style={styles.addTravelerButton}
+              labelStyle={styles.addTravelerButtonLabel}
+            >
+              Add Traveler
+            </Button>
           </View>
         )}
 
-        {/* Add Traveler Button */}
-        <TouchableOpacity 
-          style={styles.addButton}
-          onPress={handleAddTraveler}
-          activeOpacity={0.8}
-        >
-          <MaterialCommunityIcons name="plus" size={24} color="#FFFFFF" />
-          <Text style={styles.addButtonText}>Add Traveler</Text>
-        </TouchableOpacity>
+        {travelers.length > 0 && (
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={handleAddTraveler}
+            activeOpacity={0.8}
+          >
+            <MaterialCommunityIcons name="plus" size={24} color="#FFFFFF" />
+            <Text style={styles.addButtonText}>Add Traveler</Text>
+          </TouchableOpacity>
+        )}
       </ScrollView>
 
       <View style={styles.footer}>
@@ -314,10 +421,10 @@ export default function Booking() {
         <Snackbar
           visible={snackbarVisible}
           onDismiss={() => setSnackbarVisible(false)}
-          duration={3000}
+          duration={5000}
           style={styles.snackbar}
           action={{
-            label: 'Dismiss',
+            label: "Dismiss",
             onPress: () => setSnackbarVisible(false),
           }}
         >
@@ -330,8 +437,8 @@ export default function Booking() {
           contentContainerStyle={styles.modalContainer}
         >
           <Card style={styles.modalCard}>
-            <Card.Title 
-              title="Confirm Booking" 
+            <Card.Title
+              title="Confirm Booking"
               titleStyle={styles.modalTitle}
               left={(props) => <MaterialCommunityIcons name="shield-check" size={24} color="#007AFF" />}
             />
@@ -345,16 +452,16 @@ export default function Booking() {
               </Text>
             </Card.Content>
             <Card.Actions style={styles.modalActions}>
-              <Button 
-                onPress={() => setShowConfirmModal(false)} 
+              <Button
+                onPress={() => setShowConfirmModal(false)}
                 mode="outlined"
                 style={styles.cancelButton}
               >
                 Cancel
               </Button>
-              <Button 
-                mode="contained" 
-                onPress={confirmBooking} 
+              <Button
+                mode="contained"
+                onPress={confirmBooking}
                 style={styles.confirmButton}
                 icon="check"
               >
@@ -439,7 +546,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 16,
-    paddingBottom: 100,
+    paddingBottom: 120,
   },
   travelerCard: {
     marginBottom: 16,
@@ -474,6 +581,15 @@ const styles = StyleSheet.create({
     marginTop: 12,
     textAlign: "center",
   },
+  addTravelerButton: {
+    marginTop: 16,
+    borderRadius: 8,
+    backgroundColor: "#007AFF",
+  },
+  addTravelerButtonLabel: {
+    color: "#FFFFFF",
+    fontWeight: "600",
+  },
   addButton: {
     flexDirection: "row",
     alignItems: "center",
@@ -503,6 +619,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: "#E0E0E0",
     elevation: 4,
+    zIndex: 1000,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.1,
