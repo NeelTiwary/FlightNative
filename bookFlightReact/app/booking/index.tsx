@@ -183,42 +183,39 @@ export default function Booking() {
       throw new Error("Invalid flight offer format");
     }
 
-    const bookingData = {
-        flightOffer: flightOffer,
-        travelers: travelers.map((traveler: any, index: number) => ({
-          id: (index + 1).toString(),
-          dateOfBirth: traveler.dateOfBirth || traveler.dob, // support both keys
-          name: {
-            firstName: traveler.firstName,
-            lastName: traveler.lastName,
+     const bookingData = {
+      flightOffer: JSON.stringify(flightOffer), // Stringify the flight offer
+      travelers: travelers.map((traveler: any, index: number) => ({
+        id: index + 1, // Use number instead of string
+        firstName: traveler.firstName, // Include firstName at root level
+        lastName: traveler.lastName,   // Include lastName at root level
+        dateOfBirth: traveler.dob,
+        gender: traveler.gender,
+        email: traveler.email, // Include email at root level
+        phones: [
+          {
+            deviceType: "MOBILE",
+            countryCalingCode: traveler.phoneNumber.countryCallingCode, // Keep the "+" sign
+            number: traveler.phoneNumber.number,
           },
-          gender: traveler.gender,
-          contact: {
-            emailAddress: traveler.email,
-            phones: [
-              {
-                deviceType: "MOBILE",
-                countryCallingCode: traveler.phoneNumber.countryCallingCode.replace("+", ""),
-                number: traveler.phoneNumber.number,
-              },
-            ],
+        ],
+        documents: [
+          {
+            documentType: traveler.document.documentType,
+            number: traveler.document.number,
+            issuanceDate: traveler.document.issuanceDate,
+            expiryDate: traveler.document.expiryDate,
+            issuanceCountry: traveler.document.issuanceCountry, // Use code "IN" instead of "India"
+            issuanceLocation: traveler.document.issuanceLocation,
+            nationality: traveler.document.nationality, // Use code "IN" instead of "India"
+            birthPlace: traveler.document.birthPlace,
+            validityCountry: traveler.document.validityCountry, // Use code "IN" instead of "India"
+            holder: true,
           },
-          documents: [
-            {
-              documentType: traveler.document.documentType,
-              number: traveler.document.number,
-              issuanceDate: traveler.document.issuanceDate,
-              expiryDate: traveler.document.expiryDate,
-              issuanceCountry: traveler.document.issuanceCountry,
-              issuanceLocation: traveler.document.issuanceLocation,
-              nationality: traveler.document.nationality,
-              birthPlace: traveler.document.birthPlace,
-              validityCountry: traveler.document.validityCountry,
-              holder: true,
-            },
-          ],
-        })),
-      };
+        ],
+      })),
+    };
+
 
     console.log("Booking data:", JSON.stringify(bookingData, null, 2));
 

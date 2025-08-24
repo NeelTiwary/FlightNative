@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Use environment variable or fallback to custom endpoint
-const baseURL = process.env.REACT_APP_API_URL || "http://13.217.15.128:8080";
+const baseURL = process.env.REACT_APP_API_URL || "http://54.242.110.189:8080";
 
 const axiosInstance = axios.create({
   baseURL,
@@ -41,4 +41,4 @@ async function getAccessToken() {
   }
 }
 
-export default axiosInstance;
+export default axiosInstance
