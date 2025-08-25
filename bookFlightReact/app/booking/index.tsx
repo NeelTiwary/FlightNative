@@ -225,7 +225,7 @@ export default function Booking() {
 
       console.log("Booking response:", JSON.stringify(bookingResponse, null, 2));
 
-      setFlightBooking(bookingResponse); // Store full response to be safe
+      setFlightBooking(bookingResponse);
       setTravelers([]);
       setSnackbarMessage(`Booking successful! Order ID: ${bookingResponse.orderId || bookingResponse.id || "N/A"}`);
       setSnackbarVisible(true);
