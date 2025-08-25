@@ -4,20 +4,20 @@ import { theme } from "@/themes/theme";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { router, useNavigation } from "expo-router";
 import { useMemo, useRef } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
-import { Icon, IconButton, Text } from "react-native-paper";
+import { ScrollView, StyleSheet, View, StatusBar } from "react-native";
+import { Icon, IconButton, Text, Divider } from "react-native-paper";
 
 // Static mappings
 const iataToCity = {
   EWR: "Newark",
   DEL: "Delhi",
-  LAX: "Los Angeles", // Added for the logged flight
+  LAX: "Los Angeles",
   // Add more as needed
 };
 
 const carrierCodeToName = {
   UA: "United Airlines",
-  AS: "Alaska Airlines", // Added for the logged flight
+  AS: "Alaska Airlines",
   DL: "Delta Air Lines",
   AA: "American Airlines",
   WN: "Southwest Airlines",
@@ -34,7 +34,7 @@ const carrierCodeToName = {
 
 const aircraftCodeToName = {
   "789": "Boeing 787-9",
-  "73J": "Boeing 737-900", // Added for the logged flight
+  "73J": "Boeing 737-900",
   // Add more as needed
 };
 
@@ -103,58 +103,73 @@ export default function Offers() {
 
   return (
     <View style={styles.container}>
-      <View style={{ display: "flex", flexDirection: "column", justifyContent: "center", marginBottom: 10 }}>
-        <View
-          style={{
-            borderWidth: 0,
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: 0,
-            margin: 0,
-          }}
-        >
-          <View
-            style={[
-              styles.routeCard,
-              {
-                borderWidth: 0,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                flexDirection: "row",
-                width: "30%",
-              },
-            ]}
-          >
-            <View>
-              <Text style={styles.routeValue}>{searchParams.from}</Text>
+      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      
+      {/* Header Section */}
+      <View style={styles.headerContainer}>
+        <Text variant="headlineSmall" style={styles.headerTitle}>
+          Flight Offers
+        </Text>
+      </View>
+      
+      {/* Search Summary */}
+      <View style={styles.summaryCard}>
+        <View style={styles.routeContainer}>
+          <View style={styles.routeInfo}>
+            <Text variant="titleMedium" style={styles.routeText}>
+              {searchParams.from} → {searchParams.to}
+            </Text>
+            <IconButton
+              icon="pencil-outline"
+              size={18}
+              style={styles.editButton}
+              iconColor={theme.colors.primary}
+              onPress={() => router.push("/(tabs)/home")}
+            />
+          </View>
+          
+          <Divider style={styles.divider} />
+          
+          <View style={styles.detailsRow}>
+            <View style={styles.detailItem}>
+              <Icon source="calendar" size={14} color={theme.colors.primary} />
+              <Text variant="bodySmall" style={styles.detailText}>
+                {searchParams.departureDate}
+              </Text>
             </View>
-            <View style={{ flexDirection: "column", alignItems: "center" }}>
-              <Icon source="airplane" size={20} />
+            
+            <View style={styles.detailItem}>
+              <Icon source="seat-passenger" size={14} color={theme.colors.primary} />
+              <Text variant="bodySmall" style={styles.detailText}>
+                {parseInt(searchParams.adults) + parseInt(searchParams.children) + parseInt(searchParams.infants)} passengers
+              </Text>
             </View>
-            <View>
-              <Text style={styles.routeValue}>{searchParams.to}</Text>
+            
+            <View style={styles.detailItem}>
+              <Icon source="class" size={14} color={theme.colors.primary} />
+              <Text variant="bodySmall" style={styles.detailText}>
+                {searchParams.flightClass}
+              </Text>
             </View>
           </View>
-          <IconButton
-            icon={"pencil-outline"}
-            size={20}
-            style={{}}
-            onPress={() => router.push("/(tabs)/home")}
-          />
-        </View>
-        <View style={{ justifyContent: "center", alignItems: "center" }}>
-          <Text variant="labelSmall">
-            {searchParams.departureDate} | {searchParams.flightClass} |{" "}
-            {parseInt(searchParams.adults + searchParams.children + searchParams.infants)} passengers
-          </Text>
         </View>
       </View>
-      <ScrollView style={{ marginTop: 0 }}>
+
+      {/* Results Count */}
+      {flightOffers.length > 0 && (
+        <View style={styles.resultsContainer}>
+          <Text variant="bodyMedium" style={styles.resultsText}>
+            {flightOffers.length} flight{flightOffers.length !== 1 ? 's' : ''} found
+          </Text>
+          <Divider style={styles.resultsDivider} />
+        </View>
+      )}
+
+      {/* Flight Offers List */}
+      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {flightOffers.length > 0 ? (
           flightOffers.map((offer: any, index: number) => (
-            <View key={index} style={{}}>
+            <View key={index} style={styles.flightCardContainer}>
               <FlightCard
                 flightIndex={`flight-${index}`}
                 flightData={offer}
@@ -163,17 +178,28 @@ export default function Offers() {
             </View>
           ))
         ) : (
-          <View style={{ padding: 10, flex: 1, justifyContent: "center", alignItems: "center" }}>
-            <Text style={{ color: theme.colors.backdrop }}>
+          <View style={styles.emptyState}>
+            <Icon source="airplane-off" size={48} color={theme.colors.backdrop} />
+            <Text variant="titleMedium" style={styles.emptyStateTitle}>
+              No flights available
+            </Text>
+            <Text variant="bodyMedium" style={styles.emptyStateText}>
               No flight offers found for {fromInput} to {toInput} on {searchParams.departureDate}
             </Text>
           </View>
         )}
       </ScrollView>
 
-      <BottomSheet ref={bottomSheetRef} index={1} snapPoints={snapPoints} enablePanDownToClose={true}>
-        <View>
-          <Text>Bottom Sheet</Text>
+      <BottomSheet
+        ref={bottomSheetRef}
+        index={-1}
+        snapPoints={snapPoints}
+        enablePanDownToClose={true}
+        backgroundStyle={styles.bottomSheetBackground}
+        handleIndicatorStyle={styles.bottomSheetIndicator}
+      >
+        <View style={styles.bottomSheetContent}>
+          <Text variant="titleMedium">Flight Details</Text>
         </View>
       </BottomSheet>
     </View>
@@ -183,23 +209,108 @@ export default function Offers() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#f8f9fa',
   },
-  background: {
+  headerContainer: {
+    backgroundColor: '#fff',
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    paddingBottom: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e9ecef',
+  },
+  headerTitle: {
+    fontWeight: '600',
+    color: '#2c3e50',
+  },
+  summaryCard: {
+    backgroundColor: '#fff',
+    margin: 16,
+    borderRadius: 12,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+  },
+  routeContainer: {
+    padding: 16,
+  },
+  routeInfo: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  routeText: {
+    fontWeight: '600',
+    color: '#2c3e50',
     flex: 1,
   },
-  text: {
-    color: "#fff",
+  editButton: {
+    margin: 0,
   },
-  routeCard: {
-    backgroundColor: theme.colors.transparent,
-    marginVertical: 0,
-    marginHorizontal: 10,
-    alignItems: "center",
+  divider: {
+    marginBottom: 12,
+    backgroundColor: '#e9ecef',
   },
-  routeValue: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: theme.colors.darkGray,
-    marginBottom: 0,
+  detailsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  detailItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  detailText: {
+    color: '#6c757d',
+  },
+  resultsContainer: {
+    paddingHorizontal: 20,
+    marginBottom: 8,
+  },
+  resultsText: {
+    color: '#6c757d',
+    marginBottom: 8,
+  },
+  resultsDivider: {
+    backgroundColor: '#e9ecef',
+  },
+  scrollView: {
+    flex: 1,
+    paddingHorizontal: 16,
+  },
+  flightCardContainer: {
+    marginBottom: 12,
+  },
+  emptyState: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 40,
+  },
+  emptyStateTitle: {
+    color: theme.colors.backdrop,
+    marginTop: 16,
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  emptyStateText: {
+    color: theme.colors.backdrop,
+    textAlign: 'center',
+    lineHeight: 20,
+  },
+  bottomSheetBackground: {
+    backgroundColor: '#fff',
+    borderRadius: 20,
+  },
+  bottomSheetIndicator: {
+    backgroundColor: '#dee2e6',
+    width: 40,
+    height: 4,
+  },
+  bottomSheetContent: {
+    padding: 20,
   },
 });

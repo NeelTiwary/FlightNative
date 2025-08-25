@@ -1,7 +1,8 @@
 import axios from "axios";
 
 // Use environment variable or fallback to custom endpoint
-const baseURL = process.env.REACT_APP_API_URL || "http://54.242.110.189:8080";
+// const baseURL = process.env.REACT_APP_API_URL || "http://54.242.110.189:8080";
+const baseURL = process.env.REACT_APP_API_URL || "http://10.0.2.2:8080";
 
 const axiosInstance = axios.create({
   baseURL,

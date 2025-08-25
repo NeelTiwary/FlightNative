@@ -2,7 +2,7 @@ import { theme } from "@/themes/theme";
 import { FlightOffer } from "@/types";
 import * as React from "react";
 import { Image, StyleSheet, View } from "react-native";
-import { Button, Card, Text } from "react-native-paper";
+import { Button, Card, Text, Divider } from "react-native-paper";
 
 const carrierCodeToName: { [key: string]: string } = {
   DL: "Delta Air Lines",
@@ -130,68 +130,95 @@ export default function FlightCard({
   const stops = Math.max(0, firstItinerary.segments.length - 1);
 
   return (
-    <Card style={styles.card}>
-      <View style={styles.tripRow}>
-        {/* Left section - Times */}
-        <View style={styles.timeContainer}>
-          <Text style={styles.timeText}>{formatTime(firstSegment.departure?.at)}</Text>
-          <Text style={styles.arrow}>→</Text>
-          <Text style={styles.timeText}>{formatTime(firstSegment.arrival?.at)}</Text>
+    <Card style={styles.card} elevation={2}>
+      <Card.Content style={styles.cardContent}>
+        {/* Airline and Price Header */}
+        <View style={styles.header}>
+          <View style={styles.airlineHeader}>
+            <Image
+              source={{ uri: getAirlineIconURL(carrierCode) }}
+              style={styles.logo}
+              onError={() => console.log("Failed to load airline logo for:", carrierCode)}
+            />
+            <Text variant="bodyMedium" style={styles.airlineName}>
+              {airlineName}
+            </Text>
+          </View>
+          <View style={styles.priceContainer}>
+            <Text variant="titleMedium" style={styles.price}>
+              {priceInfo.currency || "USD"} {priceInfo.total || "N/A"}
+            </Text>
+            <Text variant="bodySmall" style={styles.basePrice}>
+              Base: {priceInfo.currency || "USD"} {priceInfo.base || "N/A"}
+            </Text>
+          </View>
         </View>
 
-        {/* Middle section - Duration & Stops */}
-        <View style={styles.durationContainer}>
-          <Text style={styles.duration}>
-            {formatDuration(firstItinerary.duration)}
-          </Text>
-          <Text style={styles.stops}>
-            {stops === 0 ? "Direct" : `${stops} Stop${stops > 1 ? 's' : ''}`}
-          </Text>
+        <Divider style={styles.divider} />
+
+        {/* Flight Details */}
+        <View style={styles.flightDetails}>
+          {/* Departure */}
+          <View style={styles.timeSection}>
+            <Text variant="titleMedium" style={styles.time}>
+              {formatTime(firstSegment.departure?.at)}
+            </Text>
+            <Text variant="bodySmall" style={styles.airportCode}>
+              {firstSegment.departure?.iataCode}
+            </Text>
+            <Text variant="bodySmall" style={styles.city}>
+              {departureCity || "Unknown"}
+            </Text>
+          </View>
+
+          {/* Duration and Stops */}
+          <View style={styles.durationSection}>
+            <View style={styles.durationLine}>
+              <View style={styles.dot} />
+              <View style={styles.line} />
+              <View style={styles.dot} />
+            </View>
+            <Text variant="bodySmall" style={styles.duration}>
+              {formatDuration(firstItinerary.duration)}
+            </Text>
+            <Text variant="bodySmall" style={[styles.stops, stops === 0 ? styles.direct : styles.withStops]}>
+              {stops === 0 ? "Direct" : `${stops} Stop${stops > 1 ? 's' : ''}`}
+            </Text>
+          </View>
+
+          {/* Arrival */}
+          <View style={styles.timeSection}>
+            <Text variant="titleMedium" style={styles.time}>
+              {formatTime(firstSegment.arrival?.at)}
+            </Text>
+            <Text variant="bodySmall" style={styles.airportCode}>
+              {firstSegment.arrival?.iataCode}
+            </Text>
+            <Text variant="bodySmall" style={styles.city}>
+              {arrivalCity || "Unknown"}
+            </Text>
+          </View>
         </View>
 
-        {/* Right section - Airline Logo + Name */}
-        <View style={styles.airlineContainer}>
-          <Image
-            source={{
-              uri: getAirlineIconURL(carrierCode),
-            }}
-            style={styles.logo}
-            onError={() => console.log("Failed to load airline logo for:", carrierCode)}
-          />
-          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.airline}>
-            {airlineName}
-          </Text>
-        </View>
-      </View>
+        <Divider style={styles.divider} />
 
-      {/* Route information */}
-      <View style={styles.routeContainer}>
-        <Text style={styles.routeText}>
-          {departureCity || "Unknown"} → {arrivalCity || "Unknown"}
-        </Text>
-        <Text style={styles.flightNumber}>
-          Flight: {carrierCode} {firstSegment.number}
-        </Text>
-      </View>
-
-      {/* Bottom Price + Book */}
-      <View style={styles.footer}>
-        <View>
-          <Text style={styles.price}>
-            {priceInfo.currency || "USD"} {priceInfo.total || "N/A"}
-          </Text>
-          <Text style={styles.basePrice}>
-            Base: {priceInfo.currency || "USD"} {priceInfo.base || "N/A"}
-          </Text>
+        {/* Flight Number and Book Button */}
+        <View style={styles.footer}>
+          <View style={styles.flightInfo}>
+            <Text variant="bodySmall" style={styles.flightNumber}>
+              Flight: {carrierCode} {firstSegment.number}
+            </Text>
+          </View>
+          <Button
+            mode="contained"
+            style={styles.bookButton}
+            labelStyle={styles.bookButtonLabel}
+            onPress={handleSubmit}
+          >
+            Select
+          </Button>
         </View>
-        <Button
-          mode="contained"
-          style={styles.bookButton}
-          onPress={handleSubmit}
-        >
-          Book
-        </Button>
-      </View>
+      </Card.Content>
     </Card>
   );
 }
@@ -200,104 +227,135 @@ const styles = StyleSheet.create({
   card: {
     marginHorizontal: 16,
     marginBottom: 16,
-    padding: 16,
     borderRadius: 12,
-    backgroundColor: theme.colors.surface,
+    backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: theme.colors.outline,
+    borderColor: '#e9ecef',
+    overflow: 'hidden',
   },
-  tripRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+  cardContent: {
+    padding: 16,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 12,
   },
-  timeContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    flex: 1,
-  },
-  timeText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: theme.colors.onSurface,
-    minWidth: 50,
-  },
-  arrow: {
-    marginHorizontal: 6,
-    fontSize: 16,
-    color: theme.colors.onSurfaceVariant,
-  },
-  durationContainer: {
-    alignItems: "center",
-    flex: 1,
-  },
-  duration: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: theme.colors.onSurface,
-  },
-  stops: {
-    fontSize: 12,
-    color: theme.colors.onSurfaceVariant,
-  },
-  airlineContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    flex: 1,
-    justifyContent: 'flex-end',
-  },
-  airline: {
-    fontSize: 12,
-    fontWeight: "600",
-    color: theme.colors.onSurface,
-    marginLeft: 6,
-    maxWidth: 80,
-  },
-  logo: {
-    width: 24,
-    height: 24,
-    resizeMode: "contain",
-  },
-  routeContainer: {
-    marginBottom: 12,
+  airlineHeader: {
+    flexDirection: 'row',
     alignItems: 'center',
   },
-  routeText: {
-    fontSize: 14,
-    fontWeight: "500",
-    color: theme.colors.onSurface,
-    marginBottom: 4,
+  logo: {
+    width: 32,
+    height: 32,
+    resizeMode: "contain",
+    marginRight: 8,
   },
-  flightNumber: {
-    fontSize: 12,
-    color: theme.colors.onSurfaceVariant,
+  airlineName: {
+    fontWeight: '600',
+    color: '#2c3e50',
   },
-  footer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    borderTopWidth: 1,
-    borderTopColor: theme.colors.outline,
-    paddingTop: 12,
-    marginTop: 4,
+  priceContainer: {
+    alignItems: 'flex-end',
   },
   price: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: theme.colors.onSurface,
+    fontWeight: 'bold',
+    color: '#2c3e50',
   },
   basePrice: {
-    fontSize: 12,
-    color: theme.colors.onSurfaceVariant,
+    color: '#6c757d',
+  },
+  divider: {
+    marginVertical: 12,
+    backgroundColor: '#e9ecef',
+  },
+  flightDetails: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  timeSection: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  time: {
+    fontWeight: '600',
+    color: '#2c3e50',
+    marginBottom: 4,
+  },
+  airportCode: {
+    fontWeight: '600',
+    color: '#495057',
+    marginBottom: 2,
+  },
+  city: {
+    color: '#6c757d',
+    textAlign: 'center',
+  },
+  durationSection: {
+    alignItems: 'center',
+    flex: 1,
+    paddingHorizontal: 8,
+  },
+  durationLine: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  dot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#dee2e6',
+  },
+  line: {
+    height: 1,
+    width: 40,
+    backgroundColor: '#dee2e6',
+    marginHorizontal: 4,
+  },
+  duration: {
+    color: '#495057',
+    marginBottom: 4,
+  },
+  stops: {
+    fontWeight: '500',
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 12,
+    overflow: 'hidden',
+  },
+  direct: {
+    backgroundColor: '#e8f5e8',
+    color: '#2e7d32',
+  },
+  withStops: {
+    backgroundColor: '#fff3cd',
+    color: '#856404',
+  },
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  flightInfo: {
+    flex: 1,
+  },
+  flightNumber: {
+    color: '#6c757d',
   },
   bookButton: {
     borderRadius: 8,
-    minWidth: 80,
+    backgroundColor: '#0066cc',
+  },
+  bookButtonLabel: {
+    fontWeight: '600',
+    color: '#fff',
   },
   errorText: {
-    fontSize: 14,
-    color: theme.colors.error,
+    color: '#dc3545',
     textAlign: "center",
     marginBottom: 12,
   },

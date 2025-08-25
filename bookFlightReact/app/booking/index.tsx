@@ -177,14 +177,14 @@ export default function Booking() {
     // Ensure we have parsed offer object
     let flightOffer;
     try {
-      console.log("Selected flight offer pricing info:", selectedFlightOffer);
+      // console.log("Selected flight offer pricing info:", selectedFlightOffer);
       flightOffer = selectedFlightOffer.pricingAdditionalInfo
     } catch (error) {
       throw new Error("Invalid flight offer format");
     }
 
      const bookingData = {
-      flightOffer: JSON.stringify(flightOffer), // Stringify the flight offer
+      flightOffer: flightOffer, // Stringify the flight offer
       travelers: travelers.map((traveler: any, index: number) => ({
         id: index + 1, // Use number instead of string
         firstName: traveler.firstName, // Include firstName at root level
@@ -195,7 +195,7 @@ export default function Booking() {
         phones: [
           {
             deviceType: "MOBILE",
-            countryCalingCode: traveler.phoneNumber.countryCallingCode, // Keep the "+" sign
+            countryCalingCode: traveler.phoneNumber.countryCallingCode, 
             number: traveler.phoneNumber.number,
           },
         ],
@@ -216,12 +216,12 @@ export default function Booking() {
       })),
     };
 
+    console.log( JSON.stringify(bookingData, null, 2));
 
-    console.log("Booking data:", JSON.stringify(bookingData, null, 2));
-
-    const endpoint = apiUrl
-      ? `${apiUrl}/booking/flight-order`
-      : "/v1/booking/flight-orders";
+    // const endpoint = apiUrl
+    //   ? `${apiUrl}/booking/flight-order`
+    //   : "/v1/booking/flight-orders";
+    const endpoint = "http://10.0.2.2:8080/booking/flight-order";
 
     const response = await axiosInstance.post(endpoint, bookingData, {
       headers: { "Content-Type": "application/json" },
