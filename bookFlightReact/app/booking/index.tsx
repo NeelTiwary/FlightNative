@@ -6,6 +6,7 @@ import { Platform, ScrollView, StyleSheet, View } from "react-native";
 import { Button, List, Text, Snackbar } from "react-native-paper";
 import axiosInstance from "../../config/axiosConfig";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import axios from "axios"
 
 export default function Booking() {
   const { travelers, setTravelers, selectedFlightOffer, setSelectedFlightOffer, apiUrl, setFlightBooking } = useAppContext();
@@ -195,7 +196,7 @@ export default function Booking() {
         phones: [
           {
             deviceType: "MOBILE",
-            countryCalingCode: traveler.phoneNumber.countryCallingCode, 
+            countryCalingCode: traveler.phoneNumber.countryCallingCode,
             number: traveler.phoneNumber.number,
           },
         ],
@@ -218,10 +219,10 @@ export default function Booking() {
 
     console.log( JSON.stringify(bookingData, null, 2));
 
-    // const endpoint = apiUrl
-    //   ? `${apiUrl}/booking/flight-order`
-    //   : "/v1/booking/flight-orders";
-    const endpoint = "http://10.0.2.2:8080/booking/flight-order";
+     const endpoint = apiUrl
+      ? `${apiUrl}/booking/flight-order`
+      : "/v1/booking/flight-orders";
+   // const endpoint = "http://10.0.2.2:8080/booking/flight-order";
 
     const response = await axiosInstance.post(endpoint, bookingData, {
       headers: { "Content-Type": "application/json" },
@@ -229,17 +230,17 @@ export default function Booking() {
 
     const bookingResponse = response.data;
 
-    if (!bookingResponse.data?.id) {
+    if (!bookingResponse.orderId) {
       throw new Error("Incomplete booking data received.");
     }
 
-    setFlightBooking(bookingResponse.data);
+    setFlightBooking(bookingResponse.orderId);
     setTravelers([]);
-    setSnackbarMessage(`Booking successful! Order ID: ${bookingResponse.data.id}`);
+    setSnackbarMessage(`Booking successful! Order ID: ${bookingResponse.OrderId}`);
     setSnackbarVisible(true);
 
     if (Platform.OS === "web") {
-      localStorage.setItem("flightBooking", JSON.stringify(bookingResponse.data));
+      localStorage.setItem("flightBooking", JSON.stringify(bookingResponse.OrderId));
     }
 
     router.push("/booking/confirmation");
