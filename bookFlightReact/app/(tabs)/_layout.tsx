@@ -113,14 +113,14 @@ export default function TabsLayout() {
                 }}
             />
             <Tabs.Screen
-                name="about/index"
+                name="ticket/index"
                 options={{
-                    title: "About",
-                    headerTitle: "About Flight Booking",
+                    title: "Ticket",
+                    headerTitle: "Get your ticket",
                     tabBarIcon: ({ color, size, focused }) => (
                         <View style={focused ? styles.activeIconContainer : null}>
                             <MaterialCommunityIcons 
-                                name="information" 
+                                name="ticket" 
                                 color={focused ? '#1a73e8' : color}
                                 size={focused ? 26 : size}
                             />

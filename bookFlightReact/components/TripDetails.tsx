@@ -65,68 +65,6 @@ function TripDetails({ trip, tripIndex }: {trip: any, tripIndex: string}) {
                 }
                 </View>
             </View>
-            <Divider style={{ marginVertical:10 }} />
-
-            <FlatList
-                data={trip.legs}
-                keyExtractor={(item, index) => `${tripIndex}-${index}`}
-                horizontal
-                // pagingEnabled
-                renderItem={({ item, index, separators }) => (
-                <>
-                <View style={{ 
-                    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-                    // marginRight: 10, 
-                    paddingLeft: 10,
-                    width: 300,
-                    borderRadius: 10,
-                    marginRight: 5,
-                    backgroundColor: theme.colors.background,
-                }}>     
-                    <View style={{alignItems: "center", marginRight: 0}}>
-                        <Text style={styles.legCode}>{item.departureAirport}</Text>
-                        <Text style={styles.legDate}>{formatDate(item.departureDateTime)}</Text>
-                        <Text style={styles.legTime}>{formatTime(item.departureDateTime)}</Text>
-                        <Text style={styles.legTerminal}>T{item.departureTerminal}</Text>
-                    </View>
-
-                    <View style={{marginTop: 0, marginRight: 0, alignItems: "center", alignContent: "center"}}>
-                    <List.Item
-                        title={`Flight ${item.carrierCode}${item.flightNumber}`}
-                        description={`Aircraft: ${item.aircraftCode}`}
-                        style={{marginBottom: 15}}
-                        titleStyle={{ fontWeight: 'bold', fontSize: 14 }}
-                        descriptionStyle={{ color: theme.colors.backdrop, fontSize: 12 }}
-                        contentStyle={{ alignItems: 'center' }}
-                        // left={() => <List.Icon icon="airplane" />}
-                    />
-
-                    </View>
-                    
-                    <View style={{alignItems: "center", marginRight: 10}}>
-                        <Text style={styles.legCode}>{item.arrivalAirport}</Text>
-                        <Text style={styles.legDate}>{formatDate(item.arrivalDateTime)}</Text>
-                        <Text style={styles.legTime}>{formatTime(item.arrivalDateTime)}</Text>
-                        <Text style={styles.legTerminal}>T{item.arrivalTerminal}</Text>
-                    </View>
-                </View>
-                    {/* {
-                    index < trip.legs.length - 1 && 
-                    <View style={{
-                        // borderWidth: 3,
-                        // borderColor: 'red',
-                        // marginRight: 10,
-                        width: 1, 
-                        height: '100%', 
-                        backgroundColor: theme.colors.background, 
-                        // marginHorizontal: 10
-                        // marginRight: 10 
-                        }} 
-                    />
-                    } */}
-                </>
-                )}
-            />
             </Card.Content>
         </Card>
     </View>
