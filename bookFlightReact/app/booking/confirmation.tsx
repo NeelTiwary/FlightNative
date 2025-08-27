@@ -172,156 +172,35 @@ function Confirmation() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fafafa',
-    },
-    scrollContent: {
-        padding: 20,
-        paddingBottom: 40,
-    },
-    confirmationCard: {
-        borderRadius: 16,
-        backgroundColor: '#fff',
-        elevation: 1,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.05,
-        shadowRadius: 4,
-        marginBottom: 8,
-    },
-    confirmationContent: {
-        padding: 24,
-    },
-    successHeader: {
-        alignItems: 'center',
-        marginBottom: 24,
-    },
-    successIconContainer: {
-        backgroundColor: '#e8f5e9',
-        borderRadius: 50,
-        padding: 4,
-        marginBottom: 12,
-    },
-    successIcon: {
-        margin: 0,
-    },
-    successTitle: {
-        fontWeight: '600',
-        color: '#2c3e50',
-        marginBottom: 4,
-        textAlign: 'center',
-    },
-    successSubtitle: {
-        color: '#7f8c8d',
-        textAlign: 'center',
-    },
-    bookingInfo: {
-        marginVertical: 8,
-        borderTopWidth: 1,
-        borderTopColor: '#f0f0f0',
-        paddingTop: 20,
-    },
-    infoRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    infoItem: {
-        flex: 1,
-    },
-    orderIdContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 4,
-    },
-    copyButton: {
-        margin: 0,
-        marginLeft: 8,
-    },
-    orderIdValueContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    infoLabel: {
-        color: '#95a5a6',
-        fontWeight: '500',
-        letterSpacing: 0.5,
-    },
-    infoValue: {
-        fontWeight: '600',
-        color: '#2c3e50',
-        flex: 1,
-    },
-    totalPrice: {
-        fontWeight: '700',
-        fontSize: 18,
-        color: '#2c3e50',
-    },
-    emailNotification: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginTop: 20,
-        padding: 16,
-        backgroundColor: '#f1f8e9',
-        borderRadius: 12,
-        borderLeftWidth: 4,
-        borderLeftColor: '#388e3c',
-    },
-    emailText: {
-        color: '#388e3c',
-        marginLeft: 8,
-        flex: 1,
-    },
-    divider: {
-        marginVertical: 32,
-        backgroundColor: '#e0e0e0',
-        height: 1,
-    },
-    section: {
-        marginBottom: 32,
-    },
-    sectionTitle: {
-        fontWeight: '600',
-        marginBottom: 20,
-        color: '#2c3e50',
-        letterSpacing: 0.5,
-    },
-    travelerList: {
-        paddingVertical: 8,
-    },
-    travelerCard: {
-        width: Dimensions.get('window').width * 0.75,
-        marginRight: 16,
-        backgroundColor: '#fff',
-        borderRadius: 12,
-        padding: 20,
-        elevation: 1,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.05,
-        shadowRadius: 3,
-    },
-    actions: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        gap: 12,
-        marginTop: 16,
-    },
-    primaryButton: {
-        borderRadius: 8,
-        paddingVertical: 6,
-        backgroundColor: '#2196f3',
-        flex: 1,
-    },
-    secondaryButton: {
-        borderRadius: 8,
-        paddingVertical: 6,
-        borderColor: '#b0bec5',
-        flex: 1,
-    },
-    buttonContent: {
-        paddingVertical: 8,
-    },
-});
-
-export default Confirmation;
+  code: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  time: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginTop: 4,
+  },
+  date: {
+    fontSize: 12,
+    color: 'gray',
+  },
+  legCode: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  legTerminal: {
+    fontSize: 11,
+    fontWeight: 'condensedBold',
+  },
+  legTime: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    marginTop: 4,
+  },
+  legDate: {
+    fontSize: 10,
+    color: 'gray',
+  },
+})
+export default confirmation;
