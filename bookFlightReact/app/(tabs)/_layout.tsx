@@ -87,9 +87,9 @@ export default function TabsLayout() {
                     headerTitle: "Find Flights",
                     tabBarIcon: ({ color, size, focused }) => (
                         <View style={styles.searchIconContainer}>
-                            <MaterialCommunityIcons 
+                            <MaterialCommunityIcons
                                 name="magnify"
-                                color="#fff" 
+                                color="#fff"
                                 size={28}
                             />
                         </View>
@@ -103,29 +103,29 @@ export default function TabsLayout() {
                     headerTitle: "My Account",
                     tabBarIcon: ({ color, size, focused }) => (
                         <View style={focused ? styles.activeIconContainer : null}>
-                            <MaterialCommunityIcons 
-                                name="account" 
+                            <MaterialCommunityIcons
+                                name="account"
                                 color={focused ? '#1a73e8' : color}
                                 size={focused ? 26 : size}
                             />
                         </View>
-                    ), 
+                    ),
                 }}
             />
             <Tabs.Screen
-                name="about/index"
+                name="ticket/index"
                 options={{
-                    title: "About",
-                    headerTitle: "About Flight Booking",
+                    title: "Ticket",
+                    headerTitle: "Get your ticket",
                     tabBarIcon: ({ color, size, focused }) => (
                         <View style={focused ? styles.activeIconContainer : null}>
-                            <MaterialCommunityIcons 
-                                name="information" 
+                            <MaterialCommunityIcons
+                                name="ticket"
                                 color={focused ? '#1a73e8' : color}
                                 size={focused ? 26 : size}
                             />
                         </View>
-                    ), 
+                    ),
                 }}
             />
         </Tabs>

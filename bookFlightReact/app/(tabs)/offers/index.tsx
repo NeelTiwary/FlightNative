@@ -69,29 +69,29 @@ export default function Offers() {
       trips: flightData.trips && Array.isArray(flightData.trips) && flightData.trips.length > 0
         ? flightData.trips
         : itineraries.map((itinerary: any, index: number) => ({
-            tripType: flightData.oneWay ? "ONE_WAY" : "RETURN",
-            tripNo: itinerary.id || index + 1,
-            stops: itinerary.segments ? itinerary.segments.length - 1 : 0,
-            legs: (itinerary.segments || []).map((segment: any) => ({
-              carrierName: carrierCodeToName[segment.carrierCode] || segment.carrierCode || "Unknown",
-              operatingCarrierCode: segment.operating?.carrierCode || segment.carrierCode || "",
-              departureCity: iataToCity[segment.departure?.iataCode] || segment.departure?.iataCode || "Unknown",
-              arrivalCity: iataToCity[segment.arrival?.iataCode] || segment.arrival?.iataCode || "Unknown",
-              departureDateTime: segment.departure?.at || "",
-              arrivalDateTime: segment.arrival?.at || "",
-              duration: segment.duration || "N/A",
-              aircraft: aircraftCodeToName[segment.aircraft?.code] || segment.aircraft?.code || "Unknown",
-              cabinClass:
-                flightData.travelerPricings?.[0]?.fareDetailsBySegment?.find(
-                  (fare: any) => fare.segmentId === segment.id
-                )?.cabin || "Economy",
-              layoverAfter: segment.numberOfStops > 0 ? "Unknown" : null,
-            })),
-            from: iataToCity[segment.departure?.iataCode] || segment.departure?.iataCode || "Unknown",
-            to: iataToCity[segment.arrival?.iataCode] || segment.arrival?.iataCode || "Unknown",
-            totalFlightDuration: itinerary.duration || "N/A",
-            totalLayoverDuration: segment.numberOfStops > 0 ? "Unknown" : "0h 0m",
+          tripType: flightData.oneWay ? "ONE_WAY" : "RETURN",
+          tripNo: itinerary.id || index + 1,
+          stops: itinerary.segments ? itinerary.segments.length - 1 : 0,
+          legs: (itinerary.segments || []).map((segment: any) => ({
+            carrierName: carrierCodeToName[segment.carrierCode] || segment.carrierCode || "Unknown",
+            operatingCarrierCode: segment.operating?.carrierCode || segment.carrierCode || "",
+            departureCity: iataToCity[segment.departure?.iataCode] || segment.departure?.iataCode || "Unknown",
+            arrivalCity: iataToCity[segment.arrival?.iataCode] || segment.arrival?.iataCode || "Unknown",
+            departureDateTime: segment.departure?.at || "",
+            arrivalDateTime: segment.arrival?.at || "",
+            duration: segment.duration || "N/A",
+            aircraft: aircraftCodeToName[segment.aircraft?.code] || segment.aircraft?.code || "Unknown",
+            cabinClass:
+              flightData.travelerPricings?.[0]?.fareDetailsBySegment?.find(
+                (fare: any) => fare.segmentId === segment.id
+              )?.cabin || "Economy",
+            layoverAfter: segment.numberOfStops > 0 ? "Unknown" : null,
           })),
+          from: iataToCity[segment.departure?.iataCode] || segment.departure?.iataCode || "Unknown",
+          to: iataToCity[segment.arrival?.iataCode] || segment.arrival?.iataCode || "Unknown",
+          totalFlightDuration: itinerary.duration || "N/A",
+          totalLayoverDuration: segment.numberOfStops > 0 ? "Unknown" : "0h 0m",
+        })),
     };
 
     console.log("Transformed Flight Data:", transformedFlightData);
@@ -104,67 +104,6 @@ export default function Offers() {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
-      
-      {/* Header Section */}
-      <View style={styles.headerContainer}>
-        <Text variant="headlineSmall" style={styles.headerTitle}>
-          Flight Offers
-        </Text>
-      </View>
-      
-      {/* Search Summary */}
-      <View style={styles.summaryCard}>
-        <View style={styles.routeContainer}>
-          <View style={styles.routeInfo}>
-            <Text variant="titleMedium" style={styles.routeText}>
-              {searchParams.from} → {searchParams.to}
-            </Text>
-            <IconButton
-              icon="pencil-outline"
-              size={18}
-              style={styles.editButton}
-              iconColor={theme.colors.primary}
-              onPress={() => router.push("/(tabs)/home")}
-            />
-          </View>
-          
-          <Divider style={styles.divider} />
-          
-          <View style={styles.detailsRow}>
-            <View style={styles.detailItem}>
-              <Icon source="calendar" size={14} color={theme.colors.primary} />
-              <Text variant="bodySmall" style={styles.detailText}>
-                {searchParams.departureDate}
-              </Text>
-            </View>
-            
-            <View style={styles.detailItem}>
-              <Icon source="seat-passenger" size={14} color={theme.colors.primary} />
-              <Text variant="bodySmall" style={styles.detailText}>
-                {parseInt(searchParams.adults) + parseInt(searchParams.children) + parseInt(searchParams.infants)} passengers
-              </Text>
-            </View>
-            
-            <View style={styles.detailItem}>
-              <Icon source="class" size={14} color={theme.colors.primary} />
-              <Text variant="bodySmall" style={styles.detailText}>
-                {searchParams.flightClass}
-              </Text>
-            </View>
-          </View>
-        </View>
-      </View>
-
-      {/* Results Count */}
-      {flightOffers.length > 0 && (
-        <View style={styles.resultsContainer}>
-          <Text variant="bodyMedium" style={styles.resultsText}>
-            {flightOffers.length} flight{flightOffers.length !== 1 ? 's' : ''} found
-          </Text>
-          <Divider style={styles.resultsDivider} />
-        </View>
-      )}
-
       {/* Flight Offers List */}
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {flightOffers.length > 0 ? (

@@ -43,6 +43,7 @@ export const AppContextProvider = ({ children }: { children: React.ReactNode }) 
     children: number;
     infants: number;
     currencyCode: string;
+    flightClass: string;
   }
 
   interface Traveler {
@@ -111,6 +112,7 @@ export const AppContextProvider = ({ children }: { children: React.ReactNode }) 
     children: 0,
     infants: 0,
     currencyCode: "INR",
+    flightClass: "Economy",
   });
 
   const flightClasses = ["Economy", "Premium_Economy", "Business", "First"];
