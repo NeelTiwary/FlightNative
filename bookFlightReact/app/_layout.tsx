@@ -26,10 +26,10 @@ export default function RootLayout() {
                 headerShown: false
                 
               }}/>
-              {/* <Stack.Screen name="booking" options={{
+              <Stack.Screen name="booking" options={{
                 headerLeft: () => <></>,
                 headerShown: false
-              }}/> */}
+              }}/>
               {/* <Stack.Screen name="index" options={{
                 headerTitle: "FlightMate",
                 headerLeft: () => <></>,

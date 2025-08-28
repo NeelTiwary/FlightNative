@@ -83,12 +83,19 @@ export default function FlightOfferDetailsNew() {
   const priceInfo = parsedFlightData.price || {};
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {itineraries.map((itinerary: any, index: number) => (
         <View key={index}>
-          <Chip icon={"airplane-takeoff"} style={styles.tripChip}>
-            {index === 0 ? "Outbound Flight" : "Return Flight"}
-          </Chip>
+          <View style={styles.tripHeader}>
+            <MaterialCommunityIcons 
+              name={index === 0 ? "airplane-takeoff" : "airplane-landing"} 
+              size={14} 
+              color="#2563EB" 
+            />
+            <Text style={styles.tripTitle}>
+              {index === 0 ? "OUTBOUND" : "RETURN"}
+            </Text>
+          </View>
 
           {itinerary.segments && itinerary.segments.map((segment: any, segIdx: number) => {
             const carrierCode = segment.carrierCode || "";
@@ -96,237 +103,295 @@ export default function FlightOfferDetailsNew() {
             const aircraft = aircraftCodeToName[segment.aircraft?.code] || segment.aircraft?.code;
             
             return (
-              <View key={segIdx} style={{ marginBottom: 24 }}>
-                <Card style={styles.card}>
-                  <Card.Title
-                    title={airlineName}
-                    titleStyle={styles.airlineName}
-                    left={() => (
-                      <Image
-                        source={{ uri: getAirlineIconURL(carrierCode) }}
-                        style={styles.airlineLogo}
-                        onError={() => console.log("Failed to load airline logo for:", carrierCode)}
-                      />
-                    )}
-                  />
-                  <Card.Content>
-                    <View style={styles.timelineRow}>
-                      <View style={styles.cityBlock}>
-                        <Text style={styles.city}>
-                          {iataToCity[segment.departure?.iataCode] || segment.departure?.iataCode}
-                        </Text>
-                        <Text style={styles.time}>
-                          {formatTime(segment.departure?.at)}
-                        </Text>
-                        <Text style={styles.date}>
-                          {formatDate(segment.departure?.at)}
-                        </Text>
-                      </View>
-                      
-                      <View style={styles.timelineLineHorizontal}>
-                        <View style={styles.timelineDot} />
-                        <View style={styles.timelineLineMid} />
-                        <View style={styles.timelineDot} />
-                      </View>
-                      
-                      <View style={styles.cityBlock}>
-                        <Text style={styles.city}>
-                          {iataToCity[segment.arrival?.iataCode] || segment.arrival?.iataCode}
-                        </Text>
-                        <Text style={styles.time}>
-                          {formatTime(segment.arrival?.at)}
-                        </Text>
-                        <Text style={styles.date}>
-                          {formatDate(segment.arrival?.at)}
-                        </Text>
-                      </View>
+              <Card key={segIdx} style={styles.card}>
+                <Card.Content style={styles.cardContent}>
+                  {/* Compact Header Row */}
+                  <View style={styles.headerRow}>
+                    <Image
+                      source={{ uri: getAirlineIconURL(carrierCode) }}
+                      style={styles.airlineLogo}
+                      onError={() => console.log("Failed to load airline logo for:", carrierCode)}
+                    />
+                    <View style={styles.headerInfo}>
+                      <Text style={styles.airlineName}>{airlineName}</Text>
+                      <Text style={styles.flightNumber}>
+                        {carrierCode} {segment.number} • {formatDate(segment.departure?.at)}
+                      </Text>
                     </View>
-                    
-                    <Text style={styles.flightInfo}>
-                      Duration: {segment.duration || "N/A"}
-                    </Text>
-                    
-                    <Divider style={styles.divider} />
-                    
-                    <View style={styles.row}>
-                      <Text style={styles.infoLabel}>Flight Number</Text>
-                      <Text style={styles.infoValue}>
-                        {carrierCode} {segment.number}
+                  </View>
+
+                  {/* Flight Route - Compact Layout */}
+                  <View style={styles.routeContainer}>
+                    <View style={styles.routeSegment}>
+                      <Text style={styles.time}>{formatTime(segment.departure?.at)}</Text>
+                      <Text style={styles.airportCode}>{segment.departure?.iataCode}</Text>
+                      <Text style={styles.airportName} numberOfLines={1}>
+                        {iataToCity[segment.departure?.iataCode] || segment.departure?.iataCode}
                       </Text>
                     </View>
                     
-                    <View style={styles.row}>
-                      <Text style={styles.infoLabel}>Aircraft</Text>
-                      <Text style={styles.infoValue}>{aircraft}</Text>
+                    <View style={styles.routeCenter}>
+                      <View style={styles.timelineContainer}>
+                        <View style={styles.timelineDot} />
+                        <View style={styles.timelineLine} />
+                        <View style={styles.timelineDot} />
+                      </View>
+                      <Text style={styles.duration}>{segment.duration || "N/A"}</Text>
                     </View>
                     
-                    <View style={styles.row}>
-                      <Text style={styles.infoLabel}>Cabin</Text>
-                      <Text style={styles.infoValue}>
+                    <View style={[styles.routeSegment, styles.alignEnd]}>
+                      <Text style={styles.time}>{formatTime(segment.arrival?.at)}</Text>
+                      <Text style={styles.airportCode}>{segment.arrival?.iataCode}</Text>
+                      <Text style={styles.airportName} numberOfLines={1}>
+                        {iataToCity[segment.arrival?.iataCode] || segment.arrival?.iataCode}
+                      </Text>
+                    </View>
+                  </View>
+
+                  {/* Flight Details - Single Row */}
+                  <View style={styles.detailsRow}>
+                    <View style={styles.detailItem}>
+                      <Text style={styles.detailLabel}>AIRCRAFT</Text>
+                      <Text style={styles.detailValue}>{aircraft}</Text>
+                    </View>
+                    <View style={styles.detailDivider} />
+                    <View style={styles.detailItem}>
+                      <Text style={styles.detailLabel}>CABIN</Text>
+                      <Text style={styles.detailValue}>
                         {parsedFlightData.travelerPricings?.[0]?.fareDetailsBySegment?.[0]?.cabin || "Economy"}
                       </Text>
                     </View>
-                  </Card.Content>
-                </Card>
-              </View>
+                  </View>
+                </Card.Content>
+              </Card>
             );
           })}
         </View>
       ))}
       
-      <View style={styles.priceInfo}>
-        <Text style={styles.totalPrice}>
-          Total: {priceInfo.currency} {priceInfo.total}
-        </Text>
-        <Text style={styles.basePrice}>
-          Base Fare: {priceInfo.currency} {priceInfo.base}
-        </Text>
-      </View>
+      {/* Price Summary - Compact */}
+      <Card style={styles.priceCard}>
+        <Card.Content style={styles.priceContent}>
+          <Text style={styles.priceTitle}>FARE SUMMARY</Text>
+          <View style={styles.priceGrid}>
+            <View style={styles.priceRow}>
+              <Text style={styles.priceLabel}>Base Fare:</Text>
+              <Text style={styles.priceValue}>{priceInfo.currency} {priceInfo.base}</Text>
+            </View>
+            <View style={styles.priceRow}>
+              <Text style={styles.priceLabel}>Taxes & Fees:</Text>
+              <Text style={styles.priceValue}>
+                {priceInfo.currency} {(parseFloat(priceInfo.total) - parseFloat(priceInfo.base)).toFixed(2)}
+              </Text>
+            </View>
+            <View style={styles.totalDivider} />
+            <View style={styles.priceRow}>
+              <Text style={styles.totalLabel}>Total:</Text>
+              <Text style={styles.totalValue}>{priceInfo.currency} {priceInfo.total}</Text>
+            </View>
+          </View>
+        </Card.Content>
+      </Card>
     </ScrollView>
   );
 }
 
-// Keep the same styles as before
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
-    backgroundColor: "#f8f9fb",
+    padding: 10,
+    backgroundColor: "#F8FAFC",
   },
-  tripChip: {
-    alignSelf: "flex-start",
-    marginBottom: 12,
-    backgroundColor: "rgba(93, 16, 206, 0.15)",
+  tripHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 8,
+    marginTop: 2,
+  },
+  tripTitle: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: "#374151",
+    marginLeft: 5,
+    letterSpacing: 0.3,
   },
   card: {
-    marginBottom: 16,
-    borderRadius: 16,
-    backgroundColor: "#ffffff",
+    marginBottom: 10,
+    borderRadius: 8,
+    backgroundColor: "#FFFFFF",
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: 3,
-    paddingBottom: 6,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.03,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  cardContent: {
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+  },
+  headerRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 12,
   },
   airlineLogo: {
-    width: 40,
-    height: 40,
-    borderRadius: 8,
+    width: 28,
+    height: 28,
+    borderRadius: 5,
     marginRight: 8,
+  },
+  headerInfo: {
+    flex: 1,
   },
   airlineName: {
     fontWeight: "600",
-    fontSize: 16,
-    color: "#222",
+    fontSize: 14,
+    color: "#1F2937",
+    marginBottom: 1,
   },
-  timelineRow: {
+  flightNumber: {
+    fontSize: 11,
+    color: "#6B7280",
+  },
+  routeContainer: {
     flexDirection: "row",
-    alignItems: "center",
     justifyContent: "space-between",
-    marginVertical: 12,
-  },
-  cityBlock: {
-    flexDirection: "column",
     alignItems: "center",
+    marginBottom: 10,
+  },
+  routeSegment: {
     flex: 1,
   },
-  city: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: "#333",
+  alignEnd: {
+    alignItems: "flex-end",
+  },
+  routeCenter: {
+    alignItems: "center",
+    paddingHorizontal: 6,
+  },
+  timelineContainer: {
+    alignItems: "center",
     marginBottom: 4,
   },
+  timelineDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: "#2563EB",
+  },
+  timelineLine: {
+    width: 2,
+    height: 20,
+    backgroundColor: "#2563EB",
+    marginVertical: 2,
+  },
   time: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#5d16ce",
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#111827",
+    marginBottom: 2,
   },
-  date: {
-    fontSize: 13,
-    color: "#777",
+  airportCode: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#2563EB",
+    marginBottom: 1,
   },
-  timelineLineHorizontal: {
+  airportName: {
+    fontSize: 10,
+    color: "#6B7280",
+    maxWidth: 100,
+  },
+  duration: {
+    fontSize: 10,
+    fontWeight: "600",
+    color: "#4B5563",
+  },
+  detailsRow: {
     flexDirection: "row",
     alignItems: "center",
+    borderTopWidth: 1,
+    borderTopColor: "#F3F4F6",
+    paddingTop: 8,
+  },
+  detailItem: {
     flex: 1,
-    marginHorizontal: 10,
+    alignItems: "center",
   },
-  timelineDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: "#5d16ce",
+  detailDivider: {
+    width: 1,
+    height: 20,
+    backgroundColor: "#E5E7EB",
+    marginHorizontal: 8,
   },
-  timelineLineMid: {
-    flex: 1,
-    height: 2,
-    backgroundColor: "#ccc",
-  },
-  flightInfo: {
-    textAlign: "center",
-    marginVertical: 8,
-    fontStyle: "italic",
-    color: "#0088cc",
-  },
-  divider: {
-    marginVertical: 12,
-    backgroundColor: "#ddd",
-  },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 6,
-  },
-  infoLabel: {
+  detailLabel: {
+    fontSize: 9,
     fontWeight: "600",
-    color: "#555",
-    fontSize: 14,
+    color: "#6B7280",
+    marginBottom: 1,
+    letterSpacing: 0.4,
   },
-  infoValue: {
-    fontWeight: "500",
-    color: "#222",
-  },
-  amenitiesTitle: {
-    marginTop: 12,
-    marginBottom: 6,
-    fontWeight: "600",
-    fontSize: 14,
-    color: "#333",
-  },
-  amenities: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 6,
-  },
-  amenityChip: {
-    backgroundColor: "rgba(93, 16, 206, 0.12)",
-  },
-  amenityText: {
+  detailValue: {
     fontSize: 12,
     fontWeight: "500",
+    color: "#1F2937",
   },
-  stopoverContainer: {
+  priceCard: {
+    borderRadius: 8,
+    backgroundColor: "#FFFFFF",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.03,
+    shadowRadius: 2,
+    elevation: 1,
+    marginBottom: 16,
+  },
+  priceContent: {
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+  },
+  priceTitle: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: "#374151",
+    marginBottom: 8,
+    letterSpacing: 0.3,
+  },
+  priceGrid: {
+    gap: 4,
+  },
+  priceRow: {
     flexDirection: "row",
-    alignItems: "center",
-    marginVertical: 10,
-    gap: 6,
+    justifyContent: "space-between",
   },
-  stopoverText: {
-    fontSize: 14,
-    color: "#0088cc",
+  priceLabel: {
+    fontSize: 12,
+    color: "#6B7280",
+  },
+  priceValue: {
+    fontSize: 12,
+    fontWeight: "500",
+    color: "#1F2937",
+  },
+  totalDivider: {
+    height: 1,
+    backgroundColor: "#E5E7EB",
+    marginVertical: 4,
+  },
+  totalLabel: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: "#1F2937",
+  },
+  totalValue: {
+    fontSize: 13,
+    fontWeight: "700",
+    color: "#2563EB",
   },
   errorText: {
-    fontSize: 14,
-    color: "#d32f2f",
+    fontSize: 13,
+    color: "#DC2626",
     textAlign: "center",
-    marginVertical: 10,
-  },
-  priceInfo: {
-    marginTop: 16,
-    padding: 10,
-    backgroundColor: "#ffffff",
-    borderRadius: 8,
+    marginVertical: 8,
   },
 });

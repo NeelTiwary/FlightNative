@@ -14,21 +14,21 @@ export default function Layout() {
                 },
               }}
         >
-            <Stack.Screen name="index" options={{
+            {/* <Stack.Screen name="index" options={{
                 headerTitle: "Traveler Details",
                 headerLeft: () => <></>,
                 headerShown: true
-            }}  />
-            <Stack.Screen name="flightDetails" options={{
+            }}  /> */}
+            {/* <Stack.Screen name="flightDetails" options={{
                 headerTitle: "Flight Details",
                 headerLeft: () => <></>,
                 headerShown: true
-            }}  />
-            <Stack.Screen name="confirmation" options={{
+            }}  /> */}
+            {/* <Stack.Screen name="confirmation" options={{
                 headerTitle: "Booking Details",
                 headerLeft: () => <></>,
                 headerShown: true
-            }}  />
+            }}  /> */}
         </Stack>
     )
 }
