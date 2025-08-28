@@ -168,14 +168,14 @@ export default function Home() {
     if (classDropdownVisible) {
       Animated.timing(dropdownAnimation, {
         toValue: 0,
-        duration: 200,
+        duration: 10,
         useNativeDriver: true,
       }).start(() => setClassDropdownVisible(false));
     } else {
       setClassDropdownVisible(true);
       Animated.timing(dropdownAnimation, {
         toValue: 1,
-        duration: 200,
+        duration: 10,
         useNativeDriver: true,
       }).start();
     }

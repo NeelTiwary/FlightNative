@@ -2,34 +2,33 @@ import { theme } from "@/themes/theme";
 import { FlightOffer } from "@/types";
 import * as React from "react";
 import { Image, StyleSheet, View } from "react-native";
-import { Button, Card, Text, Divider } from "react-native-paper";
+import { Button, Card, Text } from "react-native-paper";
 
 const carrierCodeToName: { [key: string]: string } = {
-  DL: "Delta Air Lines",
-  AA: "American Airlines",
-  UA: "United Airlines",
-  WN: "Southwest Airlines",
-  B6: "JetBlue Airways",
-  NK: "Spirit Airlines",
-  F9: "Frontier Airlines",
+  DL: "Delta",
+  AA: "American",
+  UA: "United",
+  WN: "Southwest",
+  B6: "JetBlue",
+  NK: "Spirit",
+  F9: "Frontier",
   AI: "Air India",
   "6E": "IndiGo",
   SG: "SpiceJet",
   UK: "Vistara",
-  TK: "Turkish Airlines",
-  AS: "Alaska Airlines",
+  TK: "Turkish",
+  AS: "Alaska",
 };
 
 const iataToCity: { [key: string]: string } = {
   EWR: "Newark",
-  LAX: "Los Angeles",
-  JFK: "New York (JFK)",
-  LGA: "New York (LGA)",
+  LAX: "LA",
+  JFK: "NYC",
+  LGA: "NYC",
   ORD: "Chicago",
   DFW: "Dallas",
   DEN: "Denver",
-  SFO: "San Francisco",
-  // Add more as needed
+  SFO: "SF",
 };
 
 const getAirlineIconURL = (code: string) =>
@@ -39,7 +38,6 @@ export default function FlightCard({
   flightData,
   handleSubmit,
 }: { flightData: FlightOffer; handleSubmit: () => void }) {
-  // Parse the flight data to get the raw API response
   const parsedFlightData = React.useMemo(() => {
     if (!flightData) return null;
     
@@ -64,26 +62,24 @@ export default function FlightCard({
 
   const formatDuration = (duration: string) => {
     if (!duration) return "N/A";
-    // Convert PT6H20M to 6h 20m
     return duration.replace('PT', '').replace('H', 'h ').replace('M', 'm').trim();
   };
 
   if (!parsedFlightData) {
     return (
       <Card style={styles.card}>
-        <Card.Content>
-          <Text style={styles.errorText}>No flight details available</Text>
+        <Card.Content style={styles.content}>
+          <Text style={styles.errorText}>No flight details</Text>
           <View style={styles.footer}>
-            <View>
-              <Text style={styles.price}>
-                {flightData?.currencyCode || "N/A"} {flightData?.totalPrice || "N/A"}
-              </Text>
-            </View>
+            <Text style={styles.price}>
+              {flightData?.currencyCode || "N/A"} {flightData?.totalPrice || "N/A"}
+            </Text>
             <Button
               mode="contained"
               style={styles.bookButton}
               onPress={handleSubmit}
               disabled
+              compact
             >
               Book
             </Button>
@@ -101,19 +97,18 @@ export default function FlightCard({
   if (!firstItinerary || !firstSegment) {
     return (
       <Card style={styles.card}>
-        <Card.Content>
-          <Text style={styles.errorText}>No flight itinerary available</Text>
+        <Card.Content style={styles.content}>
+          <Text style={styles.errorText}>No itinerary</Text>
           <View style={styles.footer}>
-            <View>
-              <Text style={styles.price}>
-                {priceInfo.currency || "N/A"} {priceInfo.total || "N/A"}
-              </Text>
-            </View>
+            <Text style={styles.price}>
+              {priceInfo.currency || "N/A"} {priceInfo.total || "N/A"}
+            </Text>
             <Button
               mode="contained"
               style={styles.bookButton}
               onPress={handleSubmit}
               disabled
+              compact
             >
               Book
             </Button>
@@ -130,50 +125,37 @@ export default function FlightCard({
   const stops = Math.max(0, firstItinerary.segments.length - 1);
 
   return (
-    <Card style={styles.card} elevation={2}>
-      <Card.Content style={styles.cardContent}>
-        {/* Airline and Price Header */}
-        <View style={styles.header}>
-          <View style={styles.airlineHeader}>
+    <Card style={styles.card} elevation={0}>
+      <Card.Content style={styles.content}>
+        {/* Top row: Airline and price */}
+        <View style={styles.topRow}>
+          <View style={styles.airlineRow}>
             <Image
               source={{ uri: getAirlineIconURL(carrierCode) }}
               style={styles.logo}
-              onError={() => console.log("Failed to load airline logo for:", carrierCode)}
             />
-            <Text variant="bodyMedium" style={styles.airlineName}>
+            <Text variant="bodySmall" style={styles.airlineName}>
               {airlineName}
             </Text>
           </View>
-          <View style={styles.priceContainer}>
-            <Text variant="titleMedium" style={styles.price}>
-              {priceInfo.currency || "USD"} {priceInfo.total || "N/A"}
-            </Text>
-            <Text variant="bodySmall" style={styles.basePrice}>
-              Base: {priceInfo.currency || "USD"} {priceInfo.base || "N/A"}
-            </Text>
-          </View>
+          <Text variant="titleSmall" style={styles.price}>
+            {priceInfo.currency || "USD"} {priceInfo.total || "N/A"}
+          </Text>
         </View>
 
-        <Divider style={styles.divider} />
-
-        {/* Flight Details */}
-        <View style={styles.flightDetails}>
-          {/* Departure */}
-          <View style={styles.timeSection}>
-            <Text variant="titleMedium" style={styles.time}>
+        {/* Middle row: Flight times and details */}
+        <View style={styles.middleRow}>
+          <View style={styles.timeBlock}>
+            <Text variant="bodyMedium" style={styles.time}>
               {formatTime(firstSegment.departure?.at)}
             </Text>
             <Text variant="bodySmall" style={styles.airportCode}>
               {firstSegment.departure?.iataCode}
             </Text>
-            <Text variant="bodySmall" style={styles.city}>
-              {departureCity || "Unknown"}
-            </Text>
           </View>
-
-          {/* Duration and Stops */}
-          <View style={styles.durationSection}>
-            <View style={styles.durationLine}>
+          
+          <View style={styles.durationBlock}>
+            <View style={styles.flightLine}>
               <View style={styles.dot} />
               <View style={styles.line} />
               <View style={styles.dot} />
@@ -182,41 +164,44 @@ export default function FlightCard({
               {formatDuration(firstItinerary.duration)}
             </Text>
             <Text variant="bodySmall" style={[styles.stops, stops === 0 ? styles.direct : styles.withStops]}>
-              {stops === 0 ? "Direct" : `${stops} Stop${stops > 1 ? 's' : ''}`}
+              {stops === 0 ? "Direct" : `${stops} Stop`}
             </Text>
           </View>
-
-          {/* Arrival */}
-          <View style={styles.timeSection}>
-            <Text variant="titleMedium" style={styles.time}>
+          
+          <View style={styles.timeBlock}>
+            <Text variant="bodyMedium" style={styles.time}>
               {formatTime(firstSegment.arrival?.at)}
             </Text>
             <Text variant="bodySmall" style={styles.airportCode}>
               {firstSegment.arrival?.iataCode}
             </Text>
-            <Text variant="bodySmall" style={styles.city}>
-              {arrivalCity || "Unknown"}
-            </Text>
           </View>
         </View>
 
-        <Divider style={styles.divider} />
-
-        {/* Flight Number and Book Button */}
-        <View style={styles.footer}>
-          <View style={styles.flightInfo}>
-            <Text variant="bodySmall" style={styles.flightNumber}>
-              Flight: {carrierCode} {firstSegment.number}
+        {/* Bottom row: Cities and select button */}
+        <View style={styles.bottomRow}>
+          <View style={styles.cityBlock}>
+            <Text variant="bodySmall" style={styles.city}>
+              {departureCity}
+            </Text>
+            <Text variant="bodySmall" style={styles.city}>
+              {arrivalCity}
             </Text>
           </View>
-          <Button
-            mode="contained"
-            style={styles.bookButton}
-            labelStyle={styles.bookButtonLabel}
-            onPress={handleSubmit}
-          >
-            Select
-          </Button>
+          <View style={styles.actionBlock}>
+            <Text variant="bodySmall" style={styles.flightNumber}>
+              {carrierCode} {firstSegment.number}
+            </Text>
+            <Button
+              mode="contained"
+              style={styles.bookButton}
+              labelStyle={styles.bookButtonLabel}
+              onPress={handleSubmit}
+              compact
+            >
+              Select
+            </Button>
+          </View>
         </View>
       </Card.Content>
     </Card>
@@ -225,106 +210,93 @@ export default function FlightCard({
 
 const styles = StyleSheet.create({
   card: {
-    marginHorizontal: 16,
-    marginBottom: 16,
-    borderRadius: 12,
+    marginHorizontal: 6,
+    marginBottom: 6,
+    borderRadius: 6,
     backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#e9ecef',
-    overflow: 'hidden',
   },
-  cardContent: {
-    padding: 16,
+  content: {
+    padding: 8,
   },
-  header: {
+  topRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 6,
   },
-  airlineHeader: {
+  airlineRow: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   logo: {
-    width: 32,
-    height: 32,
+    width: 20,
+    height: 20,
     resizeMode: "contain",
-    marginRight: 8,
+    marginRight: 4,
   },
   airlineName: {
     fontWeight: '600',
     color: '#2c3e50',
-  },
-  priceContainer: {
-    alignItems: 'flex-end',
+    fontSize: 12,
   },
   price: {
     fontWeight: 'bold',
     color: '#2c3e50',
+    fontSize: 14,
   },
-  basePrice: {
-    color: '#6c757d',
-  },
-  divider: {
-    marginVertical: 12,
-    backgroundColor: '#e9ecef',
-  },
-  flightDetails: {
+  middleRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 6,
   },
-  timeSection: {
+  timeBlock: {
     alignItems: 'center',
-    flex: 1,
+    minWidth: 50,
   },
   time: {
     fontWeight: '600',
     color: '#2c3e50',
-    marginBottom: 4,
+    fontSize: 14,
+    marginBottom: 1,
   },
   airportCode: {
-    fontWeight: '600',
+    fontWeight: '500',
     color: '#495057',
-    marginBottom: 2,
+    fontSize: 11,
   },
-  city: {
-    color: '#6c757d',
-    textAlign: 'center',
-  },
-  durationSection: {
+  durationBlock: {
     alignItems: 'center',
     flex: 1,
-    paddingHorizontal: 8,
+    paddingHorizontal: 4,
   },
-  durationLine: {
+  flightLine: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 2,
   },
   dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+    width: 4,
+    height: 4,
+    borderRadius: 2,
     backgroundColor: '#dee2e6',
   },
   line: {
     height: 1,
-    width: 40,
+    width: 25,
     backgroundColor: '#dee2e6',
-    marginHorizontal: 4,
+    marginHorizontal: 2,
   },
   duration: {
     color: '#495057',
-    marginBottom: 4,
+    fontSize: 10,
+    marginBottom: 2,
   },
   stops: {
-    fontWeight: '500',
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 12,
+    fontSize: 10,
+    paddingHorizontal: 4,
+    paddingVertical: 1,
+    borderRadius: 8,
     overflow: 'hidden',
   },
   direct: {
@@ -335,28 +307,42 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff3cd',
     color: '#856404',
   },
-  footer: {
+  bottomRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  flightInfo: {
-    flex: 1,
+  cityBlock: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '40%',
+  },
+  city: {
+    color: '#6c757d',
+    fontSize: 10,
+  },
+  actionBlock: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   flightNumber: {
     color: '#6c757d',
+    fontSize: 10,
+    marginRight: 6,
   },
   bookButton: {
-    borderRadius: 8,
+    borderRadius: 4,
     backgroundColor: '#0066cc',
+    minWidth: 70,
   },
   bookButtonLabel: {
     fontWeight: '600',
-    color: '#fff',
+    fontSize: 11,
   },
   errorText: {
     color: '#dc3545',
     textAlign: "center",
-    marginBottom: 12,
+    marginBottom: 6,
+    fontSize: 11,
   },
 });

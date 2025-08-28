@@ -43,6 +43,7 @@ export const AppContextProvider = ({ children }: { children: React.ReactNode }) 
     children: number;
     infants: number;
     currencyCode: string;
+    flightClass: string;
   }
 
   interface Traveler {
@@ -111,6 +112,7 @@ export const AppContextProvider = ({ children }: { children: React.ReactNode }) 
     children: 0,
     infants: 0,
     currencyCode: "INR",
+    flightClass: "Economy",
   });
 
   const flightClasses = ["Economy", "Premium_Economy", "Business", "First"];
@@ -123,7 +125,7 @@ export const AppContextProvider = ({ children }: { children: React.ReactNode }) 
   const [flightOffers, setFlightOffers] = useState<FlightOffer[]>([]);
   const [selectedFlightOffer, setSelectedFlightOffer] = useState<FlightOffer | null>(null);
   //const [apiUrl, setApiUrl] = useState("http://3.94.254.69:8080");
-  const [apiUrl, setApiUrl] = useState("http://3.94.254.69:8080");
+  const [apiUrl, setApiUrl] = useState("http://192.168.0.100:8080");
   const [countriesData, setCountriesData] = useState([]);
   const [flightBooking, setFlightBooking] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
