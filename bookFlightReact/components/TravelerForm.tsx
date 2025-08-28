@@ -51,36 +51,42 @@ export default function TravelerForm({
     <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}
     >
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
         onScrollBeginDrag={Keyboard.dismiss}
       >
-        <TextInput
-          label="First Name *"
-          mode="flat"
-          value={traveler.firstName || ""}
-          onChangeText={(text) => handleChange("firstName", index)(text)}
-          style={styles.input}
-        />
-        <TextInput
-          label="Last Name *"
-          mode="flat"
-          value={traveler.lastName || ""}
-          onChangeText={(text) => handleChange("lastName", index)(text)}
-          style={styles.input}
-        />
+        <View style={styles.nameContainer}>
+          <TextInput
+            label="First Name *"
+            mode="flat"
+            value={traveler.firstName || ""}
+            onChangeText={(text) => handleChange("firstName", index)(text)}
+            style={[styles.input, styles.nameInput]}
+            theme={{ roundness: 4 }}
+          />
+          <TextInput
+            label="Last Name *"
+            mode="flat"
+            value={traveler.lastName || ""}
+            onChangeText={(text) => handleChange("lastName", index)(text)}
+            style={[styles.input, styles.nameInput]}
+            theme={{ roundness: 4 }}
+          />
+        </View>
         <RadioButton.Group
           onValueChange={(value) => handleChange("gender", index)(value)}
           value={traveler.gender || ""}
         >
-          <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
+          <View style={styles.radioContainer}>
             {genderOptions.map((option, idx) => (
-              <View key={idx} style={{ flexDirection: "row", alignItems: "center" }}>
+              <View key={idx} style={styles.radioItem}>
                 <RadioButton value={option} />
-                <Button style={{ marginStart: -15 }}>{option}</Button>
+                <Button style={styles.radioButton} textColor={theme.colors.text}>
+                  {option}
+                </Button>
               </View>
             ))}
           </View>
@@ -93,6 +99,7 @@ export default function TravelerForm({
           value={traveler.email || ""}
           onChangeText={(text) => handleChange("email", index)(text)}
           style={styles.input}
+          theme={{ roundness: 4 }}
         />
         <DatePickerInput
           handleChange={(type) => (value) => handleChange(type, index)(value)}
@@ -100,25 +107,26 @@ export default function TravelerForm({
           dateValue={traveler.dob ? new Date(traveler.dob).toDateString() : ""}
           dateType="dob"
         />
-        <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 10, gap: 10, alignItems: "center" }}>
-          <View style={{ flex: 2 }}>
+        <View style={styles.phoneContainer}>
+          <View style={styles.phoneCode}>
             <MenuDropdown
               items={countryCallingCodes}
               selectedItem={traveler.phoneNumber?.countryCallingCode || ""}
               label="Code *"
               type="phoneNumber.countryCallingCode"
               handleChange={(type) => (val) => handleChange(type, index)(val)}
-              styles={{ marginTop: 45 }}
+              styles={{ marginTop: 10 }}
             />
           </View>
-          <View style={{ flex: 7 }}>
+          <View style={styles.phoneNumber}>
             <TextInput
               label="Phone Number *"
               mode="flat"
               keyboardType="phone-pad"
               value={traveler.phoneNumber?.number || ""}
               onChangeText={(text) => handleChange("phoneNumber.number", index)(text)}
-              style={{ backgroundColor: theme.colors.transparent }}
+              style={[styles.input, { backgroundColor: theme.colors.transparent }]}
+              theme={{ roundness: 4 }}
             />
           </View>
         </View>
@@ -128,14 +136,15 @@ export default function TravelerForm({
           label="Type of Document *"
           type="document.documentType"
           handleChange={(type) => (val) => handleChange(type, index)(val)}
-          styles={{ marginTop: 45 }}
+          styles={{ marginTop: 10 }}
         />
         <TextInput
           label="Document Number *"
           mode="flat"
           value={traveler.document?.number || ""}
           onChangeText={(text) => handleChange("document.number", index)(text)}
-          style={[styles.input, { marginTop: 10 }]}
+          style={[styles.input, { marginTop: 8 }]}
+          theme={{ roundness: 4 }}
         />
         <DatePickerInput
           handleChange={(type) => (value) => handleChange(type, index)(value)}
@@ -154,40 +163,45 @@ export default function TravelerForm({
           mode="flat"
           value={traveler.document?.birthPlace || ""}
           onChangeText={(text) => handleChange("document.birthPlace", index)(text)}
-          style={[styles.input, { marginTop: 10 }]}
+          style={[styles.input, { marginTop: 8 }]}
           placeholder="Ex - Delhi"
+          theme={{ roundness: 4 }}
         />
         <TextInput
           label="Issuance Location *"
           mode="flat"
           value={traveler.document?.issuanceLocation || ""}
           onChangeText={(text) => handleChange("document.issuanceLocation", index)(text)}
-          style={styles.input}
+          style={[styles.input, { marginTop: 8 }]}
           placeholder="Ex - Delhi"
+          theme={{ roundness: 4 }}
         />
         <TextInput
           label="Issuance Country *"
           mode="flat"
           value={traveler.document?.issuanceCountry || ""}
           onChangeText={(text) => handleChange("document.issuanceCountry", index)(text)}
-          style={styles.input}
+          style={[styles.input, { marginTop: 8 }]}
           placeholder="ISO Code - IN, US"
+          theme={{ roundness: 4 }}
         />
         <TextInput
           label="Validity Country *"
           mode="flat"
           value={traveler.document?.validityCountry || ""}
           onChangeText={(text) => handleChange("document.validityCountry", index)(text)}
-          style={styles.input}
+          style={[styles.input, { marginTop: 8 }]}
           placeholder="ISO Code - IN, US"
+          theme={{ roundness: 4 }}
         />
         <TextInput
           label="Nationality *"
           mode="flat"
           value={traveler.document?.nationality || ""}
           onChangeText={(text) => handleChange("document.nationality", index)(text)}
-          style={styles.input}
+          style={[styles.input, { marginTop: 8 }]}
           placeholder="ISO Code - IN, US"
+          theme={{ roundness: 4 }}
         />
       </ScrollView>
     </KeyboardAvoidingView>
@@ -196,15 +210,51 @@ export default function TravelerForm({
 
 const styles = StyleSheet.create({
   scrollContent: {
-    padding: 16,
-    paddingBottom: 110,
+    padding: 12,
+    paddingBottom: 80,
+  },
+  nameContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 8,
+  },
+  nameInput: {
+    flex: 1,
+    marginBottom: 8,
   },
   input: {
-    marginBottom: 10,
+    marginBottom: 8,
     borderTopWidth: 0,
     borderLeftWidth: 0,
     borderRightWidth: 0,
     borderRadius: 1,
     backgroundColor: theme.colors.transparent,
+    fontSize: 14, // Smaller text size
+  },
+  radioContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 8,
+    gap: 8,
+  },
+  radioItem: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  radioButton: {
+    marginStart: -10,
+  },
+  phoneContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 8,
+    marginBottom: 8,
+    alignItems: "center",
+  },
+  phoneCode: {
+    flex: 3,
+  },
+  phoneNumber: {
+    flex: 7,
   },
 });
