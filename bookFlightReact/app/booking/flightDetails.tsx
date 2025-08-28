@@ -7,12 +7,12 @@ import { Button } from "react-native-paper";
 
 export default function FlightDetails() {
     const { selectedFlightOffer } = useAppContext();
-
+    
     // Debug log to see what data we're getting
     console.log("FlightDetails - selectedFlightOffer:", selectedFlightOffer);
-
+    
     return (
-        <ScrollView style={{ padding: 0 }}>
+        <ScrollView style={{ padding: 10 }}>
             <FlightOfferDetails
                 flightData={selectedFlightOffer}
             />
