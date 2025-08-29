@@ -216,9 +216,8 @@ export default function Booking() {
 
       console.log("Booking payload:", JSON.stringify(bookingData, null, 2));
 
-      const endpoint = apiUrl
-        ? `http://192.168.0.1:8080/booking/flight-order`
-        : "/v1/booking/flight-orders";
+      const endpoint = 'http://192.168.0.107:8080/booking/flight-order';
+
       const { data: bookingResponse } = await axiosInstance.post(endpoint, bookingData, {
         headers: { "Content-Type": "application/json" },
       });
@@ -250,12 +249,29 @@ export default function Booking() {
 
   const confirmFlightOfferPricing = async () => {
     try {
+      // Check if we already have the necessary data to avoid unnecessary API calls
+      if (selectedFlightOffer && selectedFlightOffer.id && selectedFlightOffer.price) {
+        console.log("Flight offer already has pricing data, skipping confirmation");
+        return;
+      }
+      
       const body = {
         flightOffer: selectedFlightOffer.pricingAdditionalInfo,
       };
       const response = await axiosInstance.post(`/pricing/flights/confirm`, body);
       console.log("Flight offer pricing:", JSON.stringify(response.data, null, 2));
-      setSelectedFlightOffer(response.data); // Update offer
+      
+      // Preserve all existing properties and only update with the new pricing data
+      setSelectedFlightOffer(prev => ({
+        ...prev,
+        ...response.data,
+        // Preserve these critical properties that might not be in the response
+        pricingAdditionalInfo: prev.pricingAdditionalInfo,
+        bookingAdditionalInfo: prev.bookingAdditionalInfo,
+        totalTravelers: prev.totalTravelers,
+        currencyCode: prev.currencyCode || response.data.price.currency,
+        totalPrice: prev.totalPrice || response.data.price.total
+      }));
     } catch (error) {
       console.error("Error fetching flight offer pricing:", error);
     }
@@ -263,27 +279,49 @@ export default function Booking() {
 
   useEffect(() => {
     if (selectedFlightOffer && selectedFlightOffer.pricingAdditionalInfo) {
-      confirmFlightOfferPricing();
+      // Add a small delay to ensure the component is fully mounted
+      const timer = setTimeout(() => {
+        confirmFlightOfferPricing();
+      }, 500);
+      
+      return () => clearTimeout(timer);
     }
-  }, [selectedFlightOffer]);
+  }, []); // Empty dependency array to run only on mount
 
   const renderFlightSummary = () => {
-    if (!selectedFlightOffer || !selectedFlightOffer.pricingAdditionalInfo) {
+    if (!selectedFlightOffer) {
       return null;
     }
 
-    let flightOffer;
+    // Use the confirmed pricing data if available, otherwise fall back to the original data
+    const priceData = selectedFlightOffer.price || 
+                     (selectedFlightOffer.pricingAdditionalInfo && 
+                      typeof selectedFlightOffer.pricingAdditionalInfo === 'object' &&
+                      selectedFlightOffer.pricingAdditionalInfo.price);
+    
+    const currencyCode = selectedFlightOffer.currencyCode || 
+                        (priceData && priceData.currency) || 
+                        "USD";
+    
+    const totalPrice = selectedFlightOffer.totalPrice || 
+                      (priceData && priceData.total) || 
+                      "0";
+
+    let itinerary;
     try {
-      flightOffer =
-        typeof selectedFlightOffer.pricingAdditionalInfo === "string"
-          ? JSON.parse(selectedFlightOffer.pricingAdditionalInfo)
-          : selectedFlightOffer.pricingAdditionalInfo;
+      const flightOffer = selectedFlightOffer.bookingAdditionalInfo || 
+                         selectedFlightOffer.pricingAdditionalInfo;
+      
+      if (typeof flightOffer === 'string') {
+        itinerary = JSON.parse(flightOffer).itineraries?.[0];
+      } else if (typeof flightOffer === 'object') {
+        itinerary = flightOffer.itineraries?.[0];
+      }
     } catch (error) {
       console.error("Error parsing flightOffer:", error);
       return null;
     }
 
-    const itinerary = flightOffer.itineraries?.[0];
     const firstSegment = itinerary?.segments?.[0];
 
     return (
@@ -313,7 +351,7 @@ export default function Booking() {
             <MaterialCommunityIcons name="cash" size={16} color="#666" />
             <Text style={styles.summaryLabel}>Total Price:</Text>
             <Text style={[styles.summaryValue, styles.priceText]}>
-              {selectedFlightOffer.currencyCode} {selectedFlightOffer.totalPrice}
+              {currencyCode} {totalPrice}
             </Text>
           </View>
         </View>
@@ -323,19 +361,6 @@ export default function Booking() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Button
-          mode="text"
-          icon="arrow-left"
-          onPress={() => router.back()}
-          style={styles.backButton}
-          labelStyle={styles.backButtonLabel}
-        >
-          Back
-        </Button>
-        <Text style={styles.headerTitle}>Book Your Flight</Text>
-      </View>
-
       {renderFlightSummary()}
 
       <ScrollView contentContainerStyle={styles.scrollContent}>

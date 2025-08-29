@@ -16,19 +16,19 @@ export default function Layout() {
         >
             <Stack.Screen name="index" options={{
                 headerTitle: "Traveler Details",
-                headerLeft: () => <></>,
+                // headerLeft: () => <></>,
                 headerShown: true
-            }}  />
+            }} />
             <Stack.Screen name="flightDetails" options={{
                 headerTitle: "Flight Details",
-                headerLeft: () => <></>,
+                // headerLeft: () => <></>,
                 headerShown: true
-            }}  />
+            }} />
             <Stack.Screen name="confirmation" options={{
                 headerTitle: "Booking Details",
-                headerLeft: () => <></>,
+                // headerLeft: () => <></>,
                 headerShown: true
-            }}  />
+            }} />
         </Stack>
     )
 }
