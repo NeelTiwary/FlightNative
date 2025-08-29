@@ -103,7 +103,7 @@ export default function Offers() {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      {/* <StatusBar barStyle="dark-content" backgroundColor="#fff" /> */}
       {/* Flight Offers List */}
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {flightOffers.length > 0 ? (
