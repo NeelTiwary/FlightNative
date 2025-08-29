@@ -10,25 +10,31 @@ export default function Layout() {
                 },
                 headerTintColor: theme.colors.disabled,
                 headerTitleStyle: {
-                  fontWeight: 'bold'
+                  fontWeight: 'bold',
+                  fontSize: 18,
                 },
+                contentStyle: {
+                    margin: 0, // Remove default margin
+                padding: 0, // Remove default padding
+                 },
               }}
+
         >
             {/* <Stack.Screen name="index" options={{
                 headerTitle: "Traveler Details",
-                headerLeft: () => <></>,
+                // headerLeft: () => <></>,
                 headerShown: true
-            }}  /> */}
-            {/* <Stack.Screen name="flightDetails" options={{
+            }} />
+            <Stack.Screen name="flightDetails" options={{
                 headerTitle: "Flight Details",
-                headerLeft: () => <></>,
+                // headerLeft: () => <></>,
                 headerShown: true
-            }}  /> */}
-            {/* <Stack.Screen name="confirmation" options={{
+            }} />
+            <Stack.Screen name="confirmation" options={{
                 headerTitle: "Booking Details",
-                headerLeft: () => <></>,
+                // headerLeft: () => <></>,
                 headerShown: true
-            }}  /> */}
+            }} />
         </Stack>
     )
 }

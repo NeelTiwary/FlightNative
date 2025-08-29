@@ -205,8 +205,8 @@ const CheckYourFlight = () => {
     return (
       <LinearGradient colors={['#1e3a8a', '#3b82f6']} style={styles.centered}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#fff" />
-          <Text style={styles.loadingText}>Fetching your flight details...</Text>
+          <ActivityIndicator size="large" color="#0b0a0aff" />
+          <Text style={styles.loadingText} color="#0b0a0aff">Fetching your flight details...</Text>
         </View>
       </LinearGradient>
     );
@@ -215,7 +215,7 @@ const CheckYourFlight = () => {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
       {/* Header Section */}
-      <LinearGradient colors={['#1e3a8a', '#3b82f6']} style={styles.header}>
+      {/* <LinearGradient colors={['#1e3a8a', '#3b82f6']} style={styles.header}>
         <View style={styles.headerIconContainer}>
           <IconButton
             icon="airplane-takeoff"
@@ -230,7 +230,7 @@ const CheckYourFlight = () => {
         <Text variant="bodyLarge" style={styles.headerSubtitle}>
           Enter your booking reference to view flight details and itinerary
         </Text>
-      </LinearGradient>
+      </LinearGradient> */}
 
       {/* Input Section */}
       <View style={styles.inputSection}>

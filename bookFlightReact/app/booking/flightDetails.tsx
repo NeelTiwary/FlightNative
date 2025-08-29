@@ -14,7 +14,7 @@ export default function FlightDetails() {
     return (
         <ScrollView
             style={{ padding: 10 }}
-            contentContainerStyle={{ paddingBottom: 50 }} // 👈 push content higher
+            contentContainerStyle={{ paddingBottom: 30 }} 
         >
             <FlightOfferDetails flightData={selectedFlightOffer} />
             <Button
