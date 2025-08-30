@@ -5,40 +5,47 @@ import { View, StyleSheet } from "react-native";
 
 export default function TabsLayout() {
     return (
-        <Tabs screenOptions={{
-            headerStyle: {
-                backgroundColor: '#fff',
-                elevation: 0,
-                shadowOpacity: 0,
-                borderBottomWidth: 1,
-                borderBottomColor: '#e0e0e0',
-            },
-            headerTitleStyle: {
-                fontSize: 18,
-                fontWeight: '600',
-                color: '#1a73e8',
-            },
-            tabBarStyle: {
-                backgroundColor: '#fff',
-                borderTopWidth: 1,
-                borderTopColor: '#e0e0e0',
-                elevation: 8,
-                shadowColor: '#000',
-                shadowOffset: { width: 0, height: -2 },
-                shadowOpacity: 0.1,
-                shadowRadius: 4,
-                height: 60,
-                paddingBottom: 8,
-                paddingTop: 8,
-            },
-            tabBarActiveTintColor: '#1a73e8',
-            tabBarInactiveTintColor: '#5f6368',
-            tabBarLabelStyle: {
-                fontSize: 12,
-                fontWeight: '500',
-                marginTop: 4,
-            },
-        }}>
+        <Tabs
+            screenOptions={{
+                headerStyle: {
+                    backgroundColor: '#fff',
+                    elevation: 0,
+                    shadowOpacity: 0,
+                    borderBottomWidth: 1,
+                    borderBottomColor: '#e0e0e0',
+                },
+                headerTitleStyle: {
+                    fontSize: 18,
+                    fontWeight: '600',
+                    color: '#1a73e8',
+                },
+                tabBarStyle: {
+                    backgroundColor: '#fff',
+                    borderTopWidth: 1,
+                    borderTopColor: '#e0e0e0',
+                    elevation: 8,
+                    shadowColor: '#000',
+                    shadowOffset: { width: 0, height: -2 },
+                    shadowOpacity: 0.1,
+                    shadowRadius: 4,
+                    height: 70, // Increased to accommodate larger padding
+                    paddingBottom: 9, // Increased to add more space at the bottom
+                    paddingTop: 4,
+                    position: 'absolute',
+                    bottom: 12,
+                    left: 0,
+                    right: 0,
+                },
+                tabBarActiveTintColor: '#1a73e8',
+                tabBarInactiveTintColor: '#5f6368',
+                tabBarLabelStyle: {
+                    fontSize: 12,
+                    fontWeight: '500',
+                    marginTop: 4,
+                },
+            }}
+            contentContainerStyle={{ paddingBottom: 80 }} // Kept to prevent content overlap
+        >
             <Tabs.Screen
                 name="home/index"
                 options={{
@@ -137,13 +144,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#e8f0fe',
         borderRadius: 20,
         padding: 4,
-        marginBottom: 4,
+        marginBottom: 1,
+        marginTop: -5,
     },
     searchIconContainer: {
         backgroundColor: '#1a73e8',
         borderRadius: 30,
         padding: 8,
-        marginBottom: 4,
+        marginBottom: 1,
         width: 50,
         height: 50,
         justifyContent: 'center',
@@ -153,6 +161,6 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.3,
         shadowRadius: 4,
         elevation: 5,
-        marginTop: -10,
+        marginTop: -20,
     },
 });

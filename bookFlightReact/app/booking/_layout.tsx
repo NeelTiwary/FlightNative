@@ -20,7 +20,7 @@ export default function Layout() {
               }}
 
         >
-            {/* <Stack.Screen name="index" options={{
+            <Stack.Screen name="index" options={{
                 headerTitle: "Traveler Details",
                 // headerLeft: () => <></>,
                 headerShown: true
