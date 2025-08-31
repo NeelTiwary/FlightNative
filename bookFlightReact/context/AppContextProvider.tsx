@@ -1,11 +1,20 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
+import { dummyFlightData } from "../utils/flightData";
 
 const iataToCity = {
   EWR: "Newark",
   DEL: "Delhi",
   LAX: "Los Angeles",
-  // Add more as needed
+  JFK: "New York",
+  KWI: "Kuwait City",
+  LHR: "London",
+  DXB: "Dubai",
+  CDG: "Paris",
+  FRA: "Frankfurt",
+  DOH: "Doha",
+  IST: "Istanbul",
+  AUH: "Abu Dhabi",
 };
 
 const carrierCodeToName = {
@@ -22,13 +31,26 @@ const carrierCodeToName = {
   SG: "SpiceJet",
   UK: "Vistara",
   TK: "Turkish Airlines",
-  // Add more as needed
+  KU: "Kuwait Airways",
+  QR: "Qatar Airways",
+  EK: "Emirates",
+  BA: "British Airways",
+  AF: "Air France",
+  LH: "Lufthansa",
+  EY: "Etihad Airways",
 };
 
 const aircraftCodeToName = {
   "789": "Boeing 787-9",
   "73J": "Boeing 737-900",
-  // Add more as needed
+  "32N": "Airbus A320neo",
+  "77W": "Boeing 777-300ER",
+  "351": "Airbus A350-1000",
+  "388": "Airbus A380-800",
+  "359": "Airbus A350-900",
+  "333": "Airbus A330-300",
+  "772": "Boeing 777-200",
+  "787": "Boeing 787-8",
 };
 
 const AppContext = createContext<any>(null);
@@ -71,6 +93,7 @@ export const AppContextProvider = ({ children }: { children: React.ReactNode }) 
   interface Leg {
     legNo: string;
     flightNumber: string;
+    carrierCode: string;
     operatingCarrierCode: string;
     aircraftCode: string;
     departureAirport: string;
@@ -111,10 +134,11 @@ export const AppContextProvider = ({ children }: { children: React.ReactNode }) 
     adults: 1,
     children: 0,
     infants: 0,
-    currencyCode: "INR",
+    currencyCode: "USD",
     flightClass: "Economy",
   });
 
+  const [travelers, setTravelers] = useState<Traveler[]>([]);
   const flightClasses = ["Economy", "Premium_Economy", "Business", "First"];
   const [fromLoading, setFromLoading] = useState(false);
   const [fromInput, setFromInput] = useState("");
@@ -122,15 +146,13 @@ export const AppContextProvider = ({ children }: { children: React.ReactNode }) 
   const [toLoading, setToLoading] = useState(false);
   const [toInput, setToInput] = useState("");
   const [toSuggestions, setToSuggestions] = useState([]);
-  const [flightOffers, setFlightOffers] = useState<FlightOffer[]>([]);
+  const [flightOffers, setFlightOffers] = useState<FlightOffer[]>(dummyFlightData.flightsAvailable);
   const [selectedFlightOffer, setSelectedFlightOffer] = useState<FlightOffer | null>(null);
-  //const [apiUrl, setApiUrl] = useState("http://3.94.254.69:8080");
   const [apiUrl, setApiUrl] = useState("http://34.235.111.48:8080");
   const [countriesData, setCountriesData] = useState([]);
   const [flightBooking, setFlightBooking] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [travelers, setTravelers] = useState<Traveler[]>([]);
 
   const fetchCountriesData = async () => {
     try {
@@ -145,6 +167,7 @@ export const AppContextProvider = ({ children }: { children: React.ReactNode }) 
   const fetchFlightOffers = async () => {
     setIsLoading(true);
     setError(null);
+    console.log("fetchFlightOffers: Starting with searchParams:", searchParams);
     try {
       const { originLocationCode, destinationLocationCode, departureDate, returnDate, adults, children, infants, currencyCode } = searchParams;
 
@@ -152,7 +175,7 @@ export const AppContextProvider = ({ children }: { children: React.ReactNode }) 
         throw new Error("Missing required search parameters");
       }
 
-      let url = `${apiUrl}/flights/search?originLocationCode=${originLocationCode}&destinationLocationCode=${destinationLocationCode}&departureDate=${departureDate}&currencyCode=${currencyCode || "INR"}`;
+      let url = `${apiUrl}/flights/search?originLocationCode=${originLocationCode}&destinationLocationCode=${destinationLocationCode}&departureDate=${departureDate}&currencyCode=${currencyCode || "USD"}`;
       if (adults) url += `&adults=${adults}`;
       if (children) url += `&children=${children}`;
       if (infants) url += `&infants=${infants}`;
@@ -179,6 +202,14 @@ export const AppContextProvider = ({ children }: { children: React.ReactNode }) 
       const data = await response.json();
       const flightsArr: any[] = Array.isArray(data.flightsAvailable) ? data.flightsAvailable : [];
 
+      if (flightsArr.length === 0) {
+        console.warn("No flights available from API, using dummy data");
+        setFlightOffers(dummyFlightData.flightsAvailable);
+        setError("No flights found for the selected criteria. Showing sample flights.");
+        setIsLoading(false);
+        return;
+      }
+
       const transformedOffers: FlightOffer[] = flightsArr.map((offer: any, index: number) => {
         let parsedOffer;
         try {
@@ -186,7 +217,7 @@ export const AppContextProvider = ({ children }: { children: React.ReactNode }) 
             ? JSON.parse(offer.pricingAdditionalInfo)
             : offer.pricingAdditionalInfo || offer;
         } catch (e) {
-          console.warn("Failed to parse pricingAdditionalInfo", e);
+          console.warn(`Failed to parse pricingAdditionalInfo for flight ${index}:`, e);
           parsedOffer = offer;
         }
 
@@ -214,6 +245,7 @@ export const AppContextProvider = ({ children }: { children: React.ReactNode }) 
               legs: segments.map((segment: any, segIdx: number) => ({
                 legNo: `${idx + 1}-${segIdx + 1}`,
                 flightNumber: segment.number || "",
+                carrierCode: segment.carrierCode || "",
                 operatingCarrierCode: segment.operating?.carrierCode || segment.carrierCode || "",
                 aircraftCode: segment.aircraft?.code || "",
                 departureAirport: segment.departure?.iataCode || "",
@@ -230,11 +262,14 @@ export const AppContextProvider = ({ children }: { children: React.ReactNode }) 
         };
       });
 
+      console.log("fetchFlightOffers: Setting flightOffers:", transformedOffers);
       setFlightOffers(transformedOffers);
       setError(null);
     } catch (error: any) {
-      console.error("Flight search error:", error);
-      setError(error.message || "Failed to fetch flights. Please try again.");
+      console.error("fetchFlightOffers error:", error.message);
+      console.log("fetchFlightOffers: Setting dummy data");
+      setFlightOffers(dummyFlightData.flightsAvailable);
+      setError("Failed to fetch flights. Showing sample flights.");
     } finally {
       setIsLoading(false);
     }
@@ -277,10 +312,21 @@ export const AppContextProvider = ({ children }: { children: React.ReactNode }) 
   }, []);
 
   useEffect(() => {
+    console.log("searchParams useEffect: Starting with searchParams:", searchParams);
     if (searchParams.originLocationCode && searchParams.destinationLocationCode && searchParams.departureDate) {
+      console.log("searchParams useEffect: Fetching flights");
       fetchFlightOffers();
+    } else {
+      console.log("searchParams useEffect: Setting dummy data due to incomplete searchParams");
+      setFlightOffers(dummyFlightData.flightsAvailable);
+      setError("Please enter search criteria to find flights. Showing sample flights.");
     }
   }, [searchParams]);
+
+  // Debug flightOffers updates
+  useEffect(() => {
+    console.log("flightOffers updated:", flightOffers);
+  }, [flightOffers]);
 
   useEffect(() => {
     if (selectedFlightOffer && selectedFlightOffer.totalTravelers) {
@@ -312,6 +358,8 @@ export const AppContextProvider = ({ children }: { children: React.ReactNode }) 
             },
           }))
       );
+    } else {
+      setTravelers([]);
     }
   }, [selectedFlightOffer]);
 

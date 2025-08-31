@@ -1,7 +1,48 @@
 import { useState } from "react";
-import { View, StyleSheet } from "react-native";
-import { Card, Divider, List, Text } from "react-native-paper";
+import { View, StyleSheet, Image } from "react-native";
+import { Card, Text } from "react-native-paper";
 import Animated, { Easing, useSharedValue, useAnimatedStyle, withTiming } from "react-native-reanimated";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { formatDate, formatTime } from "@/utils/helper";
+
+const carrierCodeToName: { [key: string]: string } = {
+  DL: "Delta",
+  AA: "American",
+  UA: "United",
+  WN: "Southwest",
+  B6: "JetBlue",
+  NK: "Spirit",
+  F9: "Frontier",
+  AI: "Air India",
+  "6E": "IndiGo",
+  SG: "SpiceJet",
+  UK: "Vistara",
+  TK: "Turkish",
+  AS: "Alaska",
+};
+
+const iataToCity: { [key: string]: string } = {
+  EWR: "Newark",
+  LAX: "LA",
+  JFK: "NYC",
+  LGA: "NYC",
+  ORD: "Chicago",
+  DFW: "Dallas",
+  DEN: "Denver",
+  SFO: "SF",
+};
+
+const aircraftCodeToName: { [key: string]:-DW "Boeing 737-900",
+  "738": "Boeing 737-800",
+  "739": "Boeing 737-900ER",
+  "320": "Airbus A320",
+  "321": "Airbus A321",
+  "789": "Boeing 787-9 Dreamliner",
+  "77W": "Boeing 777-300ER",
+};
+
+const getAirlineIconURL = (code: string) =>
+  `https://content.airhex.com/content/logos/airlines_${code.toUpperCase()}_100_100_s.png`;
 
 export default function FlightOfferDetails({ flightData }: { flightData: any }) {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
@@ -10,56 +51,60 @@ export default function FlightOfferDetails({ flightData }: { flightData: any }) 
     setExpandedIndex(index === expandedIndex ? null : index);
   };
 
+  const formatDuration = (duration: string) => {
+    if (!duration) return "N/A";
+    return duration.replace('PT', '').replace('H', 'h ').replace('M', 'm').trim();
+  };
+
+  if (!flightData) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.errorText}>No flight details available</Text>
+      </View>
+    );
+  }
+
+  const itineraries = flightData.trips || [];
+
   return (
     <View style={styles.container}>
-      {/* Header Banner */}
+      {/* Header */}
       <View style={styles.headerBanner}>
-        <Text variant="headlineSmall" style={styles.headerTitle}>
-          Flight Details
-        </Text>
-        <Text variant="bodyMedium" style={styles.headerSubtitle}>
-          Review your itinerary
-        </Text>
+        <Text style={styles.headerTitle}>Flight Details</Text>
       </View>
 
       {/* Pricing Summary Card */}
-      <Card style={styles.card}>
+      <Card style={[styles.card, styles.lastCard]} elevation={0}>
         <Card.Content style={styles.cardContent}>
-          <Text variant="titleMedium" style={styles.sectionTitle}>
-            Price Summary
-          </Text>
+          <Text style={styles.sectionTitle}>FARE SUMMARY</Text>
           <View style={styles.priceRow}>
-            <Text variant="bodyMedium" style={styles.priceLabel}>
-              Total
-            </Text>
-            <Text variant="titleMedium" style={styles.priceValue}>
-              {flightData.currencyCode} {flightData.totalPrice}
-            </Text>
-          </View>
-          <View style={styles.priceRow}>
-            <Text variant="bodyMedium" style={styles.priceLabel}>
-              Base Fare
-            </Text>
-            <Text variant="bodyMedium" style={styles.priceValue}>
+            <Text style={styles.priceLabel}>Base Fare:</Text>
+            <Text style={styles.priceValue}>
               {flightData.currencyCode} {flightData.basePrice}
             </Text>
           </View>
           <View style={styles.priceRow}>
-            <Text variant="bodyMedium" style={styles.priceLabel}>
-              Travelers
+            <Text style={styles.priceLabel}>Taxes & Fees:</Text>
+            <Text style={styles.priceValue}>
+              {flightData.currencyCode} {(parseFloat(flightData.totalPrice) - parseFloat(flightData.basePrice)).toFixed(2)}
             </Text>
-            <Text variant="bodyMedium" style={styles.priceValue}>
-              {flightData.totalTravelers}
+          </View>
+          <View style={styles.priceRow}>
+            <Text style={styles.totalLabel}>Total:</Text>
+            <Text style={styles.totalValue}>
+              {flightData.currencyCode} {flightData.totalPrice}
             </Text>
+          </View>
+          <View style={styles.priceRow}>
+            <Text style={styles.priceLabel}>Travelers:</Text>
+            <Text style={styles.priceValue}>{flightData.totalTravelers}</Text>
           </View>
         </Card.Content>
       </Card>
 
       {/* Trip Details */}
-      <Text variant="titleMedium" style={styles.sectionTitle}>
-        Itinerary
-      </Text>
-      {flightData?.trips?.map((trip: any, index: number) => {
+      <Text style={styles.sectionTitle}>ITINERARY</Text>
+      {itineraries.map((trip: any, index: number) => {
         const isExpanded = expandedIndex === index;
         const animatedHeight = useSharedValue(isExpanded ? 1 : 0);
 
@@ -68,68 +113,89 @@ export default function FlightOfferDetails({ flightData }: { flightData: any }) 
           transform: [{ scaleY: withTiming(isExpanded ? 1 : 0, { duration: 200, easing: Easing.out(Easing.exp) }) }],
         }));
 
+        const firstLeg = trip.legs?.[0];
+        const carrierCode = firstLeg?.carrierCode || "";
+        const airlineName = carrierCodeToName[carrierCode] || carrierCode;
+        const stops = Math.max(0, trip.legs?.length - 1 || 0);
+
         return (
-          <Card key={trip.tripNo} style={styles.card}>
-            <List.Accordion
-              title={
-                <View style={styles.accordionTitle}>
-                  <Text variant="titleMedium" style={styles.tripTitle}>
-                    {trip.from} → {trip.to}
-                  </Text>
-                  <View style={styles.tripSubtitle}>
-                    {(trip.tripType === "RETURN" && index === 1) && (
-                      <Text variant="bodySmall" style={styles.subtitleText}>
-                        {trip.tripType}
-                      </Text>
-                    )}
-                    <Text variant="bodySmall" style={styles.subtitleText}>
-                      {trip.stops} Stop{trip.stops !== 1 ? "s" : ""}
+          <Card key={trip.tripNo} style={[styles.card, index === itineraries.length - 1 && styles.lastCard]} elevation={0}>
+            <Card.Content style={styles.cardContent}>
+              <TouchableOpacity onPress={() => handleAccordionPress(index)} style={styles.accordionHeader}>
+                <View style={styles.topRow}>
+                  <View style={styles.airlineRow}>
+                    <MaterialCommunityIcons
+                      name={index === 0 ? "airplane-takeoff" : "airplane-landing"}
+                      size={16}
+                      color="#0052cc"
+                    />
+                    <Text style={styles.tripTitle}>
+                      {index === 0 ? "OUTBOUND FLIGHT" : "RETURN FLIGHT"}
                     </Text>
-                    <Text variant="bodySmall" style={styles.subtitleText}>
-                      {trip.totalFlightDuration}
+                  </View>
+                  <Text style={styles.flightDate}>{formatDate(firstLeg?.departureDateTime)}</Text>
+                </View>
+                <View style={styles.middleRow}>
+                  <View style={styles.timeBlock}>
+                    <Text style={styles.time}>{formatTime(firstLeg?.departureDateTime)}</Text>
+                    <Text style={styles.airportCode}>{firstLeg?.departureAirport}</Text>
+                  </View>
+                  <View style={styles.durationBlock}>
+                    <View style={styles.flightLine}>
+                      <View style={styles.dot} />
+                      <View style={styles.line} />
+                      <View style={styles.dot} />
+                    </View>
+                    <Text style={styles.duration}>{formatDuration(trip.totalFlightDuration)}</Text>
+                    <Text style={[styles.stops, stops === 0 ? styles.direct : styles.withStops]}>
+                      {stops === 0 ? "Direct" : `${stops} Stop`}
                     </Text>
-                    {trip.stops !== 0 && (
-                      <Text variant="bodySmall" style={styles.subtitleText}>
-                        Layover: {trip.totalLayoverDuration}
-                      </Text>
-                    )}
+                  </View>
+                  <View style={styles.timeBlock}>
+                    <Text style={styles.time}>{formatTime(firstLeg?.arrivalDateTime)}</Text>
+                    <Text style={styles.airportCode}>{firstLeg?.arrivalAirport}</Text>
                   </View>
                 </View>
-              }
-              left={props => <List.Icon {...props} icon="airplane" color="#005566" />}
-              expanded={isExpanded}
-              onPress={() => handleAccordionPress(index)}
-              style={styles.accordion}
-              titleStyle={styles.accordionTitleStyle}
-            >
-              <Animated.View style={[styles.cardContent, animatedStyle]}>
-                <Divider style={styles.divider} />
+              </TouchableOpacity>
+              <Animated.View style={[styles.accordionContent, animatedStyle]}>
                 {trip.legs.map((leg: any, legIndex: number) => (
                   <View key={leg.legNo} style={styles.legContainer}>
-                    <Text variant="titleSmall" style={styles.legTitle}>
-                      {leg.departureAirport} ({leg.departureDateTime}) → {leg.arrivalAirport} ({leg.arrivalDateTime})
-                    </Text>
-                    <Text variant="bodySmall" style={styles.legDetail}>
-                      Flight {leg.carrierCode} {leg.flightNumber} ({leg.aircraftCode})
-                    </Text>
-                    {leg.operatingCarrierName && (
-                      <Text variant="bodySmall" style={styles.legDetail}>
-                        Operated by {leg.operatingCarrierName}
-                      </Text>
-                    )}
-                    <Text variant="bodySmall" style={styles.legDetail}>
-                      Duration: {leg.duration}
-                    </Text>
+                    <View style={styles.topRow}>
+                      <View style={styles.airlineRow}>
+                        <Image
+                          source={{ uri: getAirlineIconURL(leg.carrierCode) }}
+                          style={styles.logo}
+                          onError={() => console.log("Failed to load airline logo for:", leg.carrierCode)}
+                        />
+                        <Text style={styles.airlineName}>{carrierCodeToName[leg.carrierCode] || leg.carrierCode}</Text>
+                      </View>
+                    </View>
+                    <View style={styles.bottomRow}>
+                      <View style={styles.detailsBlock}>
+                        <Text style={styles.detailLabel}>AIRCRAFT</Text>
+                        <Text style={styles.detailValue}>
+                          {aircraftCodeToName[leg.aircraftCode] || leg.aircraftCode}
+                        </Text>
+                      </View>
+                      {leg.operatingCarrierName && (
+                        <View style={styles.detailsBlock}>
+                          <Text style={styles.detailLabel}>OPERATED BY</Text>
+                          <Text style={styles.detailValue}>{leg.operatingCarrierName}</Text>
+                        </View>
+                      )}
+                    </View>
                     {leg.layoverAfter && (
-                      <Text variant="bodySmall" style={styles.legDetail}>
-                        Layover: {leg.layoverAfter}
-                      </Text>
+                      <View style={styles.bottomRow}>
+                        <View style={styles.detailsBlock}>
+                          <Text style={styles.detailLabel}>LAYOVER</Text>
+                          <Text style={styles.detailValue}>{formatDuration(leg.layoverAfter)}</Text>
+                        </View>
+                      </View>
                     )}
-                    {legIndex < trip.legs.length - 1 && <Divider style={styles.divider} />}
                   </View>
                 ))}
               </Animated.View>
-            </List.Accordion>
+            </Card.Content>
           </Card>
         );
       })}
@@ -140,109 +206,196 @@ export default function FlightOfferDetails({ flightData }: { flightData: any }) 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
-    padding: 16,
+    backgroundColor: '#f5faff',
+    padding: 6,
   },
   headerBanner: {
-    padding: 16,
-    paddingTop: 32,
-    paddingBottom: 16,
-    marginBottom: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 6,
+    marginBottom: 6,
   },
   headerTitle: {
-    fontWeight: "600",
-    color: "#003087",
-    fontFamily: "System",
-  },
-  headerSubtitle: {
-    color: "#4A4A4A",
-    fontWeight: "400",
-    fontFamily: "System",
-    marginTop: 4,
+    fontWeight: '700',
+    color: '#0052cc',
+    fontSize: 14,
   },
   card: {
-    marginBottom: 12,
-    borderRadius: 8,
-    backgroundColor: "#FFFFFF",
-    borderWidth: 1,
-    borderColor: "#E8ECEF",
+    marginHorizontal: 6,
+    marginBottom: 4,
+    borderRadius: 6,
+    backgroundColor: '#f5faff',
+  },
+  lastCard: {
+    marginBottom: 0,
   },
   cardContent: {
-    padding: 16,
+    padding: 8,
   },
   sectionTitle: {
-    fontWeight: "600",
-    color: "#003087",
-    marginBottom: 12,
-    fontFamily: "System",
+    fontWeight: '700',
+    color: '#0052cc',
+    fontSize: 12,
+    marginBottom: 6,
+    marginHorizontal: 6,
   },
   priceRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 4,
   },
   priceLabel: {
-    color: "#4A4A4A",
-    fontWeight: "400",
-    fontSize: 14,
-    fontFamily: "System",
+    fontWeight: '700',
+    color: '#4a5568',
+    fontSize: 11,
   },
   priceValue: {
-    color: "#003087",
-    fontWeight: "600",
-    fontSize: 14,
-    fontFamily: "System",
+    fontWeight: '700',
+    color: '#0052cc',
+    fontSize: 11,
   },
-  accordion: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 8,
-    paddingVertical: 4,
-  },
-  accordionTitle: {
-    paddingVertical: 4,
-  },
-  accordionTitleStyle: {
-    fontWeight: "600",
-    color: "#003087",
-    fontFamily: "System",
-  },
-  tripTitle: {
-    color: "#003087",
-    fontWeight: "600",
-    fontSize: 16,
-    fontFamily: "System",
-  },
-  tripSubtitle: {
-    marginTop: 4,
-    paddingLeft: 4,
-  },
-  subtitleText: {
-    color: "#4A4A4A",
-    marginBottom: 4,
+  totalLabel: {
+    fontWeight: '700',
+    color: '#4a5568',
     fontSize: 12,
-    fontFamily: "System",
   },
-  divider: {
-    marginVertical: 12,
-    backgroundColor: "#E8ECEF",
+  totalValue: {
+    fontWeight: '700',
+    color: '#0052cc',
+    fontSize: 12,
+  },
+  accordionHeader: {
+    paddingVertical: 4,
+  },
+  topRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 6,
+  },
+  airlineRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  logo: {
+    width: 20,
+    height: 20,
+    resizeMode: 'contain',
+    marginRight: 4,
+  },
+  airlineName: {
+    fontWeight: '700',
+    color: '#0052cc',
+    fontSize: 12,
+  },
+  flightDate: {
+    fontWeight: '700',
+    color: '#4a5568',
+    fontSize: 12,
+  },
+  middleRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 6,
+  },
+  timeBlock: {
+    alignItems: 'center',
+    minWidth: 50,
+  },
+  time: {
+    fontWeight: '700',
+    color: '#0052cc',
+    fontSize: 14,
+    marginBottom: 1,
+  },
+  airportCode: {
+    fontWeight: '700',
+    color: '#4a5568',
+    fontSize: 11,
+  },
+  durationBlock: {
+    alignItems: 'center',
+    flex: 1,
+    paddingHorizontal: 4,
+  },
+  flightLine: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 2,
+  },
+  dot: {
+    width: 4,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: '#b0bec5',
+  },
+  line: {
     height: 1,
+    width: 25,
+    backgroundColor: '#b0bec5',
+    marginHorizontal: 2,
+  },
+  duration: {
+    fontWeight: '700',
+    color: '#4a5568',
+    fontSize: 10,
+    marginBottom: 2,
+  },
+  stops: {
+    fontWeight: '700',
+    fontSize: 10,
+    paddingHorizontal: 4,
+    paddingVertical: 1,
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
+  direct: {
+    backgroundColor: '#d4f4d4',
+    color: '#1e7b1e',
+  },
+  withStops: {
+    backgroundColor: '#ffeedd',
+    color: '#d97706',
+  },
+  accordionContent: {
+    paddingHorizontal: 4,
   },
   legContainer: {
     marginBottom: 12,
-    paddingHorizontal: 4,
   },
-  legTitle: {
-    fontWeight: "600",
-    color: "#003087",
+  bottomRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 4,
-    fontSize: 14,
-    fontFamily: "System",
   },
-  legDetail: {
-    color: "#4A4A4A",
-    marginBottom: 4,
+  detailsBlock: {
+    flex: 1,
+    alignItems: 'flex-start',
+  },
+  detailLabel: {
+    fontWeight: '700',
+    color: '#4a5568',
+    fontSize: 10,
+    marginBottom: 2,
+  },
+  detailValue: {
+    fontWeight: '700',
+    color: '#0052cc',
+    fontSize: 11,
+  },
+  tripTitle: {
+    fontWeight: '700',
+    color: '#0052cc',
     fontSize: 12,
-    fontFamily: "System",
+    marginLeft: 4,
+  },
+  errorText: {
+    fontWeight: '700',
+    color: '#dc3545',
+    textAlign: 'center',
+    marginVertical: 6,
+    fontSize: 11,
   },
 });

@@ -1,8 +1,8 @@
 import { theme } from "@/themes/theme";
 import { FlightOffer } from "@/types";
 import * as React from "react";
-import { Image, StyleSheet, View } from "react-native";
-import { Button, Card, Text } from "react-native-paper";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Card } from "react-native-paper";
 
 const carrierCodeToName: { [key: string]: string } = {
   DL: "Delta",
@@ -37,7 +37,7 @@ const getAirlineIconURL = (code: string) =>
 export default function FlightCard({
   flightData,
   handleSubmit,
-  isLast = false, // Added prop to handle last card styling
+  isLast = false,
 }: { flightData: FlightOffer; handleSubmit: () => void; isLast?: boolean }) {
   const parsedFlightData = React.useMemo(() => {
     if (!flightData) return null;
@@ -61,6 +61,12 @@ export default function FlightCard({
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
+  const formatDate = (dateTime: string) => {
+    if (!dateTime) return "N/A";
+    const date = new Date(dateTime);
+    return date.toLocaleDateString([], { month: "short", day: "numeric" });
+  };
+
   const formatDuration = (duration: string) => {
     if (!duration) return "N/A";
     return duration.replace('PT', '').replace('H', 'h ').replace('M', 'm').trim();
@@ -75,15 +81,9 @@ export default function FlightCard({
             <Text style={styles.price}>
               {flightData?.currencyCode || "N/A"} {flightData?.totalPrice || "N/A"}
             </Text>
-            <Button
-              mode="contained"
-              style={styles.bookButton}
-              onPress={handleSubmit}
-              disabled
-              compact
-            >
-              Book
-            </Button>
+            <TouchableOpacity onPress={handleSubmit} disabled>
+              <Text style={styles.selectText}>Select</Text>
+            </TouchableOpacity>
           </View>
         </Card.Content>
       </Card>
@@ -104,15 +104,9 @@ export default function FlightCard({
             <Text style={styles.price}>
               {priceInfo.currency || "N/A"} {priceInfo.total || "N/A"}
             </Text>
-            <Button
-              mode="contained"
-              style={styles.bookButton}
-              onPress={handleSubmit}
-              disabled
-              compact
-            >
-              Book
-            </Button>
+            <TouchableOpacity onPress={handleSubmit} disabled>
+              <Text style={styles.selectText}>Select</Text>
+            </TouchableOpacity>
           </View>
         </Card.Content>
       </Card>
@@ -121,8 +115,6 @@ export default function FlightCard({
 
   const carrierCode = firstSegment.carrierCode || "";
   const airlineName = carrierCodeToName[carrierCode] || carrierCode;
-  const departureCity = iataToCity[firstSegment.departure?.iataCode] || firstSegment.departure?.iataCode;
-  const arrivalCity = iataToCity[firstSegment.arrival?.iataCode] || firstSegment.arrival?.iataCode;
   const stops = Math.max(0, firstItinerary.segments.length - 1);
 
   return (
@@ -179,30 +171,14 @@ export default function FlightCard({
           </View>
         </View>
 
-        {/* Bottom row: Cities and select button */}
+        {/* Bottom row: Date and select text */}
         <View style={styles.bottomRow}>
-          <View style={styles.cityBlock}>
-            <Text variant="bodySmall" style={styles.city}>
-              {departureCity}
-            </Text>
-            <Text variant="bodySmall" style={styles.city}>
-              {arrivalCity}
-            </Text>
-          </View>
-          <View style={styles.actionBlock}>
-            <Text variant="bodySmall" style={styles.flightNumber}>
-              {carrierCode} {firstSegment.number}
-            </Text>
-            <Button
-              mode="contained"
-              style={styles.bookButton}
-              labelStyle={styles.bookButtonLabel}
-              onPress={handleSubmit}
-              compact
-            >
-              Select
-            </Button>
-          </View>
+          <Text variant="bodySmall" style={styles.flightDate}>
+            {formatDate(firstSegment.departure?.at)}
+          </Text>
+          <TouchableOpacity onPress={handleSubmit}>
+            <Text style={styles.selectText}>Select</Text>
+          </TouchableOpacity>
         </View>
       </Card.Content>
     </Card>
@@ -212,12 +188,12 @@ export default function FlightCard({
 const styles = StyleSheet.create({
   card: {
     marginHorizontal: 6,
-    marginBottom: 4, // Reduced for all cards
+    marginBottom: 4,
     borderRadius: 6,
-    backgroundColor: '#f5faff', // Brighter background
+    backgroundColor: '#f5faff',
   },
   lastCard: {
-    marginBottom: 0, // No margin for the last card
+    marginBottom: 80, // Increased margin to account for bottom tab height
   },
   content: {
     padding: 8,
@@ -239,13 +215,13 @@ const styles = StyleSheet.create({
     marginRight: 4,
   },
   airlineName: {
-    fontWeight: '700', // Bold
-    color: '#0052cc', // Brighter blue
+    fontWeight: '700',
+    color: '#0052cc',
     fontSize: 12,
   },
   price: {
-    fontWeight: '700', // Bold
-    color: '#0052cc', // Brighter blue
+    fontWeight: '700',
+    color: '#0052cc',
     fontSize: 14,
   },
   middleRow: {
@@ -259,14 +235,14 @@ const styles = StyleSheet.create({
     minWidth: 50,
   },
   time: {
-    fontWeight: '700', // Bold
-    color: '#0052cc', // Brighter blue
+    fontWeight: '700',
+    color: '#0052cc',
     fontSize: 14,
     marginBottom: 1,
   },
   airportCode: {
-    fontWeight: '700', // Bold
-    color: '#4a5568', // Brighter gray
+    fontWeight: '700',
+    color: '#4a5568',
     fontSize: 11,
   },
   durationBlock: {
@@ -283,22 +259,22 @@ const styles = StyleSheet.create({
     width: 4,
     height: 4,
     borderRadius: 2,
-    backgroundColor: '#b0bec5', // Brighter gray
+    backgroundColor: '#b0bec5',
   },
   line: {
     height: 1,
     width: 25,
-    backgroundColor: '#b0bec5', // Brighter gray
+    backgroundColor: '#b0bec5',
     marginHorizontal: 2,
   },
   duration: {
-    fontWeight: '700', // Bold
-    color: '#4a5568', // Brighter gray
+    fontWeight: '700',
+    color: '#4a5568',
     fontSize: 10,
     marginBottom: 2,
   },
   stops: {
-    fontWeight: '700', // Bold
+    fontWeight: '700',
     fontSize: 10,
     paddingHorizontal: 4,
     paddingVertical: 1,
@@ -306,51 +282,30 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   direct: {
-    backgroundColor: '#d4f4d4', // Brighter green
-    color: '#1e7b1e', // Brighter green
+    backgroundColor: '#d4f4d4',
+    color: '#1e7b1e',
   },
   withStops: {
-    backgroundColor: '#ffeedd', // Brighter orange
-    color: '#d97706', // Brighter orange
+    backgroundColor: '#ffeedd',
+    color: '#d97706',
   },
   bottomRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  cityBlock: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '40%',
-  },
-  city: {
-    fontWeight: '700', // Bold
-    color: '#4a5568', // Brighter gray
+  flightDate: {
+    fontWeight: '700',
+    color: '#4a5568',
     fontSize: 10,
   },
-  actionBlock: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  flightNumber: {
-    fontWeight: '700', // Bold
-    color: '#4a5568', // Brighter gray
-    fontSize: 10,
-    marginRight: 6,
-  },
-  bookButton: {
-    borderRadius: 4,
-    backgroundColor: '#007bff', // Brighter blue
-    minWidth: 60, // Reduced for thinner button
-    paddingHorizontal: 8, // Added to control padding
-  },
-  bookButtonLabel: {
-    fontWeight: '700', // Bold
+  selectText: {
+    fontWeight: '700',
+    color: '#007bff',
     fontSize: 11,
-    color: '#ffffff',
   },
   errorText: {
-    fontWeight: '700', // Bold
+    fontWeight: '700',
     color: '#dc3545',
     textAlign: "center",
     marginBottom: 6,
