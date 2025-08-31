@@ -32,7 +32,7 @@ export default function TabsLayout() {
                     paddingBottom: 9, // Increased to add more space at the bottom
                     paddingTop: 4,
                     position: 'absolute',
-                    bottom: 12,
+                    bottom: 6,
                     left: 0,
                     right: 0,
                 },

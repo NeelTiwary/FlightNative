@@ -37,10 +37,11 @@ const getAirlineIconURL = (code: string) =>
 export default function FlightCard({
   flightData,
   handleSubmit,
-}: { flightData: FlightOffer; handleSubmit: () => void }) {
+  isLast = false, // Added prop to handle last card styling
+}: { flightData: FlightOffer; handleSubmit: () => void; isLast?: boolean }) {
   const parsedFlightData = React.useMemo(() => {
     if (!flightData) return null;
-    
+
     try {
       if (flightData.pricingAdditionalInfo) {
         return typeof flightData.pricingAdditionalInfo === 'string'
@@ -67,7 +68,7 @@ export default function FlightCard({
 
   if (!parsedFlightData) {
     return (
-      <Card style={styles.card}>
+      <Card style={[styles.card, isLast && styles.lastCard]}>
         <Card.Content style={styles.content}>
           <Text style={styles.errorText}>No flight details</Text>
           <View style={styles.footer}>
@@ -96,7 +97,7 @@ export default function FlightCard({
 
   if (!firstItinerary || !firstSegment) {
     return (
-      <Card style={styles.card}>
+      <Card style={[styles.card, isLast && styles.lastCard]}>
         <Card.Content style={styles.content}>
           <Text style={styles.errorText}>No itinerary</Text>
           <View style={styles.footer}>
@@ -125,7 +126,7 @@ export default function FlightCard({
   const stops = Math.max(0, firstItinerary.segments.length - 1);
 
   return (
-    <Card style={styles.card} elevation={0}>
+    <Card style={[styles.card, isLast && styles.lastCard]} elevation={0}>
       <Card.Content style={styles.content}>
         {/* Top row: Airline and price */}
         <View style={styles.topRow}>
@@ -153,7 +154,7 @@ export default function FlightCard({
               {firstSegment.departure?.iataCode}
             </Text>
           </View>
-          
+
           <View style={styles.durationBlock}>
             <View style={styles.flightLine}>
               <View style={styles.dot} />
@@ -167,7 +168,7 @@ export default function FlightCard({
               {stops === 0 ? "Direct" : `${stops} Stop`}
             </Text>
           </View>
-          
+
           <View style={styles.timeBlock}>
             <Text variant="bodyMedium" style={styles.time}>
               {formatTime(firstSegment.arrival?.at)}
@@ -211,9 +212,12 @@ export default function FlightCard({
 const styles = StyleSheet.create({
   card: {
     marginHorizontal: 6,
-    marginBottom: 6,
+    marginBottom: 4, // Reduced for all cards
     borderRadius: 6,
-    backgroundColor: '#fff',
+    backgroundColor: '#f5faff', // Brighter background
+  },
+  lastCard: {
+    marginBottom: 0, // No margin for the last card
   },
   content: {
     padding: 8,
@@ -235,13 +239,13 @@ const styles = StyleSheet.create({
     marginRight: 4,
   },
   airlineName: {
-    fontWeight: '600',
-    color: '#2c3e50',
+    fontWeight: '700', // Bold
+    color: '#0052cc', // Brighter blue
     fontSize: 12,
   },
   price: {
-    fontWeight: 'bold',
-    color: '#2c3e50',
+    fontWeight: '700', // Bold
+    color: '#0052cc', // Brighter blue
     fontSize: 14,
   },
   middleRow: {
@@ -255,14 +259,14 @@ const styles = StyleSheet.create({
     minWidth: 50,
   },
   time: {
-    fontWeight: '600',
-    color: '#2c3e50',
+    fontWeight: '700', // Bold
+    color: '#0052cc', // Brighter blue
     fontSize: 14,
     marginBottom: 1,
   },
   airportCode: {
-    fontWeight: '500',
-    color: '#495057',
+    fontWeight: '700', // Bold
+    color: '#4a5568', // Brighter gray
     fontSize: 11,
   },
   durationBlock: {
@@ -279,20 +283,22 @@ const styles = StyleSheet.create({
     width: 4,
     height: 4,
     borderRadius: 2,
-    backgroundColor: '#dee2e6',
+    backgroundColor: '#b0bec5', // Brighter gray
   },
   line: {
     height: 1,
     width: 25,
-    backgroundColor: '#dee2e6',
+    backgroundColor: '#b0bec5', // Brighter gray
     marginHorizontal: 2,
   },
   duration: {
-    color: '#495057',
+    fontWeight: '700', // Bold
+    color: '#4a5568', // Brighter gray
     fontSize: 10,
     marginBottom: 2,
   },
   stops: {
+    fontWeight: '700', // Bold
     fontSize: 10,
     paddingHorizontal: 4,
     paddingVertical: 1,
@@ -300,12 +306,12 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   direct: {
-    backgroundColor: '#e8f5e8',
-    color: '#2e7d32',
+    backgroundColor: '#d4f4d4', // Brighter green
+    color: '#1e7b1e', // Brighter green
   },
   withStops: {
-    backgroundColor: '#fff3cd',
-    color: '#856404',
+    backgroundColor: '#ffeedd', // Brighter orange
+    color: '#d97706', // Brighter orange
   },
   bottomRow: {
     flexDirection: 'row',
@@ -318,7 +324,8 @@ const styles = StyleSheet.create({
     width: '40%',
   },
   city: {
-    color: '#6c757d',
+    fontWeight: '700', // Bold
+    color: '#4a5568', // Brighter gray
     fontSize: 10,
   },
   actionBlock: {
@@ -326,23 +333,32 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   flightNumber: {
-    color: '#6c757d',
+    fontWeight: '700', // Bold
+    color: '#4a5568', // Brighter gray
     fontSize: 10,
     marginRight: 6,
   },
   bookButton: {
     borderRadius: 4,
-    backgroundColor: '#0066cc',
-    minWidth: 70,
+    backgroundColor: '#007bff', // Brighter blue
+    minWidth: 60, // Reduced for thinner button
+    paddingHorizontal: 8, // Added to control padding
   },
   bookButtonLabel: {
-    fontWeight: '600',
+    fontWeight: '700', // Bold
     fontSize: 11,
+    color: '#ffffff',
   },
   errorText: {
+    fontWeight: '700', // Bold
     color: '#dc3545',
     textAlign: "center",
     marginBottom: 6,
     fontSize: 11,
+  },
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 });
