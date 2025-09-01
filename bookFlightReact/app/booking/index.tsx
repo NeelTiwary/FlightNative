@@ -6,6 +6,7 @@ import { Platform, ScrollView, StyleSheet, View } from "react-native";
 import { Button, List, Text, Snackbar } from "react-native-paper";
 import axiosInstance from "../../config/axiosConfig";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import axios from "axios"
 
 export default function Booking() {
   const { travelers, setTravelers, selectedFlightOffer, setSelectedFlightOffer, apiUrl, setFlightBooking } = useAppContext();
@@ -168,160 +169,133 @@ export default function Booking() {
   };
 
   const handleBooking = async () => {
-    try {
-      setLoading(true);
-      if (!validateTravelers()) {
-        return;
-      }
-
-      // Ensure we have parsed offer object
-      let flightOffer = selectedFlightOffer.bookingAdditionalInfo;
-      if (!flightOffer) {
-        throw new Error("Flight offer data is missing");
-      }
-      const flightOfferStr = typeof flightOffer === "string" ? flightOffer : JSON.stringify(flightOffer);
-
-      const bookingData = {
-        flightOffer: flightOfferStr,
-        travelers: travelers.map((traveler: any, index: number) => ({
-          id: (index + 1).toString(), // Convert to string
-          firstName: traveler.firstName,
-          lastName: traveler.lastName,
-          dateOfBirth: traveler.dob,
-          gender: traveler.gender,
-          email: index === 0 ? traveler.email : undefined, // Only first traveler gets email
-          phones: [
-            {
-              deviceType: "MOBILE",
-              countryCallingCode: traveler.phoneNumber.countryCallingCode.replace("+", ""), // Remove +
-              number: traveler.phoneNumber.number,
-            },
-          ],
-          documents: [
-            {
-              documentType: traveler.document.documentType,
-              number: traveler.document.number,
-              issuanceDate: traveler.document.issuanceDate,
-              expiryDate: traveler.document.expiryDate,
-              issuanceCountry: traveler.document.issuanceCountry,
-              validityCountry: traveler.document.validityCountry,
-              nationality: traveler.document.nationality,
-              birthPlace: traveler.document.birthPlace,
-              issuanceLocation: traveler.document.issuanceLocation,
-              holder: true,
-            },
-          ],
-        })),
-      };
-
-      console.log("Booking payload:", JSON.stringify(bookingData, null, 2));
-
-      const endpoint = 'http://34.235.111.48:8080/booking/flight-order';
-
-      const { data: bookingResponse } = await axiosInstance.post(endpoint, bookingData, {
-        headers: { "Content-Type": "application/json" },
-      });
-
-      console.log("Booking response:", JSON.stringify(bookingResponse, null, 2));
-
-      setFlightBooking(bookingResponse);
-      setTravelers([]);
-      setSnackbarMessage(`Booking successful! Order ID: ${bookingResponse.orderId || bookingResponse.id || "N/A"}`);
-      setSnackbarVisible(true);
-
-      if (Platform.OS === "web") {
-        localStorage.setItem("flightBooking", JSON.stringify(bookingResponse));
-      }
-
-      router.push("/booking/confirmation");
-    } catch (error: any) {
-      console.error("Booking error:", JSON.stringify(error.response?.data || error.message, null, 2));
-      setSnackbarMessage(
-        error.response?.data?.errors?.[0]?.detail ||
-          error.message ||
-          "Failed to book flight. Please try again."
-      );
-      setSnackbarVisible(true);
-    } finally {
-      setLoading(false);
+  try {
+    setLoading(true);
+    if (!validateTravelers()) {
+      return;
     }
-  };
+
+    // Ensure we have parsed offer object
+    let flightOffer;
+    try {
+      // console.log("Selected flight offer pricing info:", selectedFlightOffer);
+      flightOffer = selectedFlightOffer.pricingAdditionalInfo
+    } catch (error) {
+      throw new Error("Invalid flight offer format");
+    }
+
+     const bookingData = {
+      flightOffer: flightOffer, // Stringify the flight offer
+      travelers: travelers.map((traveler: any, index: number) => ({
+        id: index + 1, // Use number instead of string
+        firstName: traveler.firstName, // Include firstName at root level
+        lastName: traveler.lastName,   // Include lastName at root level
+        dateOfBirth: traveler.dob,
+        gender: traveler.gender,
+        email: traveler.email, // Include email at root level
+        phones: [
+          {
+            deviceType: "MOBILE",
+            countryCalingCode: traveler.phoneNumber.countryCallingCode,
+            number: traveler.phoneNumber.number,
+          },
+        ],
+        documents: [
+          {
+            documentType: traveler.document.documentType,
+            number: traveler.document.number,
+            issuanceDate: traveler.document.issuanceDate,
+            expiryDate: traveler.document.expiryDate,
+            issuanceCountry: traveler.document.issuanceCountry, // Use code "IN" instead of "India"
+            issuanceLocation: traveler.document.issuanceLocation,
+            nationality: traveler.document.nationality, // Use code "IN" instead of "India"
+            birthPlace: traveler.document.birthPlace,
+            validityCountry: traveler.document.validityCountry, // Use code "IN" instead of "India"
+            holder: true,
+          },
+        ],
+      })),
+    };
+
+    console.log( JSON.stringify(bookingData, null, 2));
+
+    //  const endpoint = apiUrl
+    //   ? `${apiUrl}/booking/flight-order`
+    //   : "/v1/booking/flight-orders";
+   const endpoint = "http://192.168.56.1:8080/booking/flight-order";
+
+    const response = await axiosInstance.post(endpoint, bookingData, {
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const bookingResponse = response.data;
+
+    if (!bookingResponse.orderId) {
+      throw new Error("Incomplete booking data received.");
+    }
+
+    setFlightBooking(bookingResponse.orderId);
+    setTravelers([]);
+    setSnackbarMessage(`Booking successful! Order ID: ${bookingResponse.OrderId}`);
+    setSnackbarVisible(true);
+
+    if (Platform.OS === "web") {
+      localStorage.setItem("flightBooking", JSON.stringify(bookingResponse.OrderId));
+    }
+
+    router.push("/booking/confirmation");
+  } catch (error: any) {
+    console.error("Booking error:", error.response?.data || error.message);
+    setSnackbarMessage(
+      error.response?.data?.errors?.[0]?.detail ||
+        "Failed to book flight. Please try again."
+    );
+    setSnackbarVisible(true);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const confirmFlightOfferPricing = async () => {
-    try {
-      // Check if we already have the necessary data to avoid unnecessary API calls
-      if (selectedFlightOffer && selectedFlightOffer.id && selectedFlightOffer.price) {
-        console.log("Flight offer already has pricing data, skipping confirmation");
-        return;
-      }
-      
-      const body = {
-        flightOffer: selectedFlightOffer.pricingAdditionalInfo,
-      };
-      const response = await axiosInstance.post(`/pricing/flights/confirm`, body);
-      console.log("Flight offer pricing:", JSON.stringify(response.data, null, 2));
-      
-      // Preserve all existing properties and only update with the new pricing data
-      setSelectedFlightOffer(prev => ({
-        ...prev,
-        ...response.data,
-        // Preserve these critical properties that might not be in the response
-        pricingAdditionalInfo: prev.pricingAdditionalInfo,
-        bookingAdditionalInfo: prev.bookingAdditionalInfo,
-        totalTravelers: prev.totalTravelers,
-        currencyCode: prev.currencyCode || response.data.price.currency,
-        totalPrice: prev.totalPrice || response.data.price.total
-      }));
-    } catch (error) {
-      console.error("Error fetching flight offer pricing:", error);
+        try {
+            const body = {
+                flightOffer: selectedFlightOffer.pricingAdditionalInfo,
+            }
+             const response = await axiosInstance.post(`/pricing/flights/confirm`, body);
+          //  const response = await axios.post(`${apiUrl}/pricing/flights/confirm`, body);
+            console.log("Flight offer pricing:", response.data);
+            //setSelectedFlightOffer(response.data);
+        } catch (error) {
+            console.error("Error fetching flight offer pricing:", error);
+        }
+
     }
-  };
+
 
   useEffect(() => {
     if (selectedFlightOffer && selectedFlightOffer.pricingAdditionalInfo) {
-      // Add a small delay to ensure the component is fully mounted
-      const timer = setTimeout(() => {
-        confirmFlightOfferPricing();
-      }, 500);
-      
-      return () => clearTimeout(timer);
+      confirmFlightOfferPricing();
     }
-  }, []); // Empty dependency array to run only on mount
+  }, [selectedFlightOffer]);
 
   const renderFlightSummary = () => {
-    if (!selectedFlightOffer) {
+    if (!selectedFlightOffer || !selectedFlightOffer.pricingAdditionalInfo) {
       return null;
     }
 
-    // Use the confirmed pricing data if available, otherwise fall back to the original data
-    const priceData = selectedFlightOffer.price || 
-                     (selectedFlightOffer.pricingAdditionalInfo && 
-                      typeof selectedFlightOffer.pricingAdditionalInfo === 'object' &&
-                      selectedFlightOffer.pricingAdditionalInfo.price);
-    
-    const currencyCode = selectedFlightOffer.currencyCode || 
-                        (priceData && priceData.currency) || 
-                        "USD";
-    
-    const totalPrice = selectedFlightOffer.totalPrice || 
-                      (priceData && priceData.total) || 
-                      "0";
-
-    let itinerary;
+    let flightOffer;
     try {
-      const flightOffer = selectedFlightOffer.bookingAdditionalInfo || 
-                         selectedFlightOffer.pricingAdditionalInfo;
-      
-      if (typeof flightOffer === 'string') {
-        itinerary = JSON.parse(flightOffer).itineraries?.[0];
-      } else if (typeof flightOffer === 'object') {
-        itinerary = flightOffer.itineraries?.[0];
-      }
+      flightOffer =
+        typeof selectedFlightOffer.pricingAdditionalInfo === "string"
+          ? JSON.parse(selectedFlightOffer.pricingAdditionalInfo)
+          : selectedFlightOffer.pricingAdditionalInfo;
     } catch (error) {
       console.error("Error parsing flightOffer:", error);
       return null;
     }
 
+    const itinerary = flightOffer.itineraries?.[0];
     const firstSegment = itinerary?.segments?.[0];
 
     return (
@@ -351,7 +325,7 @@ export default function Booking() {
             <MaterialCommunityIcons name="cash" size={16} color="#666" />
             <Text style={styles.summaryLabel}>Total Price:</Text>
             <Text style={[styles.summaryValue, styles.priceText]}>
-              {currencyCode} {totalPrice}
+              {selectedFlightOffer.currencyCode} {selectedFlightOffer.totalPrice}
             </Text>
           </View>
         </View>
@@ -361,6 +335,19 @@ export default function Booking() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <Button
+          mode="text"
+          icon="arrow-left"
+          onPress={() => router.back()}
+          style={styles.backButton}
+          labelStyle={styles.backButtonLabel}
+        >
+          Back
+        </Button>
+        <Text style={styles.headerTitle}>Book Your Flight</Text>
+      </View>
+
       {renderFlightSummary()}
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
