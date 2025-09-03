@@ -239,7 +239,7 @@ export default function Offers() {
                     toInput || iataToCity[searchParams.destinationLocationCode] || "Unknown"
                   }`
                 : ""}
-              {error && error.includes("sample flights") ? " (Sample Data)" : ""}
+              {error && error.includes("sample flights") ? "  " : ""}
             </Text>
             {flightOffers.map((offer: FlightOffer, index: number) => (
               <View key={`flight-${index}`} style={styles.flightCardContainer}>

@@ -20,7 +20,7 @@ export default function FlightDetails() {
             <Button
                 mode="contained"
                 onPress={() => router.push("/booking")}
-                style={{ marginTop: 20 }}
+                style={{ marginTop: 20, marginHorizontal: 15 }}
             >
                 Continue
             </Button>

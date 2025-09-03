@@ -85,14 +85,14 @@ export default function FlightOfferDetailsNew() {
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* Header with total price */}
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <Text style={styles.headerTitle}>Flight Details</Text>
         <View style={styles.priceContainer}>
           <Text style={styles.headerPrice}>
             {priceInfo.currency} {priceInfo.total}
           </Text>
         </View>
-      </View>
+      </View> */}
 
       {itineraries.map((itinerary: any, index: number) => (
         <View key={index} style={styles.itineraryContainer}>
@@ -137,9 +137,10 @@ export default function FlightOfferDetailsNew() {
                         {carrierCode} {segment.number} • {aircraft}
                       </Text>
                     </View>
-                    <Chip mode="outlined" style={styles.cabinChip}>
+                    {/* <Chip mode="outlined" style={styles.cabinChip}>
                       {parsedFlightData.travelerPricings?.[0]?.fareDetailsBySegment?.[segIdx]?.cabin || "Economy"}
-                    </Chip>
+                      
+                    </Chip> */}
                   </View>
 
                   <Divider style={styles.divider} />
@@ -248,7 +249,8 @@ export default function FlightOfferDetailsNew() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8F9FA",
+    backgroundColor: "#e2edf8ff",
+    borderRadius: 19,
   },
   header: {
     flexDirection: "row",
@@ -273,7 +275,7 @@ const styles = StyleSheet.create({
     color: "#1A73E8",
   },
   itineraryContainer: {
-    marginBottom: 10,
+    marginBottom: 0,
   },
   tripHeader: {
     flexDirection: "row",
@@ -286,7 +288,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   outboundHeader: {
-    backgroundColor: "#1A73E8",
+    backgroundColor: "#6871f1ff",
   },
   returnHeader: {
     backgroundColor: "#0B8043",
@@ -310,10 +312,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
     marginVertical: 4,
     borderRadius: 6,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#f2f6fbff",
     borderWidth: 1,
-    borderColor: "#E8EAED",
-    elevation: 1,
+    borderColor: "#ffffffff",
   },
   cardContent: {
     paddingVertical: 12,
@@ -322,7 +323,7 @@ const styles = StyleSheet.create({
   airlineHeader: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 12,
+    marginBottom: 0,
   },
   airlineLogo: {
     width: 28,
@@ -348,6 +349,7 @@ const styles = StyleSheet.create({
     height: 24,
     backgroundColor: "#F8F9FA",
     borderColor: "#DADCE0",
+    fontSize: 12,
   },
   divider: {
     marginBottom: 12,
@@ -386,15 +388,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#1A73E8",
   },
   timelineLine: {
-    width: 35,
+    width: 80,
     height: 2,
     backgroundColor: "#1A73E8",
     marginHorizontal: 3,
   },
   airplaneIcon: {
-    position: "absolute",
-    top: -5,
-    left: 22,
+    position: "center",
+    // top: -5,
+    // left: 22,
     backgroundColor: "#FFFFFF",
     borderRadius: 8,
   },
@@ -413,7 +415,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: "800",
     color: "#1A73E8",
-    marginBottom: 2,
+    marginBottom: 0,
   },
   cityName: {
     fontSize: 10,
@@ -424,7 +426,7 @@ const styles = StyleSheet.create({
   dateRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 8,
+    marginBottom: 0,
   },
   dateText: {
     fontSize: 10,
@@ -511,7 +513,7 @@ const styles = StyleSheet.create({
   travelerTitle: {
     fontSize: 15,
     fontWeight: "700",
-    color: "#202124",
+    color: "#26282cff",
     marginLeft: 6,
   },
   travelerRow: {

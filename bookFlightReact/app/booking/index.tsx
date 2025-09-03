@@ -222,7 +222,7 @@ export default function Booking() {
     //  const endpoint = apiUrl
     //   ? `${apiUrl}/booking/flight-order`
     //   : "/v1/booking/flight-orders";
-   const endpoint = "http://192.168.56.1:8080/booking/flight-order";
+   const endpoint = "http://172.29.39.116:8080/booking/flight-order";
 
     const response = await axiosInstance.post(endpoint, bookingData, {
       headers: { "Content-Type": "application/json" },
@@ -306,7 +306,7 @@ export default function Booking() {
         </View>
         <View style={styles.summaryContent}>
           <View style={styles.summaryRow}>
-            <MaterialCommunityIcons name="route" size={16} color="#666" />
+            <MaterialCommunityIcons name="arrow-decision" size={16} color="#666" />
             <Text style={styles.summaryLabel}>Route:</Text>
             <Text style={styles.summaryValue}>
               {firstSegment?.departure?.iataCode || "Unknown"} → {firstSegment?.arrival?.iataCode || "Unknown"}
@@ -335,22 +335,11 @@ export default function Booking() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Button
-          mode="text"
-          icon="arrow-left"
-          onPress={() => router.back()}
-          style={styles.backButton}
-          labelStyle={styles.backButtonLabel}
-        >
-          Back
-        </Button>
-        <Text style={styles.headerTitle}>Book Your Flight</Text>
-      </View>
 
-      {renderFlightSummary()}
+
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
+        {renderFlightSummary()}
         {travelers.length > 0 ? (
           travelers.map((traveler: any, index: number) => (
             <View key={`traveler-${traveler.id}`} style={styles.travelerCard}>
@@ -426,45 +415,13 @@ export default function Booking() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8F9FA",
-  },
-  header: {
-    padding: 16,
-    paddingTop: Platform.OS === "ios" ? 48 : 16,
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    elevation: 1,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: "#1A1A1A",
-    flex: 1,
-    textAlign: "center",
-    marginRight: 40,
-  },
-  backButton: {
-    marginRight: 8,
-  },
-  backButtonLabel: {
-    fontSize: 16,
-    color: "#007AFF",
+    backgroundColor: "#e0e9f3ff",
   },
   summaryCard: {
-    margin: 16,
     backgroundColor: "#FFFFFF",
-    borderRadius: 12,
+    borderRadius: 19,
     padding: 16,
-    elevation: 2,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    marginBottom: 8,
   },
   summaryHeader: {
     flexDirection: "row",
@@ -473,7 +430,7 @@ const styles = StyleSheet.create({
   },
   summaryTitle: {
     fontSize: 18,
-    fontWeight: "600",
+    fontWeight: "900",
     color: "#1A1A1A",
     marginLeft: 8,
   },
@@ -508,16 +465,17 @@ const styles = StyleSheet.create({
   },
   travelerCard: {
     marginBottom: 16,
-    backgroundColor: "#FFFFFF",
-    borderRadius: 12,
-    elevation: 1,
-    shadowColor: "#000",
+    backgroundColor: "#ffffffff",
+    borderRadius: 19,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
     shadowRadius: 2,
+    marginTop: 0,
   },
   accordion: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#ffffffff",
+    borderTopLeftRadius: 19,
+    borderTopRightRadius: 19,
   },
   accordionTitle: {
     fontSize: 16,
@@ -548,10 +506,10 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   bookButton: {
-    borderRadius: 12,
+    borderRadius: 11,
     backgroundColor: "#007AFF",
     paddingVertical: 6,
-    marginHorizontal: 16,
+    marginHorizontal: 10,
   },
   bookButtonLabel: {
     fontSize: 16,

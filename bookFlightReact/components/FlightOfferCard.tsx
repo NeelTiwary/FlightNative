@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 6,
     marginBottom: 4,
     borderRadius: 6,
-    backgroundColor: '#f5faff',
+    backgroundColor: '#e6ecf3ff',
   },
   lastCard: {
     marginBottom: 80, // Increased margin to account for bottom tab height
@@ -209,8 +209,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logo: {
-    width: 20,
-    height: 20,
+    width: 25,
+    height: 25,
     resizeMode: "contain",
     marginRight: 4,
   },
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
   },
   price: {
     fontWeight: '700',
-    color: '#0052cc',
+    color: '#078610ff',
     fontSize: 14,
   },
   middleRow: {
@@ -259,13 +259,15 @@ const styles = StyleSheet.create({
     width: 4,
     height: 4,
     borderRadius: 2,
-    backgroundColor: '#b0bec5',
+    backgroundColor: '#0b4a69ff',
+    marginTop: 13,
   },
   line: {
     height: 1,
-    width: 25,
-    backgroundColor: '#b0bec5',
+    width: 100,
+    backgroundColor: '#85c6e7ff',
     marginHorizontal: 2,
+    marginTop: 13,
   },
   duration: {
     fontWeight: '700',
@@ -301,8 +303,8 @@ const styles = StyleSheet.create({
   },
   selectText: {
     fontWeight: '700',
-    color: '#007bff',
-    fontSize: 11,
+    color: '#5f9bdbff',
+    fontSize: 10,
   },
   errorText: {
     fontWeight: '700',
