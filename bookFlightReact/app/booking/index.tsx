@@ -222,7 +222,7 @@ export default function Booking() {
     //  const endpoint = apiUrl
     //   ? `${apiUrl}/booking/flight-order`
     //   : "/v1/booking/flight-orders";
-   const endpoint = "http://172.29.39.116:8080/booking/flight-order";
+   const endpoint = "http://172.29.38.77:8080/booking/flight-order";
 
     const response = await axiosInstance.post(endpoint, bookingData, {
       headers: { "Content-Type": "application/json" },
@@ -230,17 +230,17 @@ export default function Booking() {
 
     const bookingResponse = response.data;
 
-    if (!bookingResponse.orderId) {
+    if (!bookingResponse) {
       throw new Error("Incomplete booking data received.");
     }
 
-    setFlightBooking(bookingResponse.orderId);
+    setFlightBooking(bookingResponse);
     setTravelers([]);
-    setSnackbarMessage(`Booking successful! Order ID: ${bookingResponse.OrderId}`);
+    setSnackbarMessage(`Booking successful! Order ID: ${bookingResponse}`);
     setSnackbarVisible(true);
 
     if (Platform.OS === "web") {
-      localStorage.setItem("flightBooking", JSON.stringify(bookingResponse.OrderId));
+      localStorage.setItem("flightBooking", JSON.stringify(bookingResponse));
     }
 
     router.push("/booking/confirmation");

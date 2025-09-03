@@ -16,7 +16,6 @@ import DatePickerInput from "./DatePickerInput";
 import MenuDropdown from "./MenuDropdown";
 import { useAppContext } from "@/context/AppContextProvider";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-
 const { width } = Dimensions.get('window');
 
 export interface Traveler {
@@ -50,6 +49,33 @@ type Props = {
   countryCallingCodes: string[];
 };
 
+// Move InputField outside the main component to prevent re-renders
+const InputField = ({ label, value, onChange, type = "default", style = {}, onFocus, onBlur, ...props }) => (
+  <TextInput
+    label={label}
+    mode="outlined"
+    value={value || ""}
+    onChangeText={onChange}
+    style={[styles.input, style]}
+    dense
+    outlineColor="#E2E8F0"
+    activeOutlineColor="#4A6CFA"
+    keyboardType={type}
+    autoCapitalize={type === "email-address" ? "none" : "words"}
+    theme={{ 
+      colors: { 
+        background: '#FFFFFF',
+        onSurfaceVariant: '#94A3B8',
+        text: '#1E293B'
+      },
+      roundness: 6,
+    }}
+    onFocus={onFocus}
+    onBlur={onBlur}
+    {...props}
+  />
+);
+
 export default function TravelerForm({
   traveler,
   index,
@@ -65,12 +91,9 @@ export default function TravelerForm({
 
   const handleFocus = (field: string) => setFocusedField(field);
   const handleBlur = () => setFocusedField(null);
-
   const handleTabChange = (tabKey: string) => {
     setActiveTab(tabKey);
     Keyboard.dismiss();
-    
-    // Animate tab indicator
     Animated.spring(tabIndicator, {
       toValue: tabKey === "personal" ? 0 : 1,
       useNativeDriver: true,
@@ -92,8 +115,8 @@ export default function TravelerForm({
     >
       <MaterialCommunityIcons 
         name={icon} 
-        size={20} 
-        color={activeTab === tabKey ? "#4F46E5" : "#64748B"} 
+        size={16} 
+        color={activeTab === tabKey ? "#4A6CFA" : "#94A3B8"} 
         style={styles.tabIcon}
       />
       <Text style={[styles.tabText, activeTab === tabKey && styles.activeTabText]}>
@@ -102,42 +125,11 @@ export default function TravelerForm({
     </TouchableOpacity>
   );
 
-  const InputField = ({ label, value, onChange, type = "default", style = {}, ...props }) => (
-    <TextInput
-      label={label}
-      mode="outlined"
-      value={value || ""}
-      onChangeText={onChange}
-      style={[styles.input, style]}
-      dense
-      outlineColor="#E2E8F0"
-      activeOutlineColor="#4F46E5"
-      keyboardType={type}
-      autoCapitalize={type === "email-address" ? "none" : "words"}
-      theme={{ 
-        colors: { 
-          background: '#FFFFFF',
-          onSurfaceVariant: '#94A3B8',
-          text: '#1E293B'
-        },
-        roundness: 10,
-      }}
-      onFocus={() => handleFocus(label)}
-      onBlur={handleBlur}
-      {...props}
-    />
-  );
-
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
         {/* Header with Title and Tabs */}
         <View style={styles.header}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.title}>Traveler {index + 1}</Text>
-            <View style={styles.titleUnderline} />
-          </View>
-          
           <View style={styles.tabContainer}>
             <TabButton title="Personal Info" tabKey="personal" icon="account-outline" />
             <TabButton title="Document" tabKey="document" icon="passport" />
@@ -149,10 +141,9 @@ export default function TravelerForm({
             />
           </View>
         </View>
-
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
-          keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
           style={styles.keyboardView}
         >
           <ScrollView
@@ -163,144 +154,128 @@ export default function TravelerForm({
             {activeTab === "personal" && (
               <View style={styles.tabContent}>
                 <View style={styles.sectionHeader}>
-                  <MaterialCommunityIcons name="account-details" size={20} color="#4F46E5" />
+                  <MaterialCommunityIcons name="account-details" size={14} color="#4A6CFA" />
                   <Text style={styles.sectionTitle}>Personal Information</Text>
                 </View>
-                
                 <View style={styles.row}>
                   <InputField
                     label="First Name"
                     value={traveler.firstName}
                     onChange={(text) => handleChange("firstName", index)(text)}
                     style={styles.halfInput}
+                    onFocus={() => handleFocus("First Name")}
+                    onBlur={handleBlur}
                   />
+                  <View style={styles.spacer} />
                   <InputField
                     label="Last Name"
                     value={traveler.lastName}
                     onChange={(text) => handleChange("lastName", index)(text)}
                     style={styles.halfInput}
+                    onFocus={() => handleFocus("Last Name")}
+                    onBlur={handleBlur}
                   />
                 </View>
-
-                <View style={styles.row}>
-                  <InputField
+                {/* Email, DOB, and Gender in single row */}
+                <InputField
                     label="Email"
                     value={traveler.email}
                     onChange={(text) => handleChange("email", index)(text)}
                     type="email-address"
                     style={styles.halfInput}
+                    onFocus={() => handleFocus("Email")}
+                    onBlur={handleBlur}
                   />
-                  <DatePickerInput
-                    handleChange={(type) => (value) => handleChange(type, index)(value)}
-                    placeholderText="Date of Birth"
-                    dateValue={traveler.dob ? new Date(traveler.dob).toDateString() : ""}
-                    dateType="dob"
-                    style={[styles.input, styles.halfInput]}
-                    compact
-                    mode="outlined"
-                  />
-                </View>
-
                 <View style={styles.row}>
-                  <View style={[styles.thirdInput, { marginRight: 12 }]}>
+                  <View style={styles.spacer} />
+                  <View style={styles.halfInput}>
+                    <DatePickerInput
+                      handleChange={(type) => (value) => handleChange(type, index)(value)}
+                      placeholderText="DOB"
+                      dateValue={traveler.dob || ""}
+                      dateType="dob"
+                    />
+                  </View>
+                  <View style={styles.spacer} />
+                  <View style={styles.halfInput}>
+                    <MenuDropdown
+                      items={genderOptions}
+                      selectedItem={traveler.gender || ""}
+                      label="Gender"
+                      type="gender"
+                      handleChange={(type) => (value) => handleChange(type, index)(value)}
+                    />
+                  </View>
+                </View>
+                {/* END Email/DOB/Gender Row */}
+                <View style={styles.row}>
+                  <View style={[styles.thirdInput]}>
                     <MenuDropdown
                       items={countryCallingCodes}
                       selectedItem={traveler.phoneNumber?.countryCallingCode || ""}
                       label="Code"
                       type="phoneNumber.countryCallingCode"
                       handleChange={(type) => (val) => handleChange(type, index)(val)}
-                      compact
-                      mode="outlined"
                     />
                   </View>
+                  <View style={styles.spacer} />
                   <InputField
                     label="Phone Number"
                     value={traveler.phoneNumber?.number}
                     onChange={(text) => handleChange("phoneNumber.number", index)(text)}
                     type="phone-pad"
                     style={{ flex: 2 }}
+                    onFocus={() => handleFocus("Phone Number")}
+                    onBlur={handleBlur}
                   />
-                </View>
-
-                <View style={styles.genderContainer}>
-                  <View style={styles.sectionHeader}>
-                    <MaterialCommunityIcons name="gender-male-female" size={18} color="#4F46E5" />
-                    <Text style={styles.sectionLabel}>Gender</Text>
-                  </View>
-                  <View style={styles.genderOptions}>
-                    {genderOptions.map((option, idx) => (
-                      <TouchableOpacity
-                        key={idx}
-                        style={[
-                          styles.genderOption,
-                          traveler.gender === option && styles.genderOptionSelected
-                        ]}
-                        onPress={() => handleChange("gender", index)(option)}
-                        activeOpacity={0.8}
-                      >
-                        <Text style={[
-                          styles.genderText,
-                          traveler.gender === option && styles.genderTextSelected
-                        ]}>
-                          {option}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
                 </View>
               </View>
             )}
-
             {activeTab === "document" && (
               <View style={styles.tabContent}>
                 <View style={styles.sectionHeader}>
-                  <MaterialCommunityIcons name="file-document" size={20} color="#4F46E5" />
+                  <MaterialCommunityIcons name="file-document" size={14} color="#4A6CFA" />
                   <Text style={styles.sectionTitle}>Document Details</Text>
                 </View>
-                
                 <View style={styles.row}>
-                  <View style={[styles.halfInput, { marginRight: 12 }]}>
+                  <View style={[styles.halfInput]}>
                     <MenuDropdown
                       items={documentTypeOptions}
                       selectedItem={traveler.document?.documentType || ""}
                       label="Document Type"
                       type="document.documentType"
                       handleChange={(type) => (val) => handleChange(type, index)(val)}
-                      compact
-                      mode="outlined"
                     />
                   </View>
+                  <View style={styles.spacer} />
                   <InputField
                     label="Document Number"
                     value={traveler.document?.number}
                     onChange={(text) => handleChange("document.number", index)(text)}
                     style={styles.halfInput}
+                    onFocus={() => handleFocus("Document Number")}
+                    onBlur={handleBlur}
                   />
                 </View>
-
                 <View style={styles.row}>
-                  <View style={[styles.halfInput, { marginRight: 12 }]}>
+                  <View style={[styles.halfInput]}>
                     <DatePickerInput
                       handleChange={(type) => (value) => handleChange(type, index)(value)}
                       placeholderText="Issuance Date"
-                      dateValue={traveler.document?.issuanceDate ? new Date(traveler.document.issuanceDate).toDateString() : ""}
+                      dateValue={traveler.document?.issuanceDate || ""}
                       dateType="document.issuanceDate"
-                      compact
-                      mode="outlined"
                     />
                   </View>
+                  <View style={styles.spacer} />
                   <View style={styles.halfInput}>
                     <DatePickerInput
                       handleChange={(type) => (value) => handleChange(type, index)(value)}
                       placeholderText="Expiry Date"
-                      dateValue={traveler.document?.expiryDate ? new Date(traveler.document.expiryDate).toDateString() : ""}
+                      dateValue={traveler.document?.expiryDate || ""}
                       dateType="document.expiryDate"
-                      compact
-                      mode="outlined"
                     />
                   </View>
                 </View>
-
                 <View style={styles.row}>
                   <InputField
                     label="Birth Place"
@@ -308,16 +283,20 @@ export default function TravelerForm({
                     onChange={(text) => handleChange("document.birthPlace", index)(text)}
                     placeholder="e.g., Delhi"
                     style={styles.halfInput}
+                    onFocus={() => handleFocus("Birth Place")}
+                    onBlur={handleBlur}
                   />
+                  <View style={styles.spacer} />
                   <InputField
                     label="Issuance Location"
                     value={traveler.document?.issuanceLocation}
                     onChange={(text) => handleChange("document.issuanceLocation", index)(text)}
                     placeholder="e.g., Delhi"
                     style={styles.halfInput}
+                    onFocus={() => handleFocus("Issuance Location")}
+                    onBlur={handleBlur}
                   />
                 </View>
-
                 <View style={styles.row}>
                   <InputField
                     label="Issuance Country"
@@ -325,20 +304,28 @@ export default function TravelerForm({
                     onChange={(text) => handleChange("document.issuanceCountry", index)(text)}
                     placeholder="ISO Code"
                     style={styles.thirdInput}
+                    onFocus={() => handleFocus("Issuance Country")}
+                    onBlur={handleBlur}
                   />
+                  <View style={styles.spacer} />
                   <InputField
                     label="Validity Country"
                     value={traveler.document?.validityCountry}
                     onChange={(text) => handleChange("document.validityCountry", index)(text)}
                     placeholder="ISO Code"
                     style={styles.thirdInput}
+                    onFocus={() => handleFocus("Validity Country")}
+                    onBlur={handleBlur}
                   />
+                  <View style={styles.spacer} />
                   <InputField
                     label="Nationality"
                     value={traveler.document?.nationality}
                     onChange={(text) => handleChange("document.nationality", index)(text)}
                     placeholder="ISO Code"
                     style={styles.thirdInput}
+                    onFocus={() => handleFocus("Nationality")}
+                    onBlur={handleBlur}
                   />
                 </View>
               </View>
@@ -354,56 +341,49 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    borderRadius: 16,
+    borderRadius: 12,
     overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.05,
-    shadowRadius: 12,
-    elevation: 3,
-    borderWidth: 1,
-    borderColor: '#F1F5F9',
   },
   header: {
     backgroundColor: '#FFFFFF',
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
+    paddingHorizontal: 12,
+    paddingTop: 12,
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
   },
   titleContainer: {
-    marginBottom: 20,
+    marginBottom: 12,
+    alignItems: 'center',
   },
   title: {
-    fontSize: 22,
-    fontWeight: '700',
+    fontSize: 16,
+    fontWeight: '600',
     color: '#1E293B',
-    marginBottom: 6,
+    marginBottom: 4,
   },
   titleUnderline: {
-    height: 3,
-    width: 40,
-    backgroundColor: '#4F46E5',
+    height: 2,
+    width: 22,
+    backgroundColor: '#4A6CFA',
     borderRadius: 2,
   },
   tabContainer: {
     flexDirection: 'row',
     backgroundColor: '#F8FAFC',
-    borderRadius: 12,
-    padding: 6,
+    borderRadius: 8,
+    padding: 2,
     position: 'relative',
-    borderWidth: 1,
-    borderColor: '#F1F5F9',
   },
   tab: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    borderRadius: 10,
+    paddingVertical: 4,
+    paddingHorizontal: 6,
+    borderRadius: 6,
     zIndex: 2,
+    minHeight: 28,
   },
   activeTab: {
     backgroundColor: '#FFFFFF',
@@ -411,102 +391,79 @@ const styles = StyleSheet.create({
   tabIndicator: {
     position: 'absolute',
     width: '50%',
-    height: '80%',
+    height: '70%',
     backgroundColor: '#FFFFFF',
-    borderRadius: 10,
-    top: '10%',
+    borderRadius: 6,
+    top: '15%',
     left: '5%',
-    shadowColor: '#4F46E5',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.04,
+    shadowRadius: 1,
+    elevation: 1,
   },
   tabIcon: {
-    marginRight: 8,
+    marginRight: 4,
   },
   tabText: {
-    fontSize: 14,
+    fontSize: 11,
     color: '#64748B',
     fontWeight: '500',
   },
   activeTabText: {
-    color: '#4F46E5',
+    color: '#4A6CFA',
     fontWeight: '600',
   },
   keyboardView: {
     flex: 1,
   },
   scrollContent: {
-    padding: 20,
-    paddingBottom: 30,
+    padding: 12,
+    paddingBottom: 18,
   },
   tabContent: {
-    gap: 24,
+    gap: 13,
   },
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 7,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 13,
     fontWeight: '600',
     color: '#1E293B',
-    marginLeft: 8,
+    marginLeft: 6,
   },
   row: {
     flexDirection: 'row',
-    gap: 12,
-    alignItems: 'flex-start',
+    alignItems: 'center',
+    marginBottom: 0,
+  },
+  spacer: {
+    width: 8,
   },
   input: {
     backgroundColor: '#FFFFFF',
+    fontSize: 12,
+    height: 25,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    marginVertical: 0,
   },
   halfInput: {
     flex: 1,
+    minWidth: 0,
+    height: 25,
   },
   thirdInput: {
     flex: 1,
+    height: 25,
   },
   sectionLabel: {
-    fontSize: 15,
+    fontSize: 11,
     fontWeight: '500',
-    color: '#374151',
-    marginLeft: 8,
-  },
-  genderContainer: {
-    marginTop: 8,
-  },
-  genderOptions: {
-    flexDirection: 'row',
-    backgroundColor: '#F8FAFC',
-    borderRadius: 10,
-    padding: 5,
-    borderWidth: 1,
-    borderColor: '#F1F5F9',
-  },
-  genderOption: {
-    flex: 1,
-    paddingVertical: 10,
-    alignItems: 'center',
-    borderRadius: 8,
-  },
-  genderOptionSelected: {
-    backgroundColor: '#FFFFFF',
-    shadowColor: '#4F46E5',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 2,
-  },
-  genderText: {
-    fontSize: 14,
-    color: '#64748B',
-    fontWeight: '500',
-  },
-  genderTextSelected: {
-    color: '#4F46E5',
-    fontWeight: '600',
-  },
+    color: '#3b68b1ff',
+    marginLeft: 4,
+  }
 });

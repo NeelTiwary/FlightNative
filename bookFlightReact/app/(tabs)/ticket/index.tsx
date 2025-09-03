@@ -116,7 +116,7 @@ const CheckYourFlight = () => {
     try {
       const encodedId = encodeURIComponent(bookingId);
       console.log(`Fetching booking for ID: ${encodedId}`);
-      const response = await fetch(`http://172.29.39.116:8080/booking/flight-order/${encodedId}`, {
+      const response = await fetch(`http://172.29.38.77:8080/booking/flight-order/${encodedId}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });

@@ -1,84 +1,108 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { StyleSheet } from "react-native";
+import { StyleSheet, Platform, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-paper";
-
-import { useState } from 'react';
-import { Platform } from 'react-native';
-
+import React, { useState } from 'react';
 
 type DatePickerInputProps = {
-    // searchParams: any;
-    dateType: string;
-    handleChange: any;
-    placeholderText: string;
-    dateValue: string;
-}
+  dateType: string;
+  handleChange: (type: string) => (value: string) => void;
+  placeholderText: string;
+  dateValue: string;
+};
 
 const DatePickerInput = ({
-    // searchParams,
-    handleChange,
-    placeholderText,
-    dateValue,
-    dateType
+  handleChange,
+  placeholderText,
+  dateValue,
+  dateType,
 }: DatePickerInputProps) => {
-    const isWeb = Platform.OS === 'web'; 
-    const [showDatePicker, setShowDatePicker] = useState(false);
-    const [selectedDate, setSelectedDate] = useState(new Date());
-    return (
-        <>
-            {
-                isWeb ? (
-                     <input
-                        type="date"
-                        value={dateValue || ''}
-                        onChange={(e) => handleChange(dateType)(e.target.value)}
-                        placeholder={placeholderText}
-                        style={{ padding: 10, borderWidth: 1, borderColor: '#ccc', borderRadius: 5 }}
-                    />
-                ) : (
-                    <>
-                        <TextInput
-                            mode="flat" 
-                            style={styles.input} 
-                            onPressIn={() => setShowDatePicker(true)}
-                            onFocus={() => setShowDatePicker(true)}
-                            value={dateValue ? new Date(dateValue).toLocaleDateString() : ''}
-                            placeholder={placeholderText}
-                            editable={false}
-                            right={<TextInput.Icon icon="calendar" onPress={() => setShowDatePicker(true)} />}
-                        />
-                        {showDatePicker && (
-                            <DateTimePicker
-                            // value={searchParams["dateType"] ? new Date(searchParams["dateType"]) : new Date()}
-                            value={dateValue ? new Date(dateValue) : new Date()}
-                            mode="date"
-                            display="spinner"
-                            onChange={(event, selectedDate) => {
-                                setShowDatePicker(false);
-                                if (selectedDate) {
-                                    // console.log("Selected Date: ", selectedDate);
-                                    setSelectedDate(selectedDate);
-                                    handleChange(dateType)(selectedDate.toISOString().split('T')[0]);
-                                }
-                            }}
-                            />
-                        )}
-                    </>
-                )
-            }
-        </>
-    )
-}
+  const isWeb = Platform.OS === 'web'; 
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
+  return (
+    <>
+      {isWeb ? (
+        <input
+          type="date"
+          value={dateValue || ''}
+          onChange={e => handleChange(dateType)(e.target.value)}
+          placeholder={placeholderText}
+          style={{
+            padding: "7px 10px",
+            border: "1px solid #e2e2e2",
+            borderRadius: 8,
+            background: "#fff",
+            fontSize: 13,
+            color: "#222",
+            outline: "none",
+            width: "100%",
+            height: 30,
+            marginBottom: 4,
+          }}
+        />
+      ) : (
+        <View>
+          <TouchableOpacity
+            activeOpacity={0.85}
+            onPress={() => setShowDatePicker(true)}
+          >
+            <TextInput
+              mode="flat"
+              style={styles.input}
+              value={dateValue ? new Date(dateValue).toLocaleDateString() : ""}
+              placeholder={placeholderText}
+              editable={false}
+              underlineColor="transparent"
+              pointerEvents="none" // disables keyboard/cursor, only touch
+              right={
+                <TextInput.Icon
+                  icon="calendar"
+                  size={16}
+                  color="#888"
+                />
+              }
+              theme={{
+                colors: {
+                  background: "#fff",
+                  text: "#222",
+                  placeholder: "#999",
+                },
+              }}
+            />
+          </TouchableOpacity>
+          {showDatePicker && (
+            <DateTimePicker
+              value={dateValue ? new Date(dateValue) : new Date()}
+              mode="date"
+              display="spinner"
+              onChange={(event, selectedDate) => {
+                setShowDatePicker(false);
+                if (selectedDate) {
+                  handleChange(dateType)(selectedDate.toISOString().split('T')[0]);
+                }
+              }}
+            />
+          )}
+        </View>
+      )}
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
-    container: {
-      padding: 16,
-    },
-    input: {
-      marginBottom: 16,
-      backgroundColor: "#ffffff02",
-    }
+  input: {
+    backgroundColor: "#fff",
+    borderColor: "#e2e2e2",
+    borderWidth: 1,
+    borderRadius: 8,
+    fontSize: 13,
+    height: 30,
+    paddingHorizontal: 10,
+    color: "#222",
+    // marginBottom: 5,
+    marginTop: 2,
+    // marginLeft: 0,
+  },
 });
 
 export default DatePickerInput;
