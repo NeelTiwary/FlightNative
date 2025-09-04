@@ -18,17 +18,27 @@ const carrierCodeToName: { [key: string]: string } = {
   UK: "Vistara",
   TK: "Turkish",
   AS: "Alaska",
+  LH: "Lufthansa",
+  KL: "KLM",
+  QR: "Qatar Airways",
+  AF: "Air France",
 };
 
 const iataToCity: { [key: string]: string } = {
   EWR: "Newark",
-  LAX: "LA",
+  LAX: "Los Angeles",
   JFK: "NYC",
   LGA: "NYC",
   ORD: "Chicago",
   DFW: "Dallas",
   DEN: "Denver",
   SFO: "SF",
+  BOM: "Mumbai",
+  FRA: "Frankfurt",
+  AMS: "Amsterdam",
+  DOH: "Doha",
+  CDG: "Paris",
+  MUC: "Munich",
 };
 
 const getAirlineIconURL = (code: string) =>
@@ -92,10 +102,8 @@ export default function FlightCard({
 
   const itineraries = parsedFlightData.itineraries || [];
   const priceInfo = parsedFlightData.price || {};
-  const firstItinerary = itineraries[0];
-  const firstSegment = firstItinerary?.segments?.[0];
 
-  if (!firstItinerary || !firstSegment) {
+  if (!itineraries.length) {
     return (
       <Card style={[styles.card, isLast && styles.lastCard]}>
         <Card.Content style={styles.content}>
@@ -113,14 +121,26 @@ export default function FlightCard({
     );
   }
 
-  const carrierCode = firstSegment.carrierCode || "";
-  const airlineName = carrierCodeToName[carrierCode] || carrierCode;
-  const stops = Math.max(0, firstItinerary.segments.length - 1);
+  // Render a single trip (outbound or return)
+  const renderTrip = (itinerary: any, tripLabel: string, index: number) => {
+    const firstSegment = itinerary?.segments?.[0];
+    if (!firstSegment) return null;
 
-  return (
-    <Card style={[styles.card, isLast && styles.lastCard]} elevation={0}>
-      <Card.Content style={styles.content}>
-        {/* Top row: Airline and price */}
+    // Get the last segment for arrival details
+    const lastSegment = itinerary.segments[itinerary.segments.length - 1];
+    const carrierCode = firstSegment.carrierCode || "";
+    const airlineName = carrierCodeToName[carrierCode] || carrierCode;
+    const stops = Math.max(0, itinerary.segments.length - 1);
+    // Get layover airport for one-stop flights
+    const layoverAirport =
+      stops === 1 && itinerary.segments[1]
+        ? iataToCity[itinerary.segments[0].arrival.iataCode] ||
+          itinerary.segments[0].arrival.iataCode
+        : null;
+
+    return (
+      <View key={`trip-${index}`} style={styles.tripContainer}>
+        <Text style={styles.tripLabel}>{tripLabel}</Text>
         <View style={styles.topRow}>
           <View style={styles.airlineRow}>
             <Image
@@ -131,12 +151,12 @@ export default function FlightCard({
               {airlineName}
             </Text>
           </View>
-          <Text variant="titleSmall" style={styles.price}>
-            {priceInfo.currency || "USD"} {priceInfo.total || "N/A"}
-          </Text>
+          {index === 0 && (
+            <Text variant="titleSmall" style={styles.price}>
+              {priceInfo.currency || "INR"} {priceInfo.total || "N/A"}
+            </Text>
+          )}
         </View>
-
-        {/* Middle row: Flight times and details */}
         <View style={styles.middleRow}>
           <View style={styles.timeBlock}>
             <Text variant="bodyMedium" style={styles.time}>
@@ -145,8 +165,10 @@ export default function FlightCard({
             <Text variant="bodySmall" style={styles.airportCode}>
               {firstSegment.departure?.iataCode}
             </Text>
+            <Text variant="bodySmall" style={styles.flightDate}>
+              {formatDate(firstSegment.departure?.at)}
+            </Text>
           </View>
-
           <View style={styles.durationBlock}>
             <View style={styles.flightLine}>
               <View style={styles.dot} />
@@ -154,28 +176,44 @@ export default function FlightCard({
               <View style={styles.dot} />
             </View>
             <Text variant="bodySmall" style={styles.duration}>
-              {formatDuration(firstItinerary.duration)}
+              {formatDuration(itinerary.duration)}
             </Text>
-            <Text variant="bodySmall" style={[styles.stops, stops === 0 ? styles.direct : styles.withStops]}>
+            <Text
+              variant="bodySmall"
+              style={[styles.stops, stops === 0 ? styles.direct : styles.withStops]}
+            >
               {stops === 0 ? "Direct" : `${stops} Stop`}
             </Text>
+            {layoverAirport && (
+              <Text variant="bodySmall" style={styles.layover}>
+                via {layoverAirport}
+              </Text>
+            )}
           </View>
-
           <View style={styles.timeBlock}>
             <Text variant="bodyMedium" style={styles.time}>
-              {formatTime(firstSegment.arrival?.at)}
+              {formatTime(lastSegment?.arrival?.at)}
             </Text>
             <Text variant="bodySmall" style={styles.airportCode}>
-              {firstSegment.arrival?.iataCode}
+              {lastSegment?.arrival?.iataCode}
+            </Text>
+            <Text variant="bodySmall" style={styles.flightDate}>
+              {formatDate(lastSegment?.arrival?.at)}
             </Text>
           </View>
         </View>
+      </View>
+    );
+  };
 
-        {/* Bottom row: Date and select text */}
-        <View style={styles.bottomRow}>
-          <Text variant="bodySmall" style={styles.flightDate}>
-            {formatDate(firstSegment.departure?.at)}
-          </Text>
+  return (
+    <Card style={[styles.card, isLast && styles.lastCard]} elevation={0}>
+      <Card.Content style={styles.content}>
+        {itineraries.map((itinerary: any, index: number) =>
+          renderTrip(itinerary, index === 0 ? "Outbound" : "Return", index)
+        )}
+        <View style={styles.footer}>
+          <View style={{ flex: 1 }} />
           <TouchableOpacity onPress={handleSubmit}>
             <Text style={styles.selectText}>Select</Text>
           </TouchableOpacity>
@@ -187,100 +225,115 @@ export default function FlightCard({
 
 const styles = StyleSheet.create({
   card: {
-    marginHorizontal: 6,
-    marginBottom: 4,
-    borderRadius: 6,
+    marginHorizontal: 4,
+    marginBottom: 2,
+    borderRadius: 4,
     backgroundColor: '#e6ecf3ff',
   },
   lastCard: {
-    marginBottom: 80, // Increased margin to account for bottom tab height
+    marginBottom: 40,
   },
   content: {
-    padding: 8,
+    padding: 6,
+  },
+  tripContainer: {
+    marginBottom: 8,
+  },
+  tripLabel: {
+    fontWeight: '700',
+    color: '#4a5568',
+    fontSize: 10,
+    marginBottom: 2,
   },
   topRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 6,
+    marginBottom: 4,
   },
   airlineRow: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   logo: {
-    width: 25,
-    height: 25,
+    width: 20,
+    height: 20,
     resizeMode: "contain",
-    marginRight: 4,
+    marginRight: 3,
   },
   airlineName: {
     fontWeight: '700',
     color: '#0052cc',
-    fontSize: 12,
+    fontSize: 10,
   },
   price: {
     fontWeight: '700',
     color: '#078610ff',
-    fontSize: 14,
+    fontSize: 12,
   },
   middleRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 6,
+    marginBottom: 4,
   },
   timeBlock: {
     alignItems: 'center',
-    minWidth: 50,
+    minWidth: 40,
   },
   time: {
     fontWeight: '700',
     color: '#0052cc',
-    fontSize: 14,
+    fontSize: 12,
     marginBottom: 1,
   },
   airportCode: {
-    fontWeight: '700',
+    fontWeight: '600',
     color: '#4a5568',
-    fontSize: 11,
+    fontSize: 9,
+    marginBottom: 1,
+  },
+  flightDate: {
+    fontWeight: '600',
+    color: '#4a5568',
+    fontSize: 8,
   },
   durationBlock: {
     alignItems: 'center',
     flex: 1,
-    paddingHorizontal: 4,
+    paddingHorizontal: 3,
   },
   flightLine: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 2,
+    marginBottom: 1,
   },
   dot: {
-    width: 4,
-    height: 4,
-    borderRadius: 2,
+    width: 3,
+    height: 3,
+    borderRadius: 1.5,
     backgroundColor: '#0b4a69ff',
-    marginTop: 13,
+    marginTop: 10,
   },
   line: {
     height: 1,
-    width: 100,
+    width: 80,
     backgroundColor: '#85c6e7ff',
     marginHorizontal: 2,
-    marginTop: 13,
+    marginTop: 10,
   },
   duration: {
-    fontWeight: '700',
+    fontWeight: '600',
     color: '#4a5568',
-    fontSize: 10,
-    marginBottom: 2,
+    fontSize: 8,
+    marginBottom: 1,
   },
   stops: {
-    fontWeight: '700',
-    fontSize: 10,
-    paddingHorizontal: 4,
+    fontWeight: '600',
+    fontSize: 8,
+    paddingHorizontal: 3,
     paddingVertical: 1,
-    borderRadius: 8,
+    borderRadius: 6,
     overflow: 'hidden',
   },
   direct: {
@@ -291,27 +344,23 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffeedd',
     color: '#d97706',
   },
-  bottomRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  flightDate: {
-    fontWeight: '700',
+  layover: {
+    fontWeight: '600',
     color: '#4a5568',
-    fontSize: 10,
+    fontSize: 8,
+    marginTop: 1,
   },
   selectText: {
     fontWeight: '700',
     color: '#5f9bdbff',
-    fontSize: 10,
+    fontSize: 9,
   },
   errorText: {
     fontWeight: '700',
     color: '#dc3545',
     textAlign: "center",
-    marginBottom: 6,
-    fontSize: 11,
+    marginBottom: 4,
+    fontSize: 9,
   },
   footer: {
     flexDirection: 'row',
