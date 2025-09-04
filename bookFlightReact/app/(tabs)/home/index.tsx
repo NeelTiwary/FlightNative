@@ -53,28 +53,35 @@ export default function Home() {
   const navigation = useNavigation();
 
   const fetchSuggestions = async (type, keyword) => {
-    try {
-      if (keyword.length < 3) return;
-      type === "from" ? setFromLoading(true) : setToLoading(true);
-      const response = await axiosInstance.get(`/locations/search?keyword=${keyword}`);
-      const suggestions = response.data.locationResponses
-        .flatMap(entry => (
-          entry.group_data.simpleAirports.length > 0
-            ? [entry, ...entry.group_data.simpleAirports]
-            : [entry]
-        ));
-      if (type === 'from') setFromSuggestions(suggestions);
-      if (type === 'to') setToSuggestions(suggestions);
-    } catch (error) {
-      console.error("Error fetching suggestions: ", error);
-      alert("Failed to fetch suggestions. Please try again.");
-      if (type === 'from') setFromSuggestions([]);
-      if (type === 'to') setToSuggestions([]);
-      return;
-    } finally {
-      type === "from" ? setFromLoading(false) : setToLoading(false);
-    }
-  };
+  try {
+    if (keyword.length < 3) return;
+    type === 'from' ? setFromLoading(true) : setToLoading(true);
+    const response = await axiosInstance.get(`/locations/search?keyword=${keyword}`);
+    const suggestions = response.data.locationResponses
+      .flatMap(entry => [
+        entry, // Include the city
+        ...entry.group_data.simpleAirports.map(airport => ({
+          ...airport,
+          city: entry.name, // Add city name to airports for display
+        })),
+      ])
+      .sort((a, b) => {
+        // Sort to show cities first, then airports
+        if (a.subType === 'CITY' && b.subType !== 'CITY') return -1;
+        if (a.subType !== 'CITY' && b.subType === 'CITY') return 1;
+        return a.name.localeCompare(b.name);
+      });
+    if (type === 'from') setFromSuggestions(suggestions);
+    if (type === 'to') setToSuggestions(suggestions);
+  } catch (error) {
+    console.error('Error fetching suggestions: ', error);
+    alert('Failed to fetch suggestions. Please try again.');
+    if (type === 'from') setFromSuggestions([]);
+    if (type === 'to') setToSuggestions([]);
+  } finally {
+    type === 'from' ? setFromLoading(false) : setToLoading(false);
+  }
+};
 
   const handleFromInputChange = (text) => {
     if (!text) {
@@ -209,10 +216,17 @@ export default function Home() {
     });
   };
 
-  const renderSuggestionItem = (item, type) => (
+  const renderSuggestionItem = (item, type) => {
+  const isCity = item.subType === 'CITY';
+  const isAirport = item.subType === 'AIRPORT';
+
+  return (
     <Pressable
-      key={item.id}
-      style={styles.suggestionItem}
+      key={item.iata}
+      style={[
+        styles.suggestionItem,
+        isAirport && styles.airportSuggestionItem, // Apply indentation for airports
+      ]}
       onPress={() => {
         if (type === 'from') {
           setSearchParams({ ...searchParams, from: item.iata });
@@ -226,14 +240,22 @@ export default function Home() {
       }}
     >
       <View style={styles.suggestionIconContainer}>
-        <IconButton icon="airplane" size={16} style={styles.suggestionIcon} />
+        <IconButton
+          icon={isCity ? 'city' : 'airplane'}
+          size={16}
+          style={styles.suggestionIcon}
+        />
       </View>
       <View style={styles.suggestionTextContainer}>
-        <Text style={styles.suggestionName}>{item.name}</Text>
+        <Text style={styles.suggestionName}>
+          {item.name}
+          {isAirport && item.city ? ` (${item.city})` : ''}
+        </Text>
         <Text style={styles.suggestionIata}>{item.iata}</Text>
       </View>
     </Pressable>
   );
+};
 
   const dropdownTranslateY = dropdownAnimation.interpolate({
     inputRange: [0, 1],
@@ -724,6 +746,9 @@ const styles = StyleSheet.create({
     padding: 4,
     borderBottomWidth: 1,
     borderBottomColor: '#f1f3f4',
+  },
+  airportSuggestionItem: {
+    paddingLeft: 20, // Indent airports
   },
   suggestionIconContainer: {
     width: 32,
