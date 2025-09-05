@@ -84,15 +84,6 @@ export default function FlightOfferDetailsNew() {
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {/* Header with total price */}
-      {/* <View style={styles.header}>
-        <Text style={styles.headerTitle}>Flight Details</Text>
-        <View style={styles.priceContainer}>
-          <Text style={styles.headerPrice}>
-            {priceInfo.currency} {priceInfo.total}
-          </Text>
-        </View>
-      </View> */}
 
       {itineraries.map((itinerary: any, index: number) => (
         <View key={index} style={styles.itineraryContainer}>
@@ -137,10 +128,6 @@ export default function FlightOfferDetailsNew() {
                         {carrierCode} {segment.number} • {aircraft}
                       </Text>
                     </View>
-                    {/* <Chip mode="outlined" style={styles.cabinChip}>
-                      {parsedFlightData.travelerPricings?.[0]?.fareDetailsBySegment?.[segIdx]?.cabin || "Economy"}
-                      
-                    </Chip> */}
                   </View>
 
                   <Divider style={styles.divider} />
@@ -179,18 +166,6 @@ export default function FlightOfferDetailsNew() {
                     <Text style={styles.dateText}>{formatDate(segment.departure?.at)}</Text>
                     <Text style={styles.dateText}>{formatDate(segment.arrival?.at)}</Text>
                   </View>
-
-                  {/* Terminal information if available */}
-                  {(segment.departure?.terminal || segment.arrival?.terminal) && (
-                    <View style={styles.terminalInfo}>
-                      <MaterialCommunityIcons name="airport" size={12} color="#5F6368" />
-                      <Text style={styles.terminalText}>
-                        {segment.departure?.terminal && `Terminal ${segment.departure.terminal}`}
-                        {segment.departure?.terminal && segment.arrival?.terminal && " → "}
-                        {segment.arrival?.terminal && `Terminal ${segment.arrival.terminal}`}
-                      </Text>
-                    </View>
-                  )}
                 </Card.Content>
               </Card>
             );
