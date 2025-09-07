@@ -1,59 +1,110 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
-  StyleSheet,
   ScrollView,
-  ActivityIndicator,
-  TouchableOpacity,
+  StyleSheet,
   Platform,
+  Animated,
+  Easing,
+  Dimensions,
+  TouchableOpacity,
 } from "react-native";
-import { Card, Text, TextInput, Button } from "react-native-paper";
+import { Text, Button, Card } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withSpring,
-} from "react-native-reanimated";
+import { useRouter } from "expo-router";
+import { useAppContext } from "@/context/AppContextProvider";
+import * as Haptics from "expo-haptics";
 import * as Clipboard from "expo-clipboard";
 
-const CheckYourFlight = () => {
-  const [bookingId, setBookingId] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [flightData, setFlightData] = useState<any>(null);
-  const [error, setError] = useState<string | null>(null);
+const { width } = Dimensions.get("window");
+
+// Safe single-pass decoder
+const decodeOrderIdSafe = (id?: string) => {
+  if (!id) return "";
+  try {
+    return decodeURIComponent(id);
+  } catch (e) {
+    // If decode fails, return original value
+    console.warn("Failed to decode orderId:", e);
+    return id;
+  }
+};
+
+export default function Confirmation() {
+  const router = useRouter();
+  const { flightBooking } = useAppContext();
   const [copied, setCopied] = useState(false);
+  const [bookingData, setBookingData] = useState<any>(null);
+  const masterAnim = useRef(new Animated.Value(0)).current;
 
-  const buttonScale = useSharedValue(1);
-  const animatedButtonStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: withSpring(buttonScale.value) }],
-  }));
+  useEffect(() => {
+    if (!flightBooking) return;
 
-  const fetchFlightDetails = async () => {
-    if (!bookingId.trim()) return;
-    setLoading(true);
-    setError(null);
-    setFlightData(null);
-
-    try {
-      const encodedId = encodeURIComponent(bookingId);
-      const response = await fetch(
-        `http://192.168.0.102:8080/booking/flight-order/${encodedId}`
-      );
-      if (!response.ok) throw new Error("Booking not found");
-      const data = await response.json();
-      setFlightData(data);
-    } catch (e: any) {
-      setError(e.message);
-    } finally {
-      setLoading(false);
+    // Build rawData from flightBooking (string or object)
+    let rawData: any;
+    if (typeof flightBooking === "string") {
+      if (Platform.OS === "web") {
+        const stored = localStorage.getItem("flightBooking");
+        if (stored) {
+          try {
+            rawData = JSON.parse(stored);
+          } catch (e) {
+            // fallback to using the flightBooking string as orderId
+            rawData = { orderId: flightBooking };
+          }
+        } else {
+          rawData = { orderId: flightBooking };
+        }
+      } else {
+        rawData = { orderId: flightBooking };
+      }
+    } else {
+      rawData = flightBooking;
     }
-  };
+
+    const encodedOrderId = rawData?.orderId;
+    const decodedOrderId = encodedOrderId ? decodeOrderIdSafe(encodedOrderId) : undefined;
+
+    // Final bookingData stores the decoded orderId so UI always uses the readable value
+    const finalData = { ...rawData, orderId: decodedOrderId ?? encodedOrderId };
+
+    // console both encoded and decoded (if encoded exists)
+    if (encodedOrderId) {
+      console.log("Encoded Order ID:", encodedOrderId);
+      console.log("Decoded Order ID:", finalData.orderId);
+    }
+
+    setBookingData(finalData);
+  }, [flightBooking]);
+
+  useEffect(() => {
+    if (bookingData) {
+      Animated.timing(masterAnim, {
+        toValue: 1,
+        duration: 700,
+        easing: Easing.out(Easing.exp),
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [bookingData]);
 
   const copyToClipboard = async () => {
-    if (!flightData?.orderId) return;
-    await Clipboard.setStringAsync(flightData.orderId);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    const id = bookingData?.orderId;
+    if (!id) return;
+
+    try {
+      if (Platform.OS === "web" && typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(id);
+      } else {
+        await Clipboard.setStringAsync(id);
+      }
+
+      setCopied(true);
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (e) {
+      console.error("Copy to clipboard failed:", e);
+    }
   };
 
   const formatTime = (dateString: string) =>
@@ -64,139 +115,65 @@ const CheckYourFlight = () => {
         })
       : "N/A";
 
-  if (loading) {
+  if (!bookingData) {
     return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#2563EB" />
-        <Text style={styles.loadingText}>Fetching your flight details...</Text>
+      <View style={styles.container}>
+        <Text style={styles.loadingText}>Loading booking details...</Text>
       </View>
     );
   }
 
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.scrollContent}
-      showsVerticalScrollIndicator={false}
-    >
-      {/* Input Section */}
-      <Card style={styles.card}>
-        <Card.Content>
-          <Text style={styles.cardTitle}>Retrieve Flight Details</Text>
+    <View style={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Success Header */}
+        <Animated.View
+          style={[
+            styles.successHeader,
+            { opacity: masterAnim, transform: [{ scale: masterAnim }] },
+          ]}
+        >
+          <MaterialCommunityIcons name="check-circle" size={48} color="#22C55E" />
+          <Text style={styles.successTitle}>Booking Confirmed</Text>
 
-          <TextInput
-            label="Booking Reference"
-            value={bookingId}
-            onChangeText={setBookingId}
-            mode="outlined"
-            style={styles.input}
-            outlineStyle={styles.inputOutline}
-            placeholder="e.g., eJzTd9e38HUJjfIGAAsQAmk=3D"
-            theme={{ colors: { primary: "#2563EB", onSurface: "#1E293B" } }}
-            right={
-              <TextInput.Icon
-                icon="clipboard-text-outline"
-                onPress={async () => {
-                  const text = await Clipboard.getStringAsync();
-                  if (text) setBookingId(text);
-                }}
-              />
-            }
-          />
+          {/* Subheading for Order */}
+          <Text style={styles.subheading}>Your Order Details</Text>
 
-          <Animated.View style={[animatedButtonStyle, { marginTop: 12 }]}>
-            <Button
-              mode="contained"
-              onPress={fetchFlightDetails}
-              disabled={!bookingId.trim()}
-              style={styles.searchButton}
-            >
-              Search
-            </Button>
-          </Animated.View>
-
-          {error && <Text style={styles.errorText}>{error}</Text>}
-        </Card.Content>
-      </Card>
-
-      {flightData && (
-        <>
-          {/* Order Summary */}
-          <Card style={styles.card}>
-            <Card.Content style={{ alignItems: "center" }}>
+          <View style={styles.orderIdContainer}>
+            <Text style={styles.orderIdLabel}>ORDER ID</Text>
+            <Text style={styles.orderId} numberOfLines={1} ellipsizeMode="middle">
+              {bookingData.orderId || "N/A"}
+            </Text>
+            <TouchableOpacity onPress={copyToClipboard} style={styles.copyButton}>
               <MaterialCommunityIcons
-                name="check-circle"
-                size={40}
-                color="#22C55E"
+                name={copied ? "check" : "content-copy"}
+                size={16}
+                color="#FFF"
               />
-              <Text style={styles.successTitle}>Booking Confirmed</Text>
-              <Text style={styles.subheading}>Your Order Details</Text>
+            </TouchableOpacity>
+          </View>
+        </Animated.View>
 
-              <View style={styles.orderIdContainer}>
-                <Text style={styles.orderIdLabel}>ORDER ID</Text>
-                <Text
-                  style={styles.orderId}
-                  numberOfLines={1}
-                  ellipsizeMode="middle"
-                >
-                  {flightData.orderId}
-                </Text>
-                <TouchableOpacity
-                  onPress={copyToClipboard}
-                  style={styles.copyButton}
-                >
-                  <MaterialCommunityIcons
-                    name={copied ? "check" : "content-copy"}
-                    size={16}
-                    color="#FFF"
-                  />
-                </TouchableOpacity>
-              </View>
-
-              <Text style={styles.price}>
-                Total: {flightData.flightOffer.currencyCode} {" "}
-                {flightData.flightOffer.totalPrice}
-              </Text>
-            </Card.Content>
-          </Card>
-
-          {/* Travelers */}
+        {/* Flight Details */}
+        {bookingData.flightOffer && (
           <Card style={styles.card}>
-            <Card.Title title="Passenger Details" titleStyle={styles.cardTitle} />
-            <Card.Content>
-              {flightData.travelers?.map((t: any, idx: number) => (
-                <View key={idx} style={styles.travelerBlock}>
-                  <Text style={styles.travelerName}>
-                    {t.firstName} {t.lastName}
-                  </Text>
-                  <Text style={styles.travelerDetail}>DOB: {t.dateOfBirth}</Text>
-                  <Text style={styles.travelerDetail}>Gender: {t.gender}</Text>
-                  {t.phones?.[0] && (
-                    <Text style={styles.travelerDetail}>
-                      Phone: +{t.phones[0].countryCallingCode} {t.phones[0].number}
-                    </Text>
-                  )}
-                  {t.documents?.[0] && (
-                    <Text style={styles.travelerDetail}>
-                      {t.documents[0].documentType}: {t.documents[0].number}
-                    </Text>
-                  )}
-                </View>
-              ))}
-            </Card.Content>
-          </Card>
-
-          {/* Flight Itinerary */}
-          <Card style={styles.card}>
-            <Card.Title title="Flight Itinerary" titleStyle={styles.cardTitle} />
-            <Card.Content>
-              {flightData.flightOffer.trips?.map((trip: any, index: number) => {
+            <Card.Title
+              title="Flight Details"
+              titleStyle={styles.cardTitle}
+              titleVariant="titleMedium"
+            />
+            <Card.Content style={styles.cardContent}>
+              {bookingData.flightOffer.trips?.map((trip: any, index: number) => {
                 const firstLeg = trip.legs[0];
                 const lastLeg = trip.legs[trip.legs.length - 1];
                 const stops =
                   trip.legs.length > 1
-                    ? trip.legs.slice(0, -1).map((l: any) => l.arrivalAirport)
+                    ? trip.legs.slice(0, -1).map((leg: any) => leg.arrivalAirport)
                     : [];
+
                 return (
                   <View key={index} style={styles.segmentContainer}>
                     <Text style={styles.tripLabel}>
@@ -230,43 +207,55 @@ const CheckYourFlight = () => {
                     </View>
 
                     <Text style={styles.flightInfo}>
-                      Flights: {trip.legs
+                      Flights:{" "}
+                      {trip.legs
                         .map(
-                          (l: any) => `${l.operatingCarrierCode} ${l.flightNumber}`
+                          (leg: any) =>
+                            `${leg.operatingCarrierCode} ${leg.flightNumber}`
                         )
                         .join(" + ")}
                     </Text>
 
                     <Text style={styles.duration}>
-                      Duration: {trip.legs.map((l: any) => l.duration).join(" + ")}
+                      Duration:{" "}
+                      {trip.legs
+                        .map((leg: any) => leg.duration || "N/A")
+                        .join(" + ")}
                     </Text>
                   </View>
                 );
               })}
+
+              <Text style={styles.price}>
+                Total: {bookingData.flightOffer.currencyCode}{" "}
+                {bookingData.flightOffer.totalPrice}
+              </Text>
             </Card.Content>
           </Card>
-        </>
-      )}
-    </ScrollView>
+        )}
+
+        <Button
+          mode="contained"
+          onPress={() => router.push("/")}
+          style={styles.homeButton}
+        >
+          Back to Home
+        </Button>
+      </ScrollView>
+    </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#F9FAFB" },
-  scrollContent: { padding: 10, paddingBottom: 20 },
-  centered: { flex: 1, justifyContent: "center", alignItems: "center" },
-  loadingText: { marginTop: 10, fontSize: 14, color: "#6B7280" },
-  card: {
+  scrollContent: { padding: 10, paddingBottom: 16 },
+  successHeader: {
+    alignItems: "center",
+    padding: 12,
     marginBottom: 12,
-    borderRadius: 10,
     backgroundColor: "#FFFFFF",
+    borderRadius: 10,
     elevation: 2,
-    paddingVertical: 4,
-  },
-  cardTitle: {
-    fontSize: 16,
-    fontWeight: "700",
-    color: "#111827",
   },
   successTitle: {
     fontSize: 18,
@@ -278,7 +267,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: "600",
     color: "#374151",
-    marginBottom: 6,
+    marginBottom: 4,
   },
   orderIdContainer: {
     flexDirection: "row",
@@ -288,32 +277,20 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     paddingHorizontal: 8,
     borderRadius: 6,
-    width: "100%",
+    width: width * 0.78,
   },
   orderIdLabel: { fontSize: 10, color: "#64748B", marginRight: 4 },
   orderId: { fontSize: 12, color: "#1E293B", flex: 1, fontWeight: "600" },
   copyButton: { backgroundColor: "#2563EB", padding: 4, borderRadius: 6 },
-  price: {
-    fontSize: 14,
-    fontWeight: "700",
-    color: "#2563EB",
-    textAlign: "center",
-    marginTop: 8,
+
+  card: {
+    marginBottom: 12,
+    borderRadius: 10,
+    backgroundColor: "#FFFFFF",
+    elevation: 1,
   },
-  errorText: { color: "#DC2626", fontSize: 12, marginTop: 8 },
-  travelerBlock: {
-    marginBottom: 8,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderColor: "#E5E7EB",
-    paddingBottom: 6,
-  },
-  travelerName: {
-    fontSize: 14,
-    fontWeight: "700",
-    color: "#111827",
-    marginBottom: 2,
-  },
-  travelerDetail: { fontSize: 12, color: "#374151" },
+  cardTitle: { fontSize: 17, fontWeight: "700", color: "#111827" },
+  cardContent: { paddingVertical: 0, paddingHorizontal: 0 },
   segmentContainer: {
     marginBottom: 3,
     paddingBottom: 3,
@@ -339,7 +316,10 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     marginBottom: 4,
   },
-  timeBlock: { alignItems: "center", minWidth: 70 },
+  timeBlock: {
+    alignItems: "center",
+    minWidth: 70,
+  },
   airportCode: {
     fontSize: 13,
     fontWeight: "700",
@@ -360,11 +340,19 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 2,
   },
-  duration: {
-    fontSize: 11,
-    color: "#64748B",
+  duration: { fontSize: 11, color: "#64748B", textAlign: "center" },
+  divider: { marginVertical: 6 },
+  price: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: "#2563EB",
     textAlign: "center",
   },
+  homeButton: { marginTop: 8, borderRadius: 8, paddingVertical: 4 },
+  loadingText: {
+    textAlign: "center",
+    marginTop: 14,
+    fontSize: 12,
+    color: "#6B7280",
+  },
 });
-
-export default CheckYourFlight;
