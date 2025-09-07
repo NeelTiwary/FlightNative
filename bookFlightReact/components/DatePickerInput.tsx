@@ -16,7 +16,7 @@ const DatePickerInput = ({
   dateValue,
   dateType,
 }: DatePickerInputProps) => {
-  const isWeb = Platform.OS === 'web'; 
+  const isWeb = Platform.OS === 'web';
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   return (
@@ -37,11 +37,11 @@ const DatePickerInput = ({
             outline: "none",
             width: "100%",
             height: 30,
-            marginBottom: 4,
+            marginBottom: 12, // outside space for web
           }}
         />
       ) : (
-        <View>
+        <View style={styles.halfInput}>
           <TouchableOpacity
             activeOpacity={0.85}
             onPress={() => setShowDatePicker(true)}
@@ -53,7 +53,7 @@ const DatePickerInput = ({
               placeholder={placeholderText}
               editable={false}
               underlineColor="transparent"
-              pointerEvents="none" // disables keyboard/cursor, only touch
+              pointerEvents="none"
               right={
                 <TextInput.Icon
                   icon="calendar"
@@ -99,9 +99,13 @@ const styles = StyleSheet.create({
     height: 30,
     paddingHorizontal: 10,
     color: "#222",
-    // marginBottom: 5,
-    marginTop: 2,
-    // marginLeft: 0,
+    marginTop: 6, // inside spacing
+  },
+  halfInput: {
+    flex: 1,
+    minWidth: 0,
+    height: 25,
+    marginBottom: 12, // ⬅️ outside spacing
   },
 });
 

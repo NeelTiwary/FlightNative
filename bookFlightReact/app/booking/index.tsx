@@ -222,7 +222,7 @@ export default function Booking() {
     //  const endpoint = apiUrl
     //   ? `${apiUrl}/booking/flight-order`
     //   : "/v1/booking/flight-orders";
-   const endpoint = "http://192.168.0.102:8080/booking/flight-order";
+   const endpoint = "http://192.168.0.103:8080/booking/flight-order";
 
     const response = await axiosInstance.post(endpoint, bookingData, {
       headers: { "Content-Type": "application/json" },

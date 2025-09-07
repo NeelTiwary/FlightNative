@@ -86,7 +86,9 @@ const simpleStyles = StyleSheet.create({
     elevation: 2,
     borderWidth: 1,
     borderColor: "#e2e2e2",
+    // marginBottom: 5,
     // marginTop: 5,
+    // paddingBottom: 8,
   },
   textInput: {
     height: 30,
@@ -96,9 +98,11 @@ const simpleStyles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 8,
+    
     marginVertical: 2,
     // marginHorizontal: ,
-    color: "#222",
+    // color: "#ac9c9cff",
+    // marginBottom: 5,
   },
   menuItem: {
     minHeight: 32,

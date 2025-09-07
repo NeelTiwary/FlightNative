@@ -5,7 +5,6 @@ import {
   ScrollView,
   ActivityIndicator,
   TouchableOpacity,
-  Platform,
 } from "react-native";
 import { Card, Text, TextInput, Button } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -37,7 +36,7 @@ const CheckYourFlight = () => {
     try {
       const encodedId = encodeURIComponent(bookingId);
       const response = await fetch(
-        `http://192.168.0.102:8080/booking/flight-order/${encodedId}`
+        `http://192.168.0.103:8080/booking/flight-order/${encodedId}`
       );
       if (!response.ok) throw new Error("Booking not found");
       const data = await response.json();
@@ -92,7 +91,9 @@ const CheckYourFlight = () => {
             style={styles.input}
             outlineStyle={styles.inputOutline}
             placeholder="e.g., eJzTd9e38HUJjfIGAAsQAmk=3D"
-            theme={{ colors: { primary: "#2563EB", onSurface: "#1E293B" } }}
+            theme={{
+              colors: { primary: "#2563EB", onSurface: "#1E293B" },
+            }}
             right={
               <TextInput.Icon
                 icon="clipboard-text-outline"
@@ -104,12 +105,14 @@ const CheckYourFlight = () => {
             }
           />
 
-          <Animated.View style={[animatedButtonStyle, { marginTop: 12 }]}>
+          <Animated.View style={[animatedButtonStyle, { marginTop: 16 }]}>
             <Button
               mode="contained"
               onPress={fetchFlightDetails}
               disabled={!bookingId.trim()}
               style={styles.searchButton}
+              contentStyle={{ paddingVertical: 6 }}
+              labelStyle={{ fontWeight: "700", fontSize: 15 }}
             >
               Search
             </Button>
@@ -126,7 +129,7 @@ const CheckYourFlight = () => {
             <Card.Content style={{ alignItems: "center" }}>
               <MaterialCommunityIcons
                 name="check-circle"
-                size={40}
+                size={42}
                 color="#22C55E"
               />
               <Text style={styles.successTitle}>Booking Confirmed</Text>
@@ -154,7 +157,7 @@ const CheckYourFlight = () => {
               </View>
 
               <Text style={styles.price}>
-                Total: {flightData.flightOffer.currencyCode} {" "}
+                Total: {flightData.flightOffer.currencyCode}{" "}
                 {flightData.flightOffer.totalPrice}
               </Text>
             </Card.Content>
@@ -173,7 +176,8 @@ const CheckYourFlight = () => {
                   <Text style={styles.travelerDetail}>Gender: {t.gender}</Text>
                   {t.phones?.[0] && (
                     <Text style={styles.travelerDetail}>
-                      Phone: +{t.phones[0].countryCallingCode} {t.phones[0].number}
+                      Phone: +{t.phones[0].countryCallingCode}{" "}
+                      {t.phones[0].number}
                     </Text>
                   )}
                   {t.documents?.[0] && (
@@ -230,15 +234,18 @@ const CheckYourFlight = () => {
                     </View>
 
                     <Text style={styles.flightInfo}>
-                      Flights: {trip.legs
+                      Flights:{" "}
+                      {trip.legs
                         .map(
-                          (l: any) => `${l.operatingCarrierCode} ${l.flightNumber}`
+                          (l: any) =>
+                            `${l.operatingCarrierCode} ${l.flightNumber}`
                         )
                         .join(" + ")}
                     </Text>
 
                     <Text style={styles.duration}>
-                      Duration: {trip.legs.map((l: any) => l.duration).join(" + ")}
+                      Duration:{" "}
+                      {trip.legs.map((l: any) => l.duration).join(" + ")}
                     </Text>
                   </View>
                 );
@@ -253,59 +260,59 @@ const CheckYourFlight = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#F9FAFB" },
-  scrollContent: { padding: 10, paddingBottom: 20 },
+  scrollContent: { padding: 14, paddingBottom: 24 },
   centered: { flex: 1, justifyContent: "center", alignItems: "center" },
-  loadingText: { marginTop: 10, fontSize: 14, color: "#6B7280" },
+  loadingText: { marginTop: 12, fontSize: 14, color: "#6B7280" },
   card: {
-    marginBottom: 12,
-    borderRadius: 10,
+    marginBottom: 14,
+    borderRadius: 12,
     backgroundColor: "#FFFFFF",
     elevation: 2,
-    paddingVertical: 4,
+    paddingVertical: 6,
   },
   cardTitle: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: "700",
     color: "#111827",
   },
   successTitle: {
     fontSize: 18,
     fontWeight: "700",
-    marginVertical: 4,
+    marginVertical: 6,
     color: "#111827",
   },
   subheading: {
     fontSize: 13,
     fontWeight: "600",
     color: "#374151",
-    marginBottom: 6,
+    marginBottom: 8,
   },
   orderIdContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 4,
+    marginTop: 6,
     backgroundColor: "#F1F5F9",
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-    borderRadius: 6,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderRadius: 8,
     width: "100%",
   },
-  orderIdLabel: { fontSize: 10, color: "#64748B", marginRight: 4 },
-  orderId: { fontSize: 12, color: "#1E293B", flex: 1, fontWeight: "600" },
-  copyButton: { backgroundColor: "#2563EB", padding: 4, borderRadius: 6 },
+  orderIdLabel: { fontSize: 11, color: "#64748B", marginRight: 6 },
+  orderId: { fontSize: 13, color: "#1E293B", flex: 1, fontWeight: "600" },
+  copyButton: { backgroundColor: "#2563EB", padding: 5, borderRadius: 8 },
   price: {
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: "700",
     color: "#2563EB",
     textAlign: "center",
-    marginTop: 8,
+    marginTop: 10,
   },
   errorText: { color: "#DC2626", fontSize: 12, marginTop: 8 },
   travelerBlock: {
-    marginBottom: 8,
+    marginBottom: 10,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderColor: "#E5E7EB",
-    paddingBottom: 6,
+    paddingBottom: 8,
   },
   travelerName: {
     fontSize: 14,
@@ -315,43 +322,43 @@ const styles = StyleSheet.create({
   },
   travelerDetail: { fontSize: 12, color: "#374151" },
   segmentContainer: {
-    marginBottom: 3,
-    paddingBottom: 3,
+    marginBottom: 8,
+    paddingBottom: 8,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderColor: "#E5E7EB",
   },
   tripLabel: {
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: "700",
     color: "#1E293B",
-    marginBottom: 0,
+    marginBottom: 2,
     textAlign: "center",
   },
   viaText: {
     fontSize: 11,
     color: "#64748B",
     textAlign: "center",
-    marginBottom: 4,
+    marginBottom: 6,
   },
   timeRow: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "flex-start",
-    marginBottom: 4,
+    marginBottom: 6,
   },
   timeBlock: { alignItems: "center", minWidth: 70 },
   airportCode: {
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: "700",
     color: "#2563EB",
-    marginBottom: 1,
+    marginBottom: 2,
   },
   time: { fontSize: 12, fontWeight: "600", color: "#111827" },
   line: {
     flex: 1,
     height: 1,
     backgroundColor: "#CBD5E1",
-    marginHorizontal: 6,
+    marginHorizontal: 8,
     marginTop: 12,
   },
   flightInfo: {
@@ -364,6 +371,13 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: "#64748B",
     textAlign: "center",
+  },
+  input: { marginTop: 8, marginBottom: 4, backgroundColor: "#FFF" },
+  inputOutline: { borderRadius: 8 },
+  searchButton: {
+    borderRadius: 8,
+    backgroundColor: "#2563EB",
+    elevation: 2,
   },
 });
 
