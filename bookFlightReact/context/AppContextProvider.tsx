@@ -1,6 +1,7 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
 import { dummyFlightData } from "../utils/flightData";
+import { BACKEND_URL } from '@env';
 
 const iataToCity = {
   EWR: "Newark",
@@ -148,7 +149,9 @@ export const AppContextProvider = ({ children }: { children: React.ReactNode }) 
   const [toSuggestions, setToSuggestions] = useState([]);
   const [flightOffers, setFlightOffers] = useState<FlightOffer[]>(dummyFlightData.flightsAvailable);
   const [selectedFlightOffer, setSelectedFlightOffer] = useState<FlightOffer | null>(null);
-  const [apiUrl, setApiUrl] = useState("http://172.29.38.77:8080");
+
+
+  const [apiUrl, setApiUrl] = useState(BACKEND_URL);
   const [countriesData, setCountriesData] = useState([]);
   const [flightBooking, setFlightBooking] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -194,8 +197,8 @@ export const AppContextProvider = ({ children }: { children: React.ReactNode }) 
           response.status === 400
             ? "Invalid search parameters."
             : response.status === 500
-            ? "Server error. Please try again later."
-            : `HTTP error ${response.status}`
+              ? "Server error. Please try again later."
+              : `HTTP error ${response.status}`
         );
       }
 

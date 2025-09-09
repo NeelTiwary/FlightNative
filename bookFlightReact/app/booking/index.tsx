@@ -7,6 +7,7 @@ import { Button, List, Text, Snackbar } from "react-native-paper";
 import axiosInstance from "../../config/axiosConfig";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import axios from "axios"
+import { BACKEND_URL } from '@env';
 
 export default function Booking() {
   const { travelers, setTravelers, selectedFlightOffer, setSelectedFlightOffer, apiUrl, setFlightBooking } = useAppContext();
@@ -219,10 +220,8 @@ export default function Booking() {
 
     console.log( JSON.stringify(bookingData, null, 2));
 
-    //  const endpoint = apiUrl
-    //   ? `${apiUrl}/booking/flight-order`
-    //   : "/v1/booking/flight-orders";
-   const endpoint = "http://172.29.38.77:8080/booking/flight-order";
+
+   const endpoint = `${BACKEND_URL}/booking/flight-order`;
 
     const response = await axiosInstance.post(endpoint, bookingData, {
       headers: { "Content-Type": "application/json" },

@@ -17,6 +17,8 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import * as Clipboard from 'expo-clipboard';
+import { BACKEND_URL } from '@env';
+
 
 interface Traveler {
   id?: string;
@@ -116,7 +118,7 @@ const CheckYourFlight = () => {
     try {
       const encodedId = encodeURIComponent(bookingId);
       console.log(`Fetching booking for ID: ${encodedId}`);
-      const response = await fetch(`http://172.29.38.77:8080/booking/flight-order/${encodedId}`, {
+      const response = await fetch(`${BACKEND_URL}/booking/flight-order/${encodedId}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });
