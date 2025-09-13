@@ -88,10 +88,10 @@ export default function TabsLayout() {
                 }}
             />
             <Tabs.Screen
-                name="search/index"
+                name="attractions/index"
                 options={{
-                    title: "Search",
-                    headerTitle: "Find Flights",
+                    title: "Attractions",
+                    headerTitle: "Attractions nearby",
                     tabBarIcon: ({ color, size, focused }) => (
                         <View style={styles.searchIconContainer}>
                             <MaterialCommunityIcons
